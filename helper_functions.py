@@ -30,7 +30,7 @@ def print_linked_list(linked_list: ListNode, verbose=True) -> None:
     node = linked_list
     print_list = []
     if verbose:
-        print_list = ['reversed order']
+        print_list = ['input order']
     while node is not None:
         print_list.append(node.val)
         node = node.next
