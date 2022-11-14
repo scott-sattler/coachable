@@ -1,5 +1,6 @@
 import test_cases as tc
 from sorting import Sort
+# from stopwatch import Stopwatch
 
 DEFAULT_TEST = tc.DEFAULT_TEST
 
@@ -12,6 +13,8 @@ class Test(Sort):
                 self.test(test_array, fn, not verbose)
 
     def test(self, test_cases: list[list] | list, sorting_algo: callable, only_fail: bool = False):
+        print("TESTING:", sorting_algo.__name__)
+
         # make single test compatible with multi-test
         if not isinstance(test_cases[0], list):
             test_cases = [test_cases]
@@ -37,10 +40,13 @@ class Test(Sort):
                 print(f"received:\t{output:}")
                 print()
 
-        print(f"{sorting_algo.__name__}: RAN {test_count} | PASSED {test_count-len(fails)} | FAILED {len(fails)}: {fails}")
+        print(f"{sorting_algo.__name__}: RAN {test_count} | PASSED {test_count-len(fails)} | FAILED {len(fails)}: {fails}\n")
 
 
-# Test().test(DEFAULT_TEST, Sort().insertion_sort, only_fail=True)
-# Test().test(DEFAULT_TEST, Sort().insertion_sort, only_fail=False)
-# Test().test(DEFAULT_TEST, Sort().selection_sort, only_fail=False)
-Test().test_all(DEFAULT_TEST, verbose=False)
+if __name__ == "__main__":
+    # Test().test(DEFAULT_TEST, Sort().insertion_sort, only_fail=True)
+    # Test().test(DEFAULT_TEST, Sort().insertion_sort, only_fail=False)
+    # Test().test(DEFAULT_TEST, Sort().selection_sort, only_fail=False)
+    Test().test_all(DEFAULT_TEST, verbose=False)
+
+
