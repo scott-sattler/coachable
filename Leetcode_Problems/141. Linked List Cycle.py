@@ -45,5 +45,19 @@ class ListNode:
         self.next = None
 
 class Solution:
+    # follow-up solution
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        pass
+        pointer_slow = head
+        pointer_fast = head
+
+        while pointer_fast is not None:
+            pointer_fast = pointer_fast.next
+            if pointer_fast is not None:
+                pointer_fast = pointer_fast.next
+            else:
+                break
+            pointer_slow = pointer_slow.next
+            if pointer_fast is pointer_slow:
+                return True
+        return False
+
