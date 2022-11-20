@@ -46,6 +46,8 @@ class ListNode:
 
 class Solution:
     # follow-up solution
+    # time complexity: O(n)
+    # space complexity: O(1)
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         pointer_slow = head
         pointer_fast = head
