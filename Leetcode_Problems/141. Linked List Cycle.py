@@ -62,4 +62,3 @@ class Solution:
             if pointer_fast is pointer_slow:
                 return True
         return False
-
