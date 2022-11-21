@@ -135,11 +135,3 @@ class Tour:
                 prev_when_min = head
             head = head.next
         self._insert_at(p, prev_when_min)
-
-
-
-
-
-
-
-
