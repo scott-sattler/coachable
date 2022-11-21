@@ -44,11 +44,12 @@ class ListNode:
         self.val = x
         self.next = None
 
+
 class Solution:
     # follow-up solution
     # time complexity: O(n)
     # space complexity: O(1)
-    def hasCycle(self, head: Optional[ListNode]) -> bool:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:  # noqa: naming convention
         pointer_slow = head
         pointer_fast = head
 
