@@ -14,7 +14,10 @@ class Point:
 
     # def __eq__(self, other):
     #     if isinstance(other, str):
-    #         other = ast.literal_eval(other)
+    #         try:
+    #             other = ast.literal_eval(other)
+    #         except:
+    #             return False
     #     if other == self.position:
     #         return True
     #     return False
@@ -27,7 +30,9 @@ class Point:
         first_point: tuple[float, float] = self.position
         second_point: tuple[float, float] = second_point.position
         # sqrt ( (x2 - x1)^2 + (y2 - y1)^2 )
-        return ((second_point[0] - first_point[0]) ** 2 + (second_point[1] - first_point[1]) ** 2) ** (1 / 2)
+        delta_x = second_point[0] - first_point[0]
+        delta_y = second_point[1] - first_point[1]
+        return (delta_x ** 2 + delta_y ** 2) ** (1 / 2)
 
 
 # a = Point(1,2)

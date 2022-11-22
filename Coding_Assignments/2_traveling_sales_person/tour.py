@@ -29,7 +29,7 @@ class Tour:
     def __init__(self):
         self.length = 0
         self.head = None
-        self.duplicates: set[tuple] = set()  # duplicate hashtable
+        self.visited: set[tuple] = set()  # duplicate hashtable
 
     # Returns string representation of the Tour.
     # Should output a list of all points on the Tour.
@@ -65,8 +65,8 @@ class Tour:
     # time complexity:
     # space complexity:
     def is_duplicate(self, coords: tuple):
-        if coords not in self.duplicates:
-            self.duplicates.add(coords)
+        if coords not in self.visited:
+            self.visited.add(coords)
             return False
         return True
 
