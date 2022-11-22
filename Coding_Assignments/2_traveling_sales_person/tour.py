@@ -125,7 +125,7 @@ class Tour:
             new_node.next = self.head
             self.head = new_node
             self.length += 1
-            return None
+            return
 
         head = self.head
         base_distance = self.distance()
