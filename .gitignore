@@ -1,6 +1,7 @@
 #
 scratch.py
 *.log
+old.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
