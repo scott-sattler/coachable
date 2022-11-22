@@ -9,8 +9,6 @@ class Node:
         self.point: Point = point
         # The next node
         self.next: None | Node = None
-        # can be used to reduce computation
-        # self.next_dist = None
 
 
 '''
@@ -28,11 +26,6 @@ The constructor creates an empty tour.
 class Tour:
     # Creates an empty tour
     # Initialize any instance variables you think are needed.
-    # def __init__(self, first_node: Node = None):
-    #     self.length = 0
-    #     if first_node is not None:
-    #         self.length += 1
-    #     self.head = first_node
     def __init__(self):
         self.length = 0
         self.head = None
