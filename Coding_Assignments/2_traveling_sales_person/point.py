@@ -9,18 +9,18 @@ class Point:
 
     # Returns a string representation of the point.
     # Should be in coordinate pair output. I.e. (x, y)
-    # def __str__(self) -> str:
-    #     return f"{self.position}"
-
-    def __eq__(self, other):
-        if isinstance(other, str):
-            other = ast.literal_eval(other)
-        if other == self.position:
-            return True
-        return False
-
-    def __repr__(self):
+    def __str__(self) -> str:
         return f"{self.position}"
+
+    # def __eq__(self, other):
+    #     if isinstance(other, str):
+    #         other = ast.literal_eval(other)
+    #     if other == self.position:
+    #         return True
+    #     return False
+
+    # def __repr__(self):
+    #     return f"{self.position}"
 
     # return Euclidean distance between the two points
     def distance_to(self, second_point: 'Point') -> float:
