@@ -1,11 +1,11 @@
 import os
-import types
-
 from tour import *
+
+import types
 import stopwatch
 import ast
 
-from tkinter import Tk, Canvas, Frame, BOTH
+import plotly.graph_objects as go
 
 """
 requirements:
@@ -13,6 +13,8 @@ a folder "tsp_test_data" containing the test files
 tour.py must be in the same directory as this file
 tour.py should/must? contain point.py import
 """
+# todo: check performance of (reverse + pop last) vs (pop first)
+# todo: implement test_case_validation
 
 
 class Test:
@@ -61,7 +63,6 @@ class Test:
             print("ERROR\n" + e.__str__() + "\n" + "ABORTING")
             return None
 
-    # todo: check performance of (reverse + pop last) vs (pop first)
     @staticmethod
     def run_test_nearest(test_data: list[tuple[float, float]], reverse_inp: bool = True) -> tuple[float, Tour]:
         if reverse_inp:
@@ -84,52 +85,65 @@ class Test:
 
 
 if __name__ == "__main__":
-    for each_file in Test.test_file_names:
-        t = Test()
-        # file_selector = -1  # indexes test_file_names list
-        file_selector = each_file
-        # path = t.working_directory + f"/{t.test_folder_name}/" + t.test_file_names[file_selector]
-        path = t.working_directory + f"/{t.test_folder_name}/" + file_selector
+    def truncate(value: float, digits: int) -> float:
+        return int(value * (10 ** digits)) / (10 ** digits)
+
+    t = Test()
+
+    # file_selector indexes test_file_names list
+    file_selector: None | int = None  # None runs all tests
+    tests_to_run = t.test_file_names
+    if file_selector is not None:
+        tests_to_run = t.test_file_names[file_selector]
+
+    for each_file in tests_to_run:
+        file_name = each_file
+        path = t.working_directory + f"/{t.test_folder_name}/" + file_name
         data = t.read_file_test(path)
-        data = data[1:]
-        print("test:", data)
-        result = t.run_test_nearest(data, reverse_inp=True)
-        # result = t.run_test_smallest(data, reverse_inp=True)
-        dec = 0  # decimal places
-        dist = result[0]  # distance
-        truncated = int(dist * (10 ** dec)) / (10 ** dec)
-        print('\t ', result[1].__str__())
-        print('\t ', truncated, result[1].length)
-        print()
-        # to check output length: len(ast.literal_eval(result[1].__str__()))
+        data = data[1:]  # this seems to be GUI data
+        result_near = t.run_test_nearest(data, reverse_inp=True)
+        result_small = t.run_test_smallest(data, reverse_inp=True)
+        dist_near = truncate(result_near[0], 4)
+        dist_small = truncate(result_small[0], 4)
 
-    # def test_duplicates():
-    #     coordinates = [
-    #         (0, 0),
-    #         (3, 0),
-    #         (0, 4),
-    #         (0, 0),
-    #         (0, 0),
-    #         (0, 4)
-    #     ]
-    #
-    #     tour = Tour()
-    #
-    #     for x, y in coordinates:
-    #         p = Point(x, y)
-    #         tour.insert_smallest(p)
-    #
-    #     print(tour.size())
-    #     assert tour.size() == 6
-    #     print(tour.distance())
-    #     assert tour.distance() == 12.0
-    #
-    #
-    # test_duplicates()
+        print("test input:", data)
+        print('near out:  ', result_near[1].__str__())
+        print('\t\t   ', dist_near, result_near[1].length)
+        print('small out: ', result_small[1].__str__())
+        print('\t\t   ', dist_small, result_small[1].length)
+        print('\t\t    ' + '-' * 32)
 
 
-# heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
-# fns = {k: v for k, v in Tour.__dict__.items() if k in heuristic_fn_names}
+
+
+
+
+
+
+
+fig = go.Figure(go.Scattermapbox(
+    mode = "markers+lines",
+    lon = [10, 20, 30],
+    lat = [10, 20,30],
+    marker = {'size': 10}))
+
+fig.add_trace(go.Scattermapbox(
+    mode = "markers+lines",
+    lon = [-50, -60,40],
+    lat = [30, 10, -20],
+    marker = {'size': 10}))
+
+fig.update_layout(
+    margin ={'l':0,'t':0,'b':0,'r':0},
+    mapbox = {
+        'center': {'lon': 10, 'lat': 10},
+        'style': "stamen-terrain",
+        'center': {'lon': -20, 'lat': -20},
+        'zoom': 1})
+
+fig.show()
+
+
 
 
 # class Example(Frame):
@@ -177,6 +191,27 @@ if __name__ == "__main__":
 #
 # if __name__ == '__main__':
 #     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+# to check output length: len(ast.literal_eval(result[1].__str__()))
+
+
+# heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
+# fns = {k: v for k, v in Tour.__dict__.items() if k in heuristic_fn_names}
+
+
+
 
 
 # test_cases: list[dict[str:list[tuple]]] = \
