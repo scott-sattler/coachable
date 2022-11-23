@@ -2,6 +2,7 @@ import time
 import os
 from point import Point
 from tour import Tour
+from typing import Callable
 
 import plotly.graph_objects as go
 import ast
@@ -119,6 +120,29 @@ class Test:
         while len(test_data) > 0:
             node_data = test_data.pop(-1)
             tour.insert_smallest(Point(node_data[0], node_data[1]))
+        run_time = run_timer.elapsed_time()
+        return tour.distance(), tour, run_time
+
+    @staticmethod
+    def run_test_(test_function: Callable,
+                  test_data: list[tuple[float, float]],
+                  reverse_inp: bool = True,
+                  ) -> tuple[float, Tour, int]:
+        """
+        :param test_function:
+        :param test_data:
+        :param reverse_inp: reverse input for .pop(-1) performance
+        :return: distance, tour, run time
+        """
+        run_time: None | int = None
+        run_timer = Stopwatch()
+        if reverse_inp:
+            test_data = test_data[::-1]
+        tour = Tour()
+        run_timer.restart()
+        while len(test_data) > 0:
+            node_data = test_data.pop(-1)
+            test_function(Point(node_data[0], node_data[1]))
         run_time = run_timer.elapsed_time()
         return tour.distance(), tour, run_time
 
