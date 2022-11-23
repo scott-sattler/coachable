@@ -13,7 +13,7 @@ class Stopwatch:
     def elapsed_time(self, resolution: int = 1e-9) -> int:
         """
         :param resolution: resolution down to ns; default 1e-9
-        :return: elapsed time since stopwatch was started
+        :return: elapsed time (seconds) since stopwatch was started
         """
         elapsed = time.perf_counter_ns() - self.__start_time
         return elapsed * resolution
