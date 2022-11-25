@@ -39,8 +39,31 @@ class Stopwatch:
 
 
 class Test:
-    test_folder_name = "tsp_test_data"
     working_directory = os.getcwd()
+
+    # test_folder_name = "tsp_test_data"
+
+    # file_selector indexes test_file_names list
+    file_selector: None | int = 4  # None runs all tests
+
+    heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
+
+    def __init__(self, heuristic_selector: str, dataset_selector: str, test_data_dir_path: str):
+        """
+
+        :param heuristic_selector: heuristic to test
+        :param dataset_selector: dataset(s) to use
+        :param test_data_dir_path: path of dataset .txt files
+        """
+        self.test_data_dir_path = test_data_dir_path
+        self.file_names = os.listdir(f'{self.test_data_dir_path}')
+        self.test_data: dict[str, list[tuple[float, float]]]  # dictionary of labeled datasets
+
+    def load_data(self):
+        # self.test_data = self.read_file_test()
+        # path = working_directory + f"\\{test_folder_name}\\" + file_name
+        # data = t.read_file_test(path)
+        # gui_bounds = data.pop(0)  # this seems to be GUI data
 
     test_file_names = \
         [
@@ -55,6 +78,7 @@ class Test:
 
         ]
 
+    # todo use files
     test_case_validation = \
         {
             "tsp2.txt":
@@ -124,93 +148,122 @@ class Test:
         return tour.distance(), tour, run_time
 
     @staticmethod
-    def run_test_(test_function: Callable,
-                  test_data: list[tuple[float, float]],
-                  reverse_inp: bool = True,
-                  ) -> tuple[float, Tour, int]:
+    def run_test(tour_instance: Tour,
+                 test_function: str,
+                 test_data: list[tuple[float, float]],
+                 reverse_inp: bool = True,
+                 ) -> tuple[float, Tour, int]:
         """
+        :param tour_instance:
         :param test_function:
         :param test_data:
         :param reverse_inp: reverse input for .pop(-1) performance
         :return: distance, tour, run time
         """
-        run_time: None | int = None
+        run_time: None | int  # todo check this initial value, should be None?
         run_timer = Stopwatch()
         if reverse_inp:
             test_data = test_data[::-1]
-        tour = Tour()
+        tour_instance = tour_instance
+        foo = getattr(tour_instance, test_function)
         run_timer.restart()
         while len(test_data) > 0:
             node_data = test_data.pop(-1)
-            test_function(Point(node_data[0], node_data[1]))
+            test_function(new_point=Point(node_data[0], node_data[1]))
         run_time = run_timer.elapsed_time()
-        return tour.distance(), tour, run_time
+        return tour_instance.distance(), tour_instance, run_time
 
 
 if __name__ == "__main__":
+    working_directory = os.getcwd()
+
+    test_folder_name = "tsp_test_data"
+
     # file_selector indexes test_file_names list
     file_selector: None | int = 4  # None runs all tests
+
+    heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
 
     def truncate(value: float, digits: int) -> float:
         return int(value * (10 ** digits)) / (10 ** digits)
 
-    t = Test()
+
+    path = working_directory + f"\\{test_folder_name}\\"
+    t = Test(test_data_dir_path=path)
+    test_results: dict = dict()
     tests_to_run = t.test_file_names
     if file_selector is not None:
         tests_to_run = [t.test_file_names[file_selector]]
 
     for file_name in tests_to_run:
-        path = t.working_directory + f"\\{t.test_folder_name}\\" + file_name
+        tour = Tour()
+        print(tour.__class__.__dict__)
+        fns = {k: v for k, v in tour.__class__.__dict__.items() if k in heuristic_fn_names}
+        print(fns)
+        path = working_directory + f"\\{test_folder_name}\\" + file_name
         data = t.read_file_test(path)
         gui_bounds = data.pop(0)  # this seems to be GUI data
-        result_near = t.run_test_nearest(data, reverse_inp=True)
-        result_small = t.run_test_smallest(data, reverse_inp=True)
-        dist_near = truncate(result_near[0], 4)
-        dist_small = truncate(result_small[0], 4)
+        for each_heuristic in fns.values():
+            result_near = t.run_test_nearest(data, reverse_inp=True)
+            # test_results = {""}
+            result_small_old = t.run_test_smallest(data, reverse_inp=True)
+            result_small = t.run_test(tour, each_heuristic, data, reverse_inp=True)
+            assert result_small == result_small_old
+            test_results = {""}
+            dist_near = truncate(result_near[0], 4)
+            dist_small = truncate(result_small[0], 4)
 
-        print("test input:", data)
-        print('near out:  ', result_near[1].__str__())
-        print('\t\t   ', dist_near, result_near[1].length, result_near[2])
-        print('small out: ', result_small[1].__str__())
-        print('\t\t   ', dist_small, result_small[1].length, result_small[2])
-        print('\t\t    ' + '-' * 32)
+        # print("test input:", data)
+        # print('near out:  ', result_near[1].__str__())
+        # print('\t\t   ', dist_near, result_near[1].length, result_near[2])
+        # print('small out: ', result_small[1].__str__())
+        # print('\t\t   ', dist_small, result_small[1].length, result_small[2])
+        # print('\t\t    ' + '-' * 32)
 
     x_list = list()
     y_list = list()
     all_data = dict(near_data=[], small_data=[])
 
-    plot_near_data = ast.literal_eval(result_near[1].__str__())
-    plot_small_data = ast.literal_eval(result_small[1].__str__())
+    # plot_near_data = ast.literal_eval(result_near[1].__str__())
+    # plot_small_data = ast.literal_eval(result_small[1].__str__())
 
-    for x, y in plot_near_data:
+    plot_data = ast.literal_eval(result_small[1].__str__())
+
+    for x, y in plot_data:
         x_list.append(x)
         y_list.append(y)
-    all_data['near_data'].append((x_list, y_list))
+    all_data['_data'].append((x_list, y_list))
 
-    x_list.clear()
-    y_list.clear()
-    for x, y in plot_small_data:
-        x_list.append(x)
-        y_list.append(y)
-    all_data['small_data'].append((x_list, y_list))
+    # for x, y in plot_near_data:
+    #     x_list.append(x)
+    #     y_list.append(y)
+    # all_data['near_data'].append((x_list, y_list))
+    #
+    # x_list.clear()
+    # y_list.clear()
+    # for x, y in plot_small_data:
+    #     x_list.append(x)
+    #     y_list.append(y)
+    # all_data['small_data'].append((x_list, y_list))
 
     # x_list += [x_list[0], x_list[-1]]
     # y_list += [y_list[0], y_list[-1]]
 
     fig = go.Figure(
-        go.Scatter(x=x_list, y=y_list, mode='lines'),
+        go.Scatter(x=x_list, y=y_list, mode='markers'),
+
     )
     # connect first<->last
     fig.add_trace(
-        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='lines'),
+        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers'),
     )
 
     fig.update_layout(
-        # width=gui_bounds[0] + gui_bounds[0],
-        # height=gui_bounds[1] + gui_bounds[1],
+        xaxis_range=(0, gui_bounds[0]),
+        yaxis_range=(0, gui_bounds[1]),
         showlegend=False,
         font_family="Courier New",
-        font_color="blue",
+        font_color="black",
         title_font_family="Times New Roman",
         title_font_color="red",
         legend_title_font_color="green",
@@ -221,23 +274,15 @@ if __name__ == "__main__":
                 type="buttons",
                 direction="left",
                 buttons=list([
-                    dict(
-                        label="Points Off",
-                        method="restyle",
-                        args=["mode", ["lines"]]
-                    ),
-                    dict(
-                        label="Points On",
-                        method="restyle",
-                        args=["mode", ["lines+markers"]]
-                    )
+                    dict(label="Points", method="restyle", args=["mode", ["markers"]]),
+                    dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
+                    dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
                 ]),
                 pad={"r": 10, "t": 10},
                 showactive=True,
-                x=0.11,
-                xanchor="center",
-                y=1.1,
-                yanchor="top"
+                x=0.02, y=1.0,  # x=0.11, y=1.1,
+                xanchor="left", yanchor="top",
+
             ),
         ],
     )
