@@ -2,7 +2,7 @@ import time
 import os
 from point import Point
 from tour import Tour
-from typing import Callable
+from typing import Union
 
 import plotly.graph_objects as go
 import ast
@@ -18,7 +18,7 @@ pip install plotly
 
 
 # todo: check performance of (reverse + pop last) vs (pop first)
-# todo: implement test_case_validation
+# todo: implement test_case_validation / def load_verification_data
 
 
 class Stopwatch:
@@ -45,25 +45,26 @@ class TestData:
         self.test_data = data
         self.plot_bounds = bounds
 
+    def __str__(self):
+        return f"{self.test_data}"
+
 
 class Test:
-    # working_directory = os.getcwd()
-    #
-    # # test_folder_name = "tsp_test_data"
-    #
-    # # file_selector indexes test_file_names list
-    # file_selector: None | int = 4  # None runs all tests
-    #
-    # heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
 
     def __init__(self,
                  heuristic_selector: str | list[str],
-                 dataset_selector: None | str | list[str],
+                 dataset_selector: str | list[str],
                  test_data_dir_path: str):
-        """
+        """ output_data format:\n
+        {heuristic name:
+            {data name: {
+                "distance": tour distance, \n
+                "time": execution time, \n
+                "TestData": TestData object, \n
+                "Tour": Tour object, }}}
 
-        :param heuristic_selector: name or list of heuristic names to test
-        :param dataset_selector: name or list of dataset names to test; None = all
+        :param heuristic_selector: heuristic name or list of names to test
+        :param dataset_selector: dataset name or list of names to test; None = all
         :param test_data_dir_path: path of dataset .txt files
         """
         self.heuristic_selector = heuristic_selector
@@ -72,49 +73,38 @@ class Test:
         self.working_directory = os.getcwd()
         self.file_names = os.listdir(f'{self.test_data_dir_path}')
         self.input_data: dict[str, list[tuple[float, float]]] = dict()  # dictionary of labeled tests
-        self.output_data: dict[str, list[tuple[float, float]]] = dict()  # dictionary of labeled results
-        self.results: any = {}
-        self.truncated_size = False
+        self.output_data: dict[str, dict[str, dict[str, Union[float, float, TestData, Tour]]]] = dict()
+        self.__truncated_size = False
 
         if isinstance(heuristic_selector, str):
             self.heuristic_selector = [self.heuristic_selector]
 
-        if dataset_selector is None:
+        if isinstance(self.dataset_selector, str):
+            self.dataset_selector = [self.dataset_selector]
+        elif isinstance(self.dataset_selector, list) and len(self.dataset_selector) == 0:
             self.dataset_selector = self.file_names
 
-    def set_format(self, digits: bool | int = False):
-        self.truncated_size = digits
-
-    # def get_tour_results(self):
-    #     return
+    def set_digits(self, digits: bool | int = False):
+        self.__truncated_size = digits
 
     @staticmethod
-    def truncate(value: float, digits: int) -> float:
+    def _truncate(value: float, digits: int) -> float:
         return int(value * (10 ** digits)) / (10 ** digits)
 
-    def load_data(self) -> None:
-        path = self.working_directory + f"\\{test_folder_name}\\"
+    def get_tour_result(self, heuristic: str, dataset: str):
+        return self.output_data[heuristic][dataset]
+
+    def load_input_data(self) -> None:
+        dir_path = self.working_directory + f"\\{test_folder_name}\\"
         tests_to_run = self.dataset_selector
         for each_test in tests_to_run:
-            self.input_data.update({each_test: self.read_file_test(path + each_test)})
+            self.input_data.update({each_test: self.read_file_input(dir_path + each_test)})
 
-    # todo use files for this
-    test_case_validation = \
-        {
-            "tsp2.txt":
-                [
-                    (316.22776601683796, 316.22776601683796),  # correct distance pop(0) pop(-1)
-                    ()  # correct tuple of point tuples
-                ],
-            "tsp3.txt":
-                [
-                    (516.2277660168379, 632.4555320336759),
-                    ()
-                ],
-        }
+    def load_verification_data(self):
+        raise NotImplementedError
 
     @staticmethod
-    def read_file_test(directory: str) -> list[tuple[float, float]] | None:
+    def read_file_input(directory: str) -> list[tuple[float, float]] | None:
         test_case: list[tuple[float, float]]
         try:
             with open(directory) as file:
@@ -125,47 +115,7 @@ class Test:
                 test_case = points_list
                 return test_case
         except Exception as e:
-            print("ERROR\n" + e.__str__() + "\n" + "ABORTING")
-            return None
-
-    @staticmethod
-    def run_test_nearest(test_data: list[tuple[float, float]],
-                         reverse_inp: bool = True) -> tuple[float, Tour, int]:
-        """
-        :param test_data:
-        :param reverse_inp: reverse input for performance
-        :return: distance, tour, run time
-        """
-        run_time: None | int = None
-        run_timer = Stopwatch()
-        if reverse_inp:
-            test_data = test_data[::-1]  # reverse list
-        tour = Tour()
-        while len(test_data) > 0:
-            node_data = test_data.pop(-1)
-            tour.insert_nearest(Point(node_data[0], node_data[1]))
-        run_time = run_timer.elapsed_time()
-        return tour.distance(), tour, run_time
-
-    @staticmethod
-    def run_test_smallest(test_data: list[tuple[float, float]],
-                          reverse_inp: bool = True, ) -> tuple[float, Tour, int]:
-        """
-        :param test_data:
-        :param reverse_inp: reverse input for performance
-        :return: distance, tour, run time
-        """
-        run_time: None | int = None
-        run_timer = Stopwatch()
-        if reverse_inp:
-            test_data = test_data[::-1]
-        tour = Tour()
-        run_timer.restart()
-        while len(test_data) > 0:
-            node_data = test_data.pop(-1)
-            tour.insert_smallest(Point(node_data[0], node_data[1]))
-        run_time = run_timer.elapsed_time()
-        return tour.distance(), tour, run_time
+            raise SystemExit("ERROR: TERMINATING APPLICATION\n" + e.__str__())
 
     def run_tests(self, reverse_inp: bool = True, truncate_result: bool | int = False) -> None:
         """
@@ -196,32 +146,22 @@ class Test:
 
                 distance = tour.distance()
                 if truncate_result:
-                    distance = self.truncate(distance, self.truncated_size)
+                    distance = self._truncate(distance, self.__truncated_size)
 
-                if not self.results.get(each_heuristic):
-                    self.results[each_heuristic] = {}
-                self.results[each_heuristic].update(
+                if not self.output_data.get(each_heuristic):
+                    self.output_data[each_heuristic] = {}
+                self.output_data[each_heuristic].update(
                     {
-                        test_data.test_name:
-                            [test_data, distance, run_time, tour]
-                    }
-                )
+                        test_data.test_name: {
+                                "distance": distance,
+                                "time": run_time,
+                                "TestData": test_data,
+                                "Tour": tour,
+                        }})
 
 
 if __name__ == "__main__":
-    # test_file_names = \
-    #     [
-    #         "tsp2.txt",
-    #         "tsp3.txt",
-    #         "tsp10.txt",
-    #         "tsp100.txt",
-    #         "tsp1000.txt",
-    #         "custom_tsp4.txt",
-    #         "custom_tsp0.txt",
-    #         "custom_tsp6_duplicates.txt",
-    #
-    #     ]
-
+    # file_selector
     test_file_names = [
         'custom_tsp0.txt',
         'custom_tsp4.txt',
@@ -232,132 +172,82 @@ if __name__ == "__main__":
         'tsp2.txt',
         'tsp3.txt',
     ]
+    # [] runs all tests
+    file_selector: []
 
     working_directory = os.getcwd()
-
     test_folder_name = "tsp_test_data"
 
-    # file_selector indexes test_file_names list
-    file_selector: None | int = 4  # None runs all tests
-
-    heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
-
+    # heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
     method_name_contains = "smallest"
-    fns = [k for k in Tour.__dict__.keys() if "smallest" in k]
+    fns = [k for k in Tour.__dict__.keys() if "smallest" in k or "nearest" in k]
     heuristic_method_names = fns
 
     path = working_directory + f"\\{test_folder_name}\\"
-    # t = Test([heuristic_fn_names[1]], None, path)
-    t = Test(heuristic_fn_names[1], ['tsp1000.txt'], path)
-    t.load_data()
+    t = Test(heuristic_method_names, [], path)
+    t.load_input_data()
+    t.set_digits = 4
     t.run_tests()
-    print(t.results)
+    result_near = t.get_tour_result("insert_nearest", "tsp1000.txt")
+    result_small = t.get_tour_result("insert_smallest", "tsp1000.txt")
 
-    # path = working_directory + f"\\{test_folder_name}\\"
-    # t = Test(test_data_dir_path=path)
-    # test_results: dict = dict()
-    # tests_to_run = t.test_file_names
-    # if file_selector is not None:
-    #     tests_to_run = [t.test_file_names[file_selector]]
-    #
-    # for file_name in tests_to_run:
-    #     tour = Tour()
-    #     print(tour.__class__.__dict__)
-    #     fns = {k: v for k, v in tour.__class__.__dict__.items() if k in heuristic_fn_names}
-    #     print(fns)
-    #     path = working_directory + f"\\{test_folder_name}\\" + file_name
-    #     data = t.read_file_test(path)
-    #     gui_bounds = data.pop(0)  # this seems to be GUI data
-    #     for each_heuristic in fns.values():
-    #         result_near = t.run_test_nearest(data, reverse_inp=True)
-    #         # test_results = {""}
-    #         result_small_old = t.run_test_smallest(data, reverse_inp=True)
-    #         result_small = t.run_test(tour, each_heuristic, data, reverse_inp=True)
-    #         assert result_small == result_small_old
-    #         test_results = {""}
-    #         dist_near = truncate(result_near[0], 4)
-    #         dist_small = truncate(result_small[0], 4)
+    print("test input:", result_near["TestData"].test_data)
 
-    # print("test input:", data)
-    # print('near out:  ', result_near[1].__str__())
-    # print('\t\t   ', dist_near, result_near[1].length, result_near[2])
-    # print('small out: ', result_small[1].__str__())
-    # print('\t\t   ', dist_small, result_small[1].length, result_small[2])
-    # print('\t\t    ' + '-' * 32)
+    print('near out:  ', result_near["Tour"].__str__())
+    print('\t\t   ', result_near["distance"], result_near["Tour"].length, result_near["time"])
+
+    print('small out: ', result_small["Tour"].__str__())
+    print('\t\t   ', result_small["distance"], result_small["Tour"].length, result_small["time"])
+
+    print('\t\t    ' + '-' * 32)
+
+    # ######### Plotly ######### #
+    plot_fn_name = "insert_smallest"
+    plot_data_name = "tsp1000.txt"
+    plotly_data = t.get_tour_result("insert_smallest", "tsp1000.txt")
+
+    gui_bounds = plotly_data["TestData"].plot_bounds
+    plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
 
     x_list = list()
     y_list = list()
-    # all_data = dict(near_data=[], small_data=[])
-
-    # plot_near_data = ast.literal_eval(result_near[1].__str__())
-    # plot_small_data = ast.literal_eval(result_small[1].__str__())
-
-    # plot_data = ast.literal_eval(result_small[1].__str__())
-    # gui_bounds = t.results[0][0][1][0]
-    plot_fn_name = "insert_smallest"
-    plot_data_name = "tsp1000.txt"
-
-    # gui_bounds = t.results.keys()[0]
-    key_0d = list(t.results.keys())[0]
-    key_1d = list(t.results[list(t.results.keys())[0]])[0]
-    gui_bounds = t.results[key_0d][key_1d][0].plot_bounds
-    # plot_data = ast.literal_eval(t.results[0][3].__str__())
-    plot_data = ast.literal_eval(t.results[key_0d][key_1d][-1].__str__())
-
     for x, y in plot_data:
         x_list.append(x)
         y_list.append(y)
-    # all_data['_data'].append((x_list, y_list))
-
-    # for x, y in plot_near_data:
-    #     x_list.append(x)
-    #     y_list.append(y)
-    # all_data['near_data'].append((x_list, y_list))
-    #
-    # x_list.clear()
-    # y_list.clear()
-    # for x, y in plot_small_data:
-    #     x_list.append(x)
-    #     y_list.append(y)
-    # all_data['small_data'].append((x_list, y_list))
-
-    # x_list += [x_list[0], x_list[-1]]
-    # y_list += [y_list[0], y_list[-1]]
 
     fig = go.Figure(
-        go.Scatter(x=x_list, y=y_list, mode='markers'),
-
+        go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
     )
     # connect first<->last
     fig.add_trace(
-        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers'),
+        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
     )
+
+    fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
+                       xref="paper", yref="paper", align="left", font=dict(size=18),
+                       x=0.0, y=1.1, showarrow=False)
 
     fig.update_layout(
         xaxis_range=(0, gui_bounds[0]),
         yaxis_range=(0, gui_bounds[1]),
         showlegend=False,
-        font_family="Courier New",
+        font_family="Courier New, monospace",
         font_color="black",
-        title_font_family="Times New Roman",
-        title_font_color="red",
-        legend_title_font_color="green",
         yaxis=dict(scaleanchor="x", scaleratio=1),
-        dragmode=False,
+        # dragmode=False,
         updatemenus=[
             dict(
                 type="buttons",
                 direction="left",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                x=0.02, y=1.0,  # x=0.11, y=1.1,
+                xanchor="left", yanchor="top",
                 buttons=list([
                     dict(label="Points", method="restyle", args=["mode", ["markers"]]),
                     dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
                     dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
                 ]),
-                pad={"r": 10, "t": 10},
-                showactive=True,
-                x=0.02, y=1.0,  # x=0.11, y=1.1,
-                xanchor="left", yanchor="top",
-
             ),
         ],
     )
