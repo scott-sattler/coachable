@@ -32,12 +32,11 @@ Explanation
 
 Constraints:
     0 <= key, value <= 106
-    At most 104 calls will be made to put, get, and remove.
+    At most 10^4 calls will be made to put, get, and remove.
 """
 
 
 class MyHashMap:
-
     # MyHashMap() initializes the object with an empty map.
     def __init__(self):
         pass
