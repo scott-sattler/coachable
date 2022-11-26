@@ -42,7 +42,8 @@ class Tour:
         return str(all_points)
 
     # return the number of points on tour
-    # Hint: You should not have to iterate through the entire Tour to get the size.
+    # Hint: You should not have to iterate through the entire Tour to get the
+    # size.
     def size(self) -> int:
         return self.length
 
@@ -62,21 +63,22 @@ class Tour:
 
     # Helper function
     # adds seen nodes to set for quick lookup
-    # time complexity:
+    # time complexity: O(1)
     # space complexity:
-    def is_duplicate(self, coords: tuple):
+    def is_duplicate(self, coords: tuple) -> bool:
         if coords not in self.visited:
             self.visited.add(coords)
             return False
         return True
 
-    # Helper function to insert a new point p into the Tour after a previous point prev.
+    # Helper function to insert a new point p into the Tour after a previous
+    # point prev.
     # Example if the tour is a -> b -> c -> d
     # And you call _insert_at(p, c). Then the Tour should look like.
     # a -> b -> c -> p -> d
     # You can use this helper function in the insert_nearest and insert_smallest
     # once you find the point you should insert p after.
-    def _insert_at(self, new_point: Point, prev: Node) -> None:  # this should be _insert_after
+    def _insert_at(self, new_point: Point, prev: Node) -> None:  # _insert_after
         head = self.head
         while head is not prev:
             head = head.next
@@ -87,8 +89,8 @@ class Tour:
 
     # Insert a new Point p to the Tour using nearest neighbor heuristic
     def insert_nearest(self, new_point: Point) -> None:
-        if self.is_duplicate(new_point.position):
-            return
+        # if self.is_duplicate(new_point.position):
+        #     return
 
         if self.length < 2:
             new_node = Node(new_point)
@@ -117,8 +119,8 @@ class Tour:
         #   add current to new, and new to next
         # compare (minimize) this total distance
 
-        if self.is_duplicate(new_point.position):
-            return
+        # if self.is_duplicate(new_point.position):
+        #     return
 
         new_node = Node(new_point)
         if self.length < 2:
@@ -137,15 +139,16 @@ class Tour:
             # wrap linked list when end of tour
             if head.next is None:
                 point_next_node = self.head.point
-                dist_prev_to_next = head.point.distance_to(point_next_node)  # remove
+                dist_prev_to_next = head.point.distance_to(point_next_node)  # -
             else:
                 point_next_node = head.next.point
-                dist_prev_to_next = head.point.distance_to(point_next_node)  # remove
+                dist_prev_to_next = head.point.distance_to(point_next_node)  # -
 
-            dist_prev_to_new = head.point.distance_to(position_new_node)  # add
-            dist_new_to_next = new_node.point.distance_to(point_next_node)  # add
+            dist_prev_to_new = head.point.distance_to(position_new_node)  # +
+            dist_new_to_next = new_node.point.distance_to(point_next_node)  # +
 
-            new_dist = base_distance - dist_prev_to_next + dist_prev_to_new + dist_new_to_next
+            add_dist = dist_prev_to_new + dist_new_to_next
+            new_dist = base_distance - dist_prev_to_next + add_dist
             if new_dist < min_distance:
                 min_distance = new_dist
                 prev_when_min = head
