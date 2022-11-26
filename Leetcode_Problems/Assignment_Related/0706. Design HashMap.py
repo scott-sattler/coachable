@@ -33,30 +33,33 @@ Explanation
 Constraints:
     0 <= key, value <= 106
     At most 10^4 calls will be made to put, get, and remove.
-"""
-
-
-class MyHashMap:
-    # MyHashMap() initializes the object with an empty map.
-    def __init__(self):
-        pass
-
-    # void put(int key, int value) inserts a (key, value) pair into the HashMap. If the key already exists in the map,
-    # update the corresponding value.
-    def put(self, key: int, value: int) -> None:
-        pass
-
-    # int get(int key) returns the value to which the specified key is mapped, or -1 if this map contains no mapping for
-    # the key.
-    def get(self, key: int) -> int:
-        pass
-
-    # void remove(key) removes the key and its corresponding value if the map contains the mapping for the key.
-    def remove(self, key: int) -> None:
-        pass
 
 # Your MyHashMap object will be instantiated and called as such:
 # obj = MyHashMap()
 # obj.put(key,value)
 # param_2 = obj.get(key)
 # obj.remove(key)
+"""
+
+
+class MyHashMap:
+    # MyHashMap() initializes the object with an empty map.
+    def __init__(self):
+        self.hashmap: list[None | int | list] = [None] * (10 ** 6 + 1)
+
+    # void put(int key, int value) inserts a (key, value) pair into the HashMap. If the key already exists in the map,
+    # update the corresponding value.
+    def put(self, key: int, value: int) -> None:
+        self.hashmap[key] = value
+
+    # int get(int key) returns the value to which the specified key is mapped, or -1 if this map contains no mapping for
+    # the key.
+    def get(self, key: int) -> int:
+        if self.hashmap[key] is not None:
+            return self.hashmap[key]
+        else:
+            return -1
+
+    # void remove(key) removes the key and its corresponding value if the map contains the mapping for the key.
+    def remove(self, key: int) -> None:
+        self.hashmap[key] = None
