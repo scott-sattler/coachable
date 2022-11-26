@@ -33,15 +33,3 @@ class Point:
         delta_x = second_point[0] - first_point[0]
         delta_y = second_point[1] - first_point[1]
         return (delta_x ** 2 + delta_y ** 2) ** (1 / 2)
-
-
-# a = Point(1,2)
-# # print(a)
-# # print(str(a))
-# print(str(a) == '(1,2)')
-# print(a == '(1,2)')
-# print(a == '(1, 2)')
-# # print('(1,2)' == str(a))
-# print(str(a) == '(1, 2)')
-# print((1,2) == a)
-# print((1, 2) == a)
