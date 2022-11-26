@@ -76,9 +76,10 @@ class Tour:
     # Example if the tour is a -> b -> c -> d
     # And you call _insert_at(p, c). Then the Tour should look like.
     # a -> b -> c -> p -> d
-    # You can use this helper function in the insert_nearest and insert_smallest
-    # once you find the point you should insert p after.
-    def _insert_at(self, new_point: Point, prev: Node) -> None:  # _insert_after
+    # You can use this helper function in the insert_nearest and
+    # insert_smallest once you find the point you should insert p after.
+    # _insert_after
+    def _insert_at(self, new_point: Point, prev: Node) -> None:
         head = self.head
         while head is not prev:
             head = head.next
@@ -139,13 +140,13 @@ class Tour:
             # wrap linked list when end of tour
             if head.next is None:
                 point_next_node = self.head.point
-                dist_prev_to_next = head.point.distance_to(point_next_node)  # -
+                dist_prev_to_next = head.point.distance_to(point_next_node)
             else:
                 point_next_node = head.next.point
-                dist_prev_to_next = head.point.distance_to(point_next_node)  # -
+                dist_prev_to_next = head.point.distance_to(point_next_node)
 
-            dist_prev_to_new = head.point.distance_to(position_new_node)  # +
-            dist_new_to_next = new_node.point.distance_to(point_next_node)  # +
+            dist_prev_to_new = head.point.distance_to(position_new_node)
+            dist_new_to_next = new_node.point.distance_to(point_next_node)
 
             add_dist = dist_prev_to_new + dist_new_to_next
             new_dist = base_distance - dist_prev_to_next + add_dist
