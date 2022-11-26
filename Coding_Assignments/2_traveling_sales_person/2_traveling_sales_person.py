@@ -160,6 +160,64 @@ class Test:
                         }})
 
 
+class PlotlyGraph:
+
+    plot_fn_name = "insert_smallest"
+    plot_data_name = "tsp1000.txt"
+    plotly_data = t.get_tour_result("insert_smallest", "tsp1000.txt")
+
+    gui_bounds = plotly_data["TestData"].plot_bounds
+    plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
+
+    x_list = list()
+    y_list = list()
+    for x, y in plot_data:
+        x_list.append(x)
+        y_list.append(y)
+
+    fig = go.Figure(
+        go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
+    )
+    # connect first<->last
+    fig.add_trace(
+        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
+    )
+
+    fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
+                       xref="paper", yref="paper", align="left", font=dict(size=18),
+                       x=0.0, y=1.1, showarrow=False)
+
+    fig.update_layout(
+        xaxis_range=(0, gui_bounds[0]),
+        yaxis_range=(0, gui_bounds[1]),
+        showlegend=False,
+        font_family="Courier New, monospace",
+        font_color="black",
+        yaxis=dict(scaleanchor="x", scaleratio=1),
+        # dragmode=False,
+        updatemenus=[
+            dict(
+                type="buttons",
+                direction="left",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                x=0.02, y=1.0,  # x=0.11, y=1.1,
+                xanchor="left", yanchor="top",
+                buttons=list([
+                    dict(label="Points", method="restyle", args=["mode", ["markers"]]),
+                    dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
+                    dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
+                ]),
+            ),
+        ],
+    )
+
+    config = {'displayModeBar': False,
+              'scrollZoom': True,
+              }
+    fig.show(config=config)
+
+
 if __name__ == "__main__":
     # file_selector
     test_file_names = [
