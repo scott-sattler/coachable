@@ -4,7 +4,7 @@ import ast
 # (2D point data type to model points in the plane.)
 class Point:
     # create the point (x, y)
-    def __init__(self, x: float, y: float):
+    def __init__(self, x: float, y: float) -> None:
         self.position: tuple = (x, y)
 
     # Returns a string representation of the point.

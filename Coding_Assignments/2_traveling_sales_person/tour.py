@@ -4,7 +4,7 @@ from math import inf
 
 # Hint: You will want to use a classic LinkedList Node to implement the tour.
 class Node:
-    def __init__(self, point: Point):
+    def __init__(self, point: Point) -> None:
         # This node's point
         self.point: Point = point
         # The next node
@@ -26,7 +26,7 @@ The constructor creates an empty tour.
 class Tour:
     # Creates an empty tour
     # Initialize any instance variables you think are needed.
-    def __init__(self):
+    def __init__(self) -> None:
         self.length = 0
         self.head = None
         self.visited: set[tuple] = set()  # duplicate hashtable
