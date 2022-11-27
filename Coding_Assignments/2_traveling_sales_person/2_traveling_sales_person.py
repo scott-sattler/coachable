@@ -1,11 +1,13 @@
 import time
 import os
+
 from point import Point
 from tour import Tour
 from typing import Union
 
 import plotly.graph_objects as go
 import ast
+from plotly.graph_objs import Figure
 
 """
 additional requirements:
@@ -54,7 +56,7 @@ class Test:
     def __init__(self,
                  heuristic_selector: str | list[str],
                  dataset_selector: str | list[str],
-                 test_data_dir_path: str):
+                 test_data_dir_path: str) -> None:
         """ output_data format:\n
         {heuristic name:
             {data name: {
@@ -162,60 +164,68 @@ class Test:
 
 class PlotlyGraph:
 
-    plot_fn_name = "insert_smallest"
-    plot_data_name = "tsp1000.txt"
-    plotly_data = t.get_tour_result("insert_smallest", "tsp1000.txt")
+    def __init__(self, test: Test, config: None | dict = None) -> None:
+        self.test = test
+        self.fig: Figure = Figure()
+        self.configuration: None | dict = config
 
-    gui_bounds = plotly_data["TestData"].plot_bounds
-    plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
+        if self.configuration is None:
+            default_config = {
+                'displayModeBar': False,
+                'scrollZoom': True,
+            }
+            self.configuration = default_config
 
-    x_list = list()
-    y_list = list()
-    for x, y in plot_data:
-        x_list.append(x)
-        y_list.append(y)
+    def plot(self, fn_name, data_name) -> None:
 
-    fig = go.Figure(
-        go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
-    )
-    # connect first<->last
-    fig.add_trace(
-        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
-    )
+        plotly_data = self.test.get_tour_result(fn_name, data_name)
+        gui_bounds = plotly_data["TestData"].plot_bounds
+        plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
 
-    fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
-                       xref="paper", yref="paper", align="left", font=dict(size=18),
-                       x=0.0, y=1.1, showarrow=False)
+        x_list = list()
+        y_list = list()
+        for x, y in plot_data:
+            x_list.append(x)
+            y_list.append(y)
 
-    fig.update_layout(
-        xaxis_range=(0, gui_bounds[0]),
-        yaxis_range=(0, gui_bounds[1]),
-        showlegend=False,
-        font_family="Courier New, monospace",
-        font_color="black",
-        yaxis=dict(scaleanchor="x", scaleratio=1),
-        # dragmode=False,
-        updatemenus=[
-            dict(
-                type="buttons",
-                direction="left",
-                pad={"r": 10, "t": 10},
-                showactive=True,
-                x=0.02, y=1.0,  # x=0.11, y=1.1,
-                xanchor="left", yanchor="top",
-                buttons=list([
-                    dict(label="Points", method="restyle", args=["mode", ["markers"]]),
-                    dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
-                    dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
-                ]),
-            ),
-        ],
-    )
+        self.fig = go.Figure(
+            go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
+        )
+        # connect first<->last
+        self.fig.add_trace(
+            go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
+        )
 
-    config = {'displayModeBar': False,
-              'scrollZoom': True,
-              }
-    fig.show(config=config)
+        self.fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
+                           xref="paper", yref="paper", align="left", font=dict(size=18),
+                           x=0.0, y=1.1, showarrow=False)
+
+        self.fig.update_layout(
+            xaxis_range=(0, gui_bounds[0]),
+            yaxis_range=(0, gui_bounds[1]),
+            showlegend=False,
+            font_family="Courier New, monospace",
+            font_color="black",
+            yaxis=dict(scaleanchor="x", scaleratio=1),
+            # dragmode=False,
+            updatemenus=[
+                dict(
+                    type="buttons",
+                    direction="left",
+                    pad={"r": 10, "t": 10},
+                    showactive=True,
+                    x=0.02, y=1.0,  # x=0.11, y=1.1,
+                    xanchor="left", yanchor="top",
+                    buttons=list([
+                        dict(label="Points", method="restyle", args=["mode", ["markers"]]),
+                        dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
+                        dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
+                    ]),
+                ),
+            ],
+        )
+
+        self.fig.show(configuration=self.configuration)
 
 
 if __name__ == "__main__":
@@ -262,55 +272,61 @@ if __name__ == "__main__":
     # ######### Plotly ######### #
     plot_fn_name = "insert_smallest"
     plot_data_name = "tsp1000.txt"
-    plotly_data = t.get_tour_result("insert_smallest", "tsp1000.txt")
+    plot = PlotlyGraph(t)
+    plot.plot(plot_fn_name, plot_data_name)
 
-    gui_bounds = plotly_data["TestData"].plot_bounds
-    plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
-
-    x_list = list()
-    y_list = list()
-    for x, y in plot_data:
-        x_list.append(x)
-        y_list.append(y)
-
-    fig = go.Figure(
-        go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
-    )
-    # connect first<->last
-    fig.add_trace(
-        go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
-    )
-
-    fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
-                       xref="paper", yref="paper", align="left", font=dict(size=18),
-                       x=0.0, y=1.1, showarrow=False)
-
-    fig.update_layout(
-        xaxis_range=(0, gui_bounds[0]),
-        yaxis_range=(0, gui_bounds[1]),
-        showlegend=False,
-        font_family="Courier New, monospace",
-        font_color="black",
-        yaxis=dict(scaleanchor="x", scaleratio=1),
-        # dragmode=False,
-        updatemenus=[
-            dict(
-                type="buttons",
-                direction="left",
-                pad={"r": 10, "t": 10},
-                showactive=True,
-                x=0.02, y=1.0,  # x=0.11, y=1.1,
-                xanchor="left", yanchor="top",
-                buttons=list([
-                    dict(label="Points", method="restyle", args=["mode", ["markers"]]),
-                    dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
-                    dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
-                ]),
-            ),
-        ],
-    )
-
-    config = {'displayModeBar': False,
-              'scrollZoom': True,
-              }
-    fig.show(config=config)
+    # # ######### Plotly ######### #
+    # plot_fn_name = "insert_smallest"
+    # plot_data_name = "tsp1000.txt"
+    # plotly_data = t.get_tour_result("insert_smallest", "tsp1000.txt")
+    #
+    # gui_bounds = plotly_data["TestData"].plot_bounds
+    # plot_data = ast.literal_eval(plotly_data["Tour"].__str__())
+    #
+    # x_list = list()
+    # y_list = list()
+    # for x, y in plot_data:
+    #     x_list.append(x)
+    #     y_list.append(y)
+    #
+    # fig = go.Figure(
+    #     go.Scatter(x=x_list, y=y_list, mode='markers', name=""),
+    # )
+    # # connect first<->last
+    # fig.add_trace(
+    #     go.Scatter(x=[x_list[0], x_list[-1]], y=[y_list[0], y_list[-1]], mode='markers', name=""),
+    # )
+    #
+    # fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
+    #                    xref="paper", yref="paper", align="left", font=dict(size=18),
+    #                    x=0.0, y=1.1, showarrow=False)
+    #
+    # fig.update_layout(
+    #     xaxis_range=(0, gui_bounds[0]),
+    #     yaxis_range=(0, gui_bounds[1]),
+    #     showlegend=False,
+    #     font_family="Courier New, monospace",
+    #     font_color="black",
+    #     yaxis=dict(scaleanchor="x", scaleratio=1),
+    #     # dragmode=False,
+    #     updatemenus=[
+    #         dict(
+    #             type="buttons",
+    #             direction="left",
+    #             pad={"r": 10, "t": 10},
+    #             showactive=True,
+    #             x=0.02, y=1.0,  # x=0.11, y=1.1,
+    #             xanchor="left", yanchor="top",
+    #             buttons=list([
+    #                 dict(label="Points", method="restyle", args=["mode", ["markers"]]),
+    #                 dict(label="Lines+Point", method="restyle", args=["mode", ["lines+markers"]]),
+    #                 dict(label="Lines", method="restyle", args=["mode", ["lines"]]),
+    #             ]),
+    #         ),
+    #     ],
+    # )
+    #
+    # config = {'displayModeBar': False,
+    #           'scrollZoom': True,
+    #           }
+    # fig.show(config=config)
