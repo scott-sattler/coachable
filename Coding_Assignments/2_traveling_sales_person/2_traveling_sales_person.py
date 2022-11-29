@@ -16,6 +16,8 @@ additional requirements:
 - point.py must be in the same directory as this file
 
 pip install plotly
+
+notes:
 """
 
 
@@ -155,14 +157,22 @@ class Test:
                 self.output_data[each_heuristic].update(
                     {
                         test_data.test_name: {
-                                "distance": distance,
-                                "time": run_time,
-                                "TestData": test_data,
-                                "Tour": tour,
+                            "distance": distance,
+                            "time": run_time,
+                            "TestData": test_data,
+                            "Tour": tour,
                         }})
 
+    def print_output_data(self):
+        for each_test in self.output_data.items():
+            print(each_test[0])
+            for each_dataset in each_test[1].items():
+                print('\t' + each_dataset[0] + f' ({each_test[0]})')
+                for each_item in each_dataset[1].items():
+                    print(f'\t\t {each_item[0]}: {each_item[1]}')
 
-class PlotlyGraph:
+
+class GraphDataPlotly:
 
     def __init__(self, test: Test, config: None | dict = None) -> None:
         self.test = test
@@ -197,8 +207,8 @@ class PlotlyGraph:
         )
 
         self.fig.add_annotation(text="zoom: mouse scroll<br>pan: shift + left mouse button",
-                           xref="paper", yref="paper", align="left", font=dict(size=18),
-                           x=0.0, y=1.1, showarrow=False)
+                                xref="paper", yref="paper", align="left", font=dict(size=18),
+                                x=0.0, y=1.1, showarrow=False)
 
         self.fig.update_layout(
             xaxis_range=(0, gui_bounds[0]),
@@ -259,21 +269,30 @@ if __name__ == "__main__":
     result_near = t.get_tour_result("insert_nearest", "tsp1000.txt")
     result_small = t.get_tour_result("insert_smallest", "tsp1000.txt")
 
-    print("test input:", result_near["TestData"].test_data)
-
-    print('near out:  ', result_near["Tour"].__str__())
-    print('\t\t   ', result_near["distance"], result_near["Tour"].length, result_near["time"])
-
-    print('small out: ', result_small["Tour"].__str__())
-    print('\t\t   ', result_small["distance"], result_small["Tour"].length, result_small["time"])
-
-    print('\t\t    ' + '-' * 32)
+    # ######### Print ######### #
+    t.print_output_data()
 
     # ######### Plotly ######### #
     plot_fn_name = "insert_smallest"
     plot_data_name = "tsp1000.txt"
-    plot = PlotlyGraph(t)
+    plot = GraphDataPlotly(t)
     plot.plot(plot_fn_name, plot_data_name)
+
+
+
+
+
+    # # ######### Print ######### #
+    # print("test input:", result_near["TestData"].test_data)
+    #
+    # print('near out:  ', result_near["Tour"].__str__())
+    # print('\t\t   ', result_near["distance"], result_near["Tour"].length, result_near["time"])
+    #
+    # print('small out: ', result_small["Tour"].__str__())
+    # print('\t\t   ', result_small["distance"], result_small["Tour"].length, result_small["time"])
+    #
+    # print('\t\t    ' + '-' * 32)
+
 
     # # ######### Plotly ######### #
     # plot_fn_name = "insert_smallest"
