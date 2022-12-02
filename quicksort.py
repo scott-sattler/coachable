@@ -96,3 +96,110 @@ def partition_rightmost(arr, low, high):
 unsorted_rightmost = [3, 4, 2, 1, 5, 6, 2, 7, 8, 8, 3, 11, 100, 0, -3, -10, 9]
 quicksort_rightmost(unsorted_rightmost)
 print(unsorted_rightmost)
+
+
+
+
+
+
+
+
+
+
+
+# leftmost partition
+def quicksort(arr):
+    _quicksort_helper(arr, 0, len(arr) - 1)
+
+def _quicksort_helper(arr, low, high):
+    if low >= high:
+        return
+
+    pivot_index = partition(arr, low, high)
+    # lower
+    _quicksort_helper(arr, low, pivot_index -1)
+    # upper
+    _quicksort_helper(arr, pivot_index + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[low]
+    low_swap = low + 1
+
+    for i in range(low + 1, high + 1):
+        if arr[i] < pivot:
+            arr[i], arr[low_swap] = arr[low_swap], arr[i]
+            low_swap += 1
+    arr[low], arr[low_swap - 1] = arr[low_swap - 1], arr[low]
+    return low_swap - 1
+
+
+unsorted = [3, 4, 2, 1, 5, 6, 2, 7, 8, 8, 3, 11, 100, 0, -3, -10, 9]
+quicksort(unsorted)
+print(unsorted)
+
+
+
+
+
+
+
+
+
+
+
+# # middle partition
+# # recursive_fn
+# #   base case (low >= high ?or? high <= low)
+# #   get partition index
+# #   quicksort lower (up to partition index)
+# #   quicksort upper (down to partition index)
+# # partition_fn
+# #   ! move partition index to correct location
+# #   to do so, correct number left/right less/greater
+# #   swaps
+#
+# def quicksort_middle(arr):
+#     _quicksort_middle(arr, 0, len(arr) - 1)
+#
+# def _quicksort_middle(arr, low, high):
+#     if low >= high:  # todo
+#         return
+#
+#     partition_index = partition_middle(arr, low, high)
+#     # lower subarray
+#     _quicksort_middle(arr, low, partition_index - 1)
+#     # upper subarray
+#     _quicksort_middle(arr, partition_index + 1, high)
+#
+# def partition_middle(arr, low, high):
+#     partition_index = low + (high - low) // 2
+#     # swap partition value with low
+#     arr[low], arr[partition_index] = arr[partition_index], arr[low]
+#     partition_value = arr[low]
+#
+#     low_index = low + 1
+#     high_index = high
+#     while low_index < high_index:
+#         if arr[low_index] < partition_value:
+#             low_index += 1
+#         elif arr[high_index] > partition_value:
+#             high_index -= 1
+#         else:
+#             print("\npart_value:", partition_value, "part_index:", partition_index)
+#             print("\t\t\t\t\t", arr)
+#             print(f"swap: {arr[low_index]} <-> {arr[high_index]}", end=" ")
+#             arr[low_index], arr[high_index] = arr[high_index], arr[low_index]
+#             print("\t",  arr)
+#     if low + 1 != low_index:
+#         arr[low], arr[low_index - 1] = arr[low_index - 1], arr[low]
+#     return low_index - 1
+#
+#
+# unsorted_middle = [3, 8, 4, 2, 13, 5, 6, -1, 7, 1, 2, 8, 3, 11, 100, 0, -3, -10, 9]
+# quicksort_middle(unsorted_middle)
+# print(unsorted_middle)
+
+
+
+
+
