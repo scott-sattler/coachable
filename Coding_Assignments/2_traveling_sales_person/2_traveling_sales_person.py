@@ -26,21 +26,39 @@ notes:
 
 
 class Stopwatch:
-    # create and start a stop watch
+    # create a stop watch
     def __init__(self) -> None:
-        self.__start_time: int = time.perf_counter_ns()
+        self.__start_time: None | int = None
 
-    def restart(self) -> None:
+    # start the stop watch
+    def start(self) -> None:
         self.__start_time = time.perf_counter_ns()
 
+    def restart(self) -> None:
+        self.start()
+
     # returns elapsed time since stopwatch was started
-    def elapsed_time(self, resolution: int = 1e-9) -> int:
+    def elapsed_time(self) -> None | int:
+        """:return: elapsed time (nanoseconds) since stopwatch was started"""
+        if self.__start_time is None:
+            raise Exception("Stopwatch was never started.")
+        return time.perf_counter_ns() - self.__start_time
+
+    @staticmethod
+    def _truncate(value: float, digits: int) -> float:
+        return int(value * (10 ** digits)) / (10 ** digits)
+
+    def format_time(self, duration: int, resolution: int = 9, digits: int = 4) -> int | float:
         """
-        :param resolution: resolution down to ns; default 1e-9
-        :return: elapsed time (seconds) since stopwatch was started
+        :param digits: number of digits right of decimal
+        :param duration:
+        :param resolution: 10^(value - 9); 0 - 9 -> sec - nanoseconds
+        :return: formatted time as float (unless in nanoseconds)
         """
-        elapsed = time.perf_counter_ns() - self.__start_time
-        return elapsed * resolution
+        duration = duration * 10 ** (resolution - 9)
+        if isinstance(duration, float):
+            duration = self._truncate(duration, digits)
+        return duration
 
 
 class TestData:
@@ -79,6 +97,7 @@ class Test:
         self.input_data: dict[str, list[tuple[float, float]]] = dict()  # dictionary of labeled tests
         self.output_data: dict[str, dict[str, dict[str, Union[float, float, TestData, Tour]]]] = dict()
         self.__truncated_size = False
+        self.__temporal_resolution = False
 
         if isinstance(heuristic_selector, str):
             self.heuristic_selector = [self.heuristic_selector]
@@ -88,8 +107,21 @@ class Test:
         elif isinstance(self.dataset_selector, list) and len(self.dataset_selector) == 0:
             self.dataset_selector = self.file_names
 
-    def set_digits(self, digits: bool | int = False):
+    @property
+    def truncated_size(self) -> bool | int:
+        return self.__truncated_size
+
+    @truncated_size.setter
+    def truncated_size(self, digits: bool | int = False):
         self.__truncated_size = digits
+
+    @property
+    def time_resolution(self) -> bool | int:
+        return self.__temporal_resolution
+
+    @time_resolution.setter
+    def time_resolution(self, resolution: bool | int = False):
+        self.__temporal_resolution = resolution
 
     @staticmethod
     def _truncate(value: float, digits: int) -> float:
@@ -121,11 +153,12 @@ class Test:
         except Exception as e:
             raise SystemExit("ERROR: TERMINATING APPLICATION\n" + e.__str__())
 
-    def run_tests(self, reverse_inp: bool = True, truncate_result: bool | int = False) -> None:
+    def run_tests(self, reverse_inp: bool = True) -> None:
         """
         :param truncate_result: default: False; digits
         :param reverse_inp: reverse input for .pop(-1) performance
         """
+
         run_time: None | int  # todo check this initial value, should be None?
         for each_test in self.input_data.items():
             test_data = TestData(
@@ -136,21 +169,24 @@ class Test:
             data = test_data.test_data
             if reverse_inp:
                 data = data[::-1]
+            run_timer = Stopwatch()
             for each_heuristic in self.heuristic_selector:
                 test_data_copy = data[:]
-                run_timer = Stopwatch()
                 tour = Tour()
                 test_function = getattr(tour, each_heuristic)
 
-                run_timer.restart()
+                run_timer.start()
                 while len(test_data_copy) > 0:
                     node_data = test_data_copy.pop(-1)
                     test_function(new_point=Point(node_data[0], node_data[1]))
                 run_time = run_timer.elapsed_time()
 
                 distance = tour.distance()
-                if truncate_result:
+                if self.truncated_size is not False:
                     distance = self._truncate(distance, self.__truncated_size)
+
+                # todo: remove hardcoded format; allow config
+                run_time = run_timer.format_time(run_time, 3, 4)
 
                 if not self.output_data.get(each_heuristic):
                     self.output_data[each_heuristic] = {}
@@ -158,7 +194,7 @@ class Test:
                     {
                         test_data.test_name: {
                             "distance": distance,
-                            "time": run_time,
+                            "time (ms)": run_time,  # todo: remove hardcoded format
                             "TestData": test_data,
                             "Tour": tour,
                         }})
@@ -264,13 +300,22 @@ if __name__ == "__main__":
     path = working_directory + f"\\{test_folder_name}\\"
     t = Test(heuristic_method_names, [], path)
     t.load_input_data()
-    t.set_digits = 4
-    t.run_tests()
+    t.truncated_size = 4
+    t.time_resolution = 0
+    t.run_tests(reverse_inp=True)
     result_near = t.get_tour_result("insert_nearest", "tsp1000.txt")
     result_small = t.get_tour_result("insert_smallest", "tsp1000.txt")
 
     # ######### Print ######### #
     t.print_output_data()
+
+    # print('foo')
+    # watch = Stopwatch()
+    # watch.start()
+    # time.sleep(1)
+    # dur = watch.elapsed_time()
+    # dur = watch.format_time(duration=dur, resolution=0, digits=4)
+    # print(dur)
 
     # ######### Plotly ######### #
     plot_fn_name = "insert_smallest"
