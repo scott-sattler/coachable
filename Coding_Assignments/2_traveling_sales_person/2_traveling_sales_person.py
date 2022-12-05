@@ -1,3 +1,4 @@
+import sys
 import time
 import os
 
@@ -17,7 +18,6 @@ additional requirements:
 
 pip install plotly
 
-notes:
 """
 
 
@@ -43,22 +43,6 @@ class Stopwatch:
         if self.__start_time is None:
             raise Exception("Stopwatch was never started.")
         return time.perf_counter_ns() - self.__start_time
-
-    @staticmethod
-    def _truncate(value: float, digits: int) -> float:
-        return int(value * (10 ** digits)) / (10 ** digits)
-
-    def format_time(self, duration: int, resolution: int = 9, digits: int = 4) -> int | float:
-        """
-        :param digits: number of digits right of decimal
-        :param duration:
-        :param resolution: 10^(value - 9); 0 - 9 -> sec - nanoseconds
-        :return: formatted time as float (unless in nanoseconds)
-        """
-        duration = duration * 10 ** (resolution - 9)
-        if isinstance(duration, float):
-            duration = self._truncate(duration, digits)
-        return duration
 
 
 class TestData:
@@ -96,8 +80,9 @@ class Test:
         self.file_names = os.listdir(f'{self.test_data_dir_path}')
         self.input_data: dict[str, list[tuple[float, float]]] = dict()  # dictionary of labeled tests
         self.output_data: dict[str, dict[str, dict[str, Union[float, float, TestData, Tour]]]] = dict()
-        self.__truncated_size = False
-        self.__temporal_resolution = False
+        self.__dist_truncate: bool | int = False
+        self.__time_truncate: bool | int = False
+        self.__time_resolution: bool | int = False
 
         if isinstance(heuristic_selector, str):
             self.heuristic_selector = [self.heuristic_selector]
@@ -107,25 +92,52 @@ class Test:
         elif isinstance(self.dataset_selector, list) and len(self.dataset_selector) == 0:
             self.dataset_selector = self.file_names
 
+    # experimenting with Python setter/getter
     @property
-    def truncated_size(self) -> bool | int:
-        return self.__truncated_size
+    def truncated_dist(self) -> bool | int:
+        return self.__dist_truncate
 
-    @truncated_size.setter
-    def truncated_size(self, digits: bool | int = False):
-        self.__truncated_size = digits
+    @truncated_dist.setter
+    def truncated_dist(self, digits: bool | int):
+        self.__dist_truncate = digits
+
+    @property
+    def truncated_time(self) -> bool | int:
+        return self.__dist_truncate
+
+    @truncated_time.setter
+    def truncated_time(self, digits: bool | int):
+        self.__dist_truncate = digits
 
     @property
     def time_resolution(self) -> bool | int:
-        return self.__temporal_resolution
+        return self.__time_resolution
 
     @time_resolution.setter
     def time_resolution(self, resolution: bool | int = False):
-        self.__temporal_resolution = resolution
+        self.__time_resolution = resolution
 
     @staticmethod
     def _truncate(value: float, digits: int) -> float:
         return int(value * (10 ** digits)) / (10 ** digits)
+
+    def format_time(self, duration: int, resolution: int = 9, digits: int = 2) -> int | float:
+        """ default example: 314.72 milliseconds\n
+        :param duration: time to format, in nanoseconds
+        :param resolution: 10^(value - 9); 0 - 9 -> sec - nanoseconds
+        :param digits: number of digits right of decimal
+        :return: formatted time as float (unless in nanoseconds)
+        """
+        if self.__time_resolution is not False:
+            resolution = self.__time_resolution
+
+        if self.__time_truncate is not False:
+            digits = self.__time_truncate
+
+        duration = duration * 10 ** (resolution - 9)
+        if isinstance(duration, float):
+            duration = self._truncate(duration, digits)
+        return duration
 
     def get_tour_result(self, heuristic: str, dataset: str):
         return self.output_data[heuristic][dataset]
@@ -155,7 +167,6 @@ class Test:
 
     def run_tests(self, reverse_inp: bool = True) -> None:
         """
-        :param truncate_result: default: False; digits
         :param reverse_inp: reverse input for .pop(-1) performance
         """
 
@@ -182,11 +193,10 @@ class Test:
                 run_time = run_timer.elapsed_time()
 
                 distance = tour.distance()
-                if self.truncated_size is not False:
-                    distance = self._truncate(distance, self.__truncated_size)
+                if self.truncated_dist is not False:
+                    distance = self._truncate(distance, self.truncated_dist)
 
-                # todo: remove hardcoded format; allow config
-                run_time = run_timer.format_time(run_time, 3, 4)
+                run_time = self.format_time(run_time)
 
                 if not self.output_data.get(each_heuristic):
                     self.output_data[each_heuristic] = {}
@@ -194,7 +204,7 @@ class Test:
                     {
                         test_data.test_name: {
                             "distance": distance,
-                            "time (ms)": run_time,  # todo: remove hardcoded format
+                            "time (ms)": run_time,
                             "TestData": test_data,
                             "Tour": tour,
                         }})
@@ -276,6 +286,7 @@ class GraphDataPlotly:
 
 if __name__ == "__main__":
     # file_selector
+    # this is only a reference to use below
     test_file_names = [
         'custom_tsp0.txt',
         'custom_tsp4.txt',
@@ -289,25 +300,38 @@ if __name__ == "__main__":
     # [] runs all tests
     file_selector: []
 
+    # ######## create/run tests ######### #
     working_directory = os.getcwd()
     test_folder_name = "tsp_test_data"
 
+    # get method names
     # heuristic_fn_names = ["insert_nearest", "insert_smallest"]  # heuristic method names
-    method_name_contains = "smallest"
     fns = [k for k in Tour.__dict__.keys() if "smallest" in k or "nearest" in k]
     heuristic_method_names = fns
 
     path = working_directory + f"\\{test_folder_name}\\"
     t = Test(heuristic_method_names, [], path)
     t.load_input_data()
-    t.truncated_size = 4
-    t.time_resolution = 0
+    t.truncated_dist = 4
+    t.truncated_time = 2
+    t.time_resolution = 3  # milliseconds
     t.run_tests(reverse_inp=True)
     result_near = t.get_tour_result("insert_nearest", "tsp1000.txt")
     result_small = t.get_tour_result("insert_smallest", "tsp1000.txt")
 
-    # ######### Print ######### #
+    # ############## Print ############## #
     t.print_output_data()
+
+    # ############## Plotly ############# #
+    plot_fn_name = "insert_smallest"
+    plot_data_name = "tsp1000.txt"
+    plot = GraphDataPlotly(t)
+    plot.plot(plot_fn_name, plot_data_name)
+
+
+
+
+
 
     # print('foo')
     # watch = Stopwatch()
@@ -316,15 +340,6 @@ if __name__ == "__main__":
     # dur = watch.elapsed_time()
     # dur = watch.format_time(duration=dur, resolution=0, digits=4)
     # print(dur)
-
-    # ######### Plotly ######### #
-    plot_fn_name = "insert_smallest"
-    plot_data_name = "tsp1000.txt"
-    plot = GraphDataPlotly(t)
-    plot.plot(plot_fn_name, plot_data_name)
-
-
-
 
 
     # # ######### Print ######### #
