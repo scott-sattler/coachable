@@ -6,6 +6,18 @@ Implementation Contains:
     Trie
 """
 
+# todo: testing
+"""
+Testing
+
+As usual, please write up sufficient test cases to ensure your code works on a variety of inputs. You do not need to test the URL navigation functions as you can assume they work from the previous assignment.
+
+To start with writing test cases, imagine several inputs/outputs qualitatively. "What if these weird cases happened" then think about those cases and convert them to concrete inputs to verify your code.
+Deliverables
+
+Complete BrowserHisory with the autocomplate, clear_history functions along with sufficient unit tests that are labeled. 
+"""
+
 
 class DLLNode:
     def __init__(self, val=None, prev=None, next=None) -> None:  # noqa: sbin
