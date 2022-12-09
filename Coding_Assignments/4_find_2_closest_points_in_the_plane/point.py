@@ -1,3 +1,6 @@
+from __future__ import annotations  # coachable testing
+
+
 class Point:
 
     # Initializes 2D point with x,y coordinate
@@ -5,19 +8,19 @@ class Point:
         self.point: tuple[float, float] = (x, y)
 
     @property
-    def x(self):
+    def x(self) -> float:
         return self.point[0]
 
     @x.setter
-    def x(self, value):
+    def x(self, value) -> None:
         self.point = (value, self.y)
 
     @property
-    def y(self):
+    def y(self) -> float:
         return self.point[1]
 
     @y.setter
-    def y(self, value):
+    def y(self, value) -> None:
         self.point = (self.x, value)
 
     # Strings representations of the Point class.
@@ -30,11 +33,15 @@ class Point:
     # # Built in comparators for sorting Points by y-coordinate first and using
     # # x-coordinate for ties.
     # # Here greater than or less than refer to y-coordinate.
-    #
-    # # Returns True if self has the same (x, y) coordinates as other.
-    # def __eq__(self, other: 'Point') -> bool:
-    #     return self.point == other.point
-    #
+
+    # Returns True if self has the same (x, y) coordinates as other.
+    def __eq__(self, other: 'Point') -> bool:  # type: ignore
+        # return self.x == other.x and self.y == other.y
+        # return hash(self.point) == hash(other)
+        # if not isinstance(other, Point):
+        #     return NotImplemented
+        return self.point == other
+
     # # Returns True if self is "less than" the point as other
     # def __lt__(self, other: 'Point') -> bool:
     #     return self.y < other.y
@@ -45,24 +52,9 @@ class Point:
 
     # Returns the Euclidean distance between self and other
     def distance_to(self, other: 'Point') -> float:
-        return ((other.x - self.x)**2 + (other.y - self.y)**2)**(1/2)
+        return ((other.x - self.x) ** 2 + (other.y - self.y) ** 2) ** (1/2)
 
     # Hash function for Points.
     # Hint: You can use the hash function for tuples.
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.point)
-
-
-if __name__ == "__main__":
-    p1 = Point(0, 0)
-    p2 = Point(4, 3)
-    print(p1.distance_to(p2))
-
-    print(p1.__hash__())
-    print(p1.__hash__())
-
-    print(p1.__eq__(p2), p2.__eq__(p1))
-    print(p1.__lt__(p2), p2.__lt__(p1))
-    print(p1.__gt__(p2), p2.__gt__(p1))
-
-
