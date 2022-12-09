@@ -4,13 +4,16 @@ from point import Point
 
 
 class DistPointPair:
-    def __init__(self,
-                 dist: float,
-                 pt_one: None | Point,
-                 pt_two: None | Point) -> None:
-        self.d: float = dist
-        self.p1: None | Point = pt_one
-        self.p2: None | Point = pt_two
+    def __init__(self, d: float, p_1: None | Point, p_2: None | Point) -> None:
+        """ distance between two points
+
+        :param d: distance between p_1 and p_2
+        :param p_1: point 1
+        :param p_2: point 2
+        """
+        self.d: float = d
+        self.p1: None | Point = p_1
+        self.p2: None | Point = p_2
 
     def __str__(self) -> str:
         return f"d={self.d}, p1={self.p1}, p2={self.p2}"
@@ -54,23 +57,8 @@ class NearestPointSet:
 
     def _find_closest(self, low: int, high: int) -> DistPointPair:
         # # base case(s) # #
-        min_d_pair = DistPointPair(float('inf'), None, None)
-        if high == low:
-            return min_d_pair
         if high - low < 4:
-            # get all distances
-            dist_pairs: list[DistPointPair] = [min_d_pair]
-            for i in range(low, high):
-                for j in range(low + 1, high + 1):
-                    if i != j:
-                        pnt_1 = self.points[i]
-                        pnt_2 = self.points[j]
-                        dist = pnt_1.distance_to(pnt_2)
-                        dis_pair = DistPointPair(dist, pnt_1, pnt_2)
-                        dist_pairs.append(dis_pair)
-            # find min distance
-            min_d_pair = min(dist_pairs, key=lambda p: p.d)
-            return min_d_pair
+            return self._get_dist(low, high, split=False)
 
         # # input reduction # #
         # find midpoint
@@ -83,40 +71,39 @@ class NearestPointSet:
         right_half = self._find_closest(midpoint + 1, high)
 
         # upper bound of d
-        d_up_bnd = min(left_half, right_half, key=lambda p: p.d)
+        upper_bound_d = min(left_half, right_half, key=lambda p: p.d)
 
-        # get midpoint bounds
-        # look at each x until exceed d<-x->d
-        l_bnd = midpoint - 1
-        r_bnd = midpoint + 1
-        while l_bnd > low and self.points[l_bnd].x <= d_up_bnd.d:
-            l_bnd -= 1
-        while r_bnd < high and self.points[r_bnd + 1].x <= d_up_bnd.d:
-            r_bnd += 1
+        # get midpoint bounds: d<-x->d
+        l_mid = midpoint - 1
+        r_mid = midpoint + 1
+        while l_mid > low and self.points[l_mid].x <= upper_bound_d.d:
+            l_mid -= 1
+        while r_mid < high and self.points[r_mid].x <= upper_bound_d.d:
+            r_mid += 1
 
-        # sort y
-        self.points[l_bnd:r_bnd] = sorted(self.points[l_bnd:r_bnd],
-                                          key=lambda p: (p.y, p.x))
-        # recurse mid
-        mid_section = self._closest_split_pair(l_bnd, r_bnd)
+        # sort y (in place)
+        self.points[l_mid:r_mid + 1] = sorted(self.points[l_mid:r_mid + 1],
+                                              key=lambda p: (p.y, p.x))
+        # find mid
+        mid_section = self._get_dist(l_mid, r_mid, split=True)
 
         return min(left_half, right_half, mid_section, key=lambda x: x.d)
 
-    def _closest_split_pair(self, low: int, high: int) -> DistPointPair:
-        # get all distances
+    def _get_dist(self, lo: int, hi: int, split: bool) -> DistPointPair:
         min_d_pair = DistPointPair(float('inf'), None, None)
-        dist_pairs: list[DistPointPair] = [min_d_pair]
-        for i in range(low, high + 1):
-            for j in range(1, 8):
-                if high > (i + j) != i:  # (i + j < high) and (i != i + j)
+        if lo - hi < 4:
+            # get all distances
+            for i in range(lo, hi):
+                for j in range(i + 1, hi + 1):
+                    if split and j - (i + 1) > 6:
+                        break
                     pnt_1 = self.points[i]
-                    pnt_2 = self.points[i + j]
-                    dist_csp = pnt_1.distance_to(pnt_2)
-                    dis_pair = DistPointPair(dist_csp, pnt_1, pnt_2)
-                    dist_pairs.append(dis_pair)
-        # get min distance
-        min_d_pair = min(dist_pairs, key=lambda p: p.d)
-        return min_d_pair
+                    pnt_2 = self.points[j]
+                    dist = pnt_1.distance_to(pnt_2)
+                    # update min dist if lower
+                    if dist < min_d_pair.d:
+                        min_d_pair = DistPointPair(dist, pnt_1, pnt_2)
+            return min_d_pair
 
     def __str__(self) -> str:
         return str(self.points)
