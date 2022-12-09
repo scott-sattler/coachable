@@ -52,7 +52,7 @@ class Point:
 
     # Returns the Euclidean distance between self and other
     def distance_to(self, other: 'Point') -> float:
-        return ((other.x - self.x) ** 2 + (other.y - self.y) ** 2) ** (1/2)
+        return ((other.x - self.x) ** 2 + (other.y - self.y) ** 2) ** (1 / 2)
 
     # Hash function for Points.
     # Hint: You can use the hash function for tuples.
