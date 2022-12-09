@@ -12,7 +12,7 @@ class Point:
         return self.point[0]
 
     @x.setter
-    def x(self, value) -> None:
+    def x(self, value: float) -> None:
         self.point = (value, self.y)
 
     @property
@@ -20,7 +20,7 @@ class Point:
         return self.point[1]
 
     @y.setter
-    def y(self, value) -> None:
+    def y(self, value: float) -> None:
         self.point = (self.x, value)
 
     # Strings representations of the Point class.
