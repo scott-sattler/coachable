@@ -1,23 +1,25 @@
 from __future__ import annotations  # coachable testing
-import random  # for testing
 
 from point import Point
 
 
 class DistPointPair:
-    def __init__(self, distance, first_point, second_point):
-        self.d: float = distance
-        self.p1: Point = first_point
-        self.p2: Point = second_point
+    def __init__(self,
+                 dist: float,
+                 pt_one: None | Point,
+                 pt_two: None | Point) -> None:
+        self.d: float = dist
+        self.p1: None | Point = pt_one
+        self.p2: None | Point = pt_two
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"d={self.d}, p1={self.p1}, p2={self.p2}"
 
 
 # Represents a set of points and function to find distance of the closest ones.
 class NearestPointSet:
     # Initializes an empty set of points.
-    def __init__(self):
+    def __init__(self) -> None:
         self.point_set: set = set()
         self.points: list[Point] = list()
         self.min_dist: float = float('inf')
@@ -34,7 +36,7 @@ class NearestPointSet:
             self.points.append(point)
             self.point_set.add(point)
 
-    def sort_x(self, low: int, high: int):
+    def sort_x(self, low: int, high: int) -> None:
         p_to_srt = self.points[low:high + 1]
         self.points[low:high + 1] = sorted(p_to_srt, key=lambda p: (p.x, p.y))
 
@@ -54,10 +56,10 @@ class NearestPointSet:
         # # base case(s) # #
         min_d_pair = DistPointPair(float('inf'), None, None)
         if high == low:
-            return min_d_pair  # DistPointPair(float('inf'), None, None)
+            return min_d_pair
         if high - low < 3:  # todo base case < 4 ??
             # get all distances
-            dist_pairs: list[DistPointPair] = [min_d_pair]  # [DistPointPair(float('inf'), None, None)]
+            dist_pairs: list[DistPointPair] = [min_d_pair]
             for i in range(low, high):
                 for j in range(low + 1, high + 1):
                     if i != j:
