@@ -57,7 +57,7 @@ class NearestPointSet:
         min_d_pair = DistPointPair(float('inf'), None, None)
         if high == low:
             return min_d_pair
-        if high - low < 3:  # todo base case < 4 ??
+        if high - low < 4:
             # get all distances
             dist_pairs: list[DistPointPair] = [min_d_pair]
             for i in range(low, high):
