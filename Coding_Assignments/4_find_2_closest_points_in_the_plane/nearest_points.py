@@ -32,10 +32,13 @@ class NearestPointSet:
         # self.points.update({(point.x, point.y): point})
         self.points.append(point)
 
-    def sort_x(self, low: None | int = None, high: None | int = None):
-        if low is None or high is None:
-            low = 0
-            high = len(self.points) - 1
+    # def sort_x(self, low: None | int = None, high: None | int = None):
+    #     if low is None or high is None:
+    #         low = 0
+    #         high = len(self.points) - 1
+    #     points = self.points[low:high + 1]
+    #     self.points[low:high + 1] = sorted(points, key=lambda p: (p.x, p.y))
+    def sort_x(self, low: int, high: int):
         points = self.points[low:high + 1]
         self.points[low:high + 1] = sorted(points, key=lambda p: (p.x, p.y))
 
@@ -43,8 +46,10 @@ class NearestPointSet:
     # Runtime should be O(n log n) in the average case
     # If there are less than 2 points, simply return None.
     def find_closest(self) -> float:
-        self.sort_x()
-        min_pair = self._find_closest(0, len(self.points) - 1)
+        left_bound = 0
+        right_bound = len(self.points) - 1
+        self.sort_x(left_bound, right_bound)
+        min_pair = self._find_closest(left_bound, right_bound)
         print("found", min_pair)
         return min_pair.d
 
