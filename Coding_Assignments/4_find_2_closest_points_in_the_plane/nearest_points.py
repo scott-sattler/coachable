@@ -1,4 +1,4 @@
-from __future__ import annotations  # testing
+from __future__ import annotations  # coachable testing
 
 from point import Point
 
