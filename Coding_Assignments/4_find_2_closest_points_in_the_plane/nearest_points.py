@@ -1,4 +1,4 @@
-from __future__ import annotations  # coachable testing
+from __future__ import annotations  # testing
 
 from point import Point
 
@@ -63,10 +63,10 @@ class NearestPointSet:
             for i in range(low, high):
                 for j in range(low + 1, high + 1):
                     if i != j:
-                        p1 = self.points[i]
-                        p2 = self.points[j]
-                        dist = p1.distance_to(p2)
-                        dis_pair = DistPointPair(dist, p1, p2)
+                        pnt_1 = self.points[i]
+                        pnt_2 = self.points[j]
+                        dist = pnt_1.distance_to(pnt_2)
+                        dis_pair = DistPointPair(dist, pnt_1, pnt_2)
                         dist_pairs.append(dis_pair)
             # find min distance
             min_d_pair = min(dist_pairs, key=lambda p: p.d)
@@ -86,7 +86,7 @@ class NearestPointSet:
         d_up_bnd = min(left_half, right_half, key=lambda p: p.d)
 
         # get midpoint bounds
-        # look at each x until exceed 2d @ midpoint
+        # look at each x until exceed d<-x->d
         l_bnd = midpoint - 1
         r_bnd = midpoint + 1
         while l_bnd > low and self.points[l_bnd].x <= d_up_bnd.d:
@@ -95,8 +95,8 @@ class NearestPointSet:
             r_bnd += 1
 
         # sort y
-        self.points[l_bnd:r_bnd] = sorted(self.points[l_bnd:r_bnd], key=lambda p: (p.y, p.x))
-
+        self.points[l_bnd:r_bnd] = sorted(self.points[l_bnd:r_bnd],
+                                          key=lambda p: (p.y, p.x))
         # recurse mid
         mid_section = self._closest_split_pair(l_bnd, r_bnd)
 
@@ -109,10 +109,10 @@ class NearestPointSet:
         for i in range(low, high + 1):
             for j in range(1, 8):
                 if high > (i + j) != i:  # (i + j < high) and (i != i + j)
-                    p1 = self.points[i]
-                    p2 = self.points[i + j]
-                    dist = p1.distance_to(p2)
-                    dis_pair = DistPointPair(dist, p1, p2)
+                    pnt_1 = self.points[i]
+                    pnt_2 = self.points[i + j]
+                    dist_csp = pnt_1.distance_to(pnt_2)
+                    dis_pair = DistPointPair(dist_csp, pnt_1, pnt_2)
                     dist_pairs.append(dis_pair)
         # get min distance
         min_d_pair = min(dist_pairs, key=lambda p: p.d)
@@ -120,78 +120,3 @@ class NearestPointSet:
 
     def __str__(self) -> str:
         return str(self.points)
-
-
-class Test(NearestPointSet):
-    # def __init__(self):
-    #     super().__init__()
-    #     print(super().__dict__)
-
-    # brute force method override for correctness check
-    def _find_closest(self, low: int, high: int) -> DistPointPair:
-        min_d_pair = DistPointPair(float('inf'), None, None)
-        dist_pairs: list[DistPointPair] = [min_d_pair]
-        for i in range(low, high - 1):
-            for j in range(low + 1, high):
-                if i != j:
-                    p1 = self.points[i]
-                    p2 = self.points[j]
-                    dist = p1.distance_to(p2)
-                    dis_pair = DistPointPair(dist, p1, p2)
-                    dist_pairs.append(dis_pair)
-        # get min distance
-        min_d_pair = min(dist_pairs, key=lambda p: p.d)
-        return min_d_pair
-
-
-if __name__ == "__main__":
-    inp1 = [(0, 1), (2, 3), (4, 5)]  # todo care equal distances
-    inp2 = [(4, 6), (2, 3), (4, 5), (0, 1)]
-    inp3 = [(0.0, 0.0), (1.1, 1.1), (2.42, 2.42), (3.99, 3.99), (5.85, 5.85), (8.05, 8.05), (10.62, 10.62), (13.64, 13.64), (17.14, 17.14), (21.22, 21.22), ]
-    inp = inp3
-    random.shuffle(inp)
-    # print(inp)
-    #
-    # foo = NearestPointSet()
-    # for each in inp:
-    #     foo.insert(Point(each[0], each[1]))
-    # # print(foo.__str__())
-    # # foo.sort_x(0, )
-    # # print(foo.__str__())
-    # ans = foo.find_closest()
-    # print(ans)
-    #
-    # t = Test()  # brute forces for correctness
-    # c = NearestPointSet()
-    # for each in inp:
-    #     t.insert(Point(each[0], each[1]))
-    #     c.insert(Point(each[0], each[1]))
-    # ans_t = t.find_closest()
-    # ans_c = c.find_closest()
-    # print(ans_t == ans_c, ans_t, ans_c)
-
-
-
-
-
-    # failed = Test()
-    # failed = NearestPointSet()
-    # a = Point(0, 0)
-    # b = Point(0, 2)
-    # c = Point(0, 2)
-    # d = Point(4, 5)
-    # e = Point(1, 1)
-    # f = Point(2, 5)
-    # g = Point(3, 10)
-    # h = Point(1, 0)
-    # points = [a, b, c, d, e, f, g, h]
-    # for each in points:
-    #     failed.insert(each)
-    # print(len(failed.point_set), len(failed.points))
-
-
-
-
-    point_set = NearestPointSet()
-    print(point_set)
-    assert point_set.find_closest() is None
