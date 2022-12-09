@@ -1,5 +1,5 @@
-import random
-import sys
+from __future__ import annotations  # coachable testing
+import random  # testing
 
 from point import Point
 
@@ -44,13 +44,10 @@ class NearestPointSet:
     # If there are less than 2 points, simply return None.
     def find_closest(self) -> float:
         self.sort_x()
-        # low = self.points[0].x
-        # high = self.points[-1].x
         min_pair = self._find_closest(0, len(self.points) - 1)
         print("found", min_pair)
         return min_pair.d
 
-    # @staticmethod
     def _find_closest(self, low: int, high: int) -> DistPointPair:
         # # base case(s) # #
         min_d_pair = DistPointPair(float('inf'), None, None)
@@ -103,14 +100,46 @@ class NearestPointSet:
         print('post y sort:', self.points)
 
         # recurse mid
-        mid_section = self._find_closest(l_bnd, r_bnd)
-
-        # todo mid sort < 7 er whatever
+        mid_section = self._closest_split_pair(l_bnd, r_bnd)
 
         return min(left_half, right_half, mid_section, key=lambda x: x.d)
 
+    def _closest_split_pair(self, low: int, high: int) -> DistPointPair:
+        # get all distances
+        min_d_pair = DistPointPair(float('inf'), None, None)
+        dist_pairs: list[DistPointPair] = [min_d_pair]
+        for i in range(low, high + 1):
+            for j in range(1, 8):
+                if high > (i + j) != i:  # (j < high) and (i != j)
+                    p1 = self.points[i]
+                    p2 = self.points[i + j]
+                    dist = p1.distance_to(p2)
+                    dis_pair = DistPointPair(dist, p1, p2)
+                    dist_pairs.append(dis_pair)
+        # get min distance
+        min_d_pair = min(dist_pairs, key=lambda p: p.d)
+        return min_d_pair
+
     def __str__(self) -> str:
         return str(self.points)
+
+
+class Test(NearestPointSet):
+    # brute force method override for correctness check
+    def _find_closest(self, low: int, high: int) -> DistPointPair:
+        min_d_pair = DistPointPair(float('inf'), None, None)
+        dist_pairs: list[DistPointPair] = [min_d_pair]
+        for i in range(low, high - 1):
+            for j in range(low + 1, high):
+                if i != j:
+                    p1 = self.points[i]
+                    p2 = self.points[j]
+                    dist = p1.distance_to(p2)
+                    dis_pair = DistPointPair(dist, p1, p2)
+                    dist_pairs.append(dis_pair)
+        # get min distance
+        min_d_pair = min(dist_pairs, key=lambda p: p.d)
+        return min_d_pair
 
 
 if __name__ == "__main__":
@@ -120,6 +149,7 @@ if __name__ == "__main__":
     inp = inp3
     random.shuffle(inp)
     print(inp)
+
     foo = NearestPointSet()
     for each in inp:
         foo.insert(Point(each[0], each[1]))
@@ -127,6 +157,12 @@ if __name__ == "__main__":
     # foo.sort_x(0, )
     # print(foo.__str__())
     ans = foo.find_closest()
+    print(ans)
+
+    t = Test()
+    for each in inp:
+        t.insert(Point(each[0], each[1]))
+    ans_c = t.find_closest()
     print(ans)
 
 
