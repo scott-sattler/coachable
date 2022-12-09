@@ -91,19 +91,18 @@ class NearestPointSet:
 
     def _get_dist(self, lo: int, hi: int, split: bool) -> DistPointPair:
         min_d_pair = DistPointPair(float('inf'), None, None)
-        if lo - hi < 4:
-            # get all distances
-            for i in range(lo, hi):
-                for j in range(i + 1, hi + 1):
-                    if split and j - (i + 1) > 6:
-                        break
-                    pnt_1 = self.points[i]
-                    pnt_2 = self.points[j]
-                    dist = pnt_1.distance_to(pnt_2)
-                    # update min dist if lower
-                    if dist < min_d_pair.d:
-                        min_d_pair = DistPointPair(dist, pnt_1, pnt_2)
-            return min_d_pair
+        # get all distances
+        for i in range(lo, hi):
+            for j in range(i + 1, hi + 1):
+                if split and j - (i + 1) > 6:
+                    break
+                pnt_1 = self.points[i]
+                pnt_2 = self.points[j]
+                dist = pnt_1.distance_to(pnt_2)
+                # update min dist if lower
+                if dist < min_d_pair.d:
+                    min_d_pair = DistPointPair(dist, pnt_1, pnt_2)
+        return min_d_pair
 
     def __str__(self) -> str:
         return str(self.points)
