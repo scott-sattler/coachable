@@ -7,6 +7,7 @@ Implementation Contains:
 """
 
 # todo: testing
+
 """
 Testing
 
@@ -32,16 +33,16 @@ class DLLNode:
 
 
 class TrieNode:
-    def __init__(self):
+    def __init__(self) -> None:
         self.children = {}
         self.is_word: bool = False
 
 
 class Trie:
-    def __init__(self):
+    def __init__(self) -> None:
         self.root: TrieNode = TrieNode()
 
-    def insert(self, string: str):
+    def insert(self, string: str) -> None:
         node_pointer = self.root
         for char in string:
             if char not in node_pointer.children:
@@ -50,7 +51,7 @@ class Trie:
         else:
             node_pointer.is_word = True
 
-    def starts_with(self, prefix: str):
+    def starts_with(self, prefix: str) -> str | list:
         node = self.root
         # traverse trie until at prefix level
         for char in prefix:
@@ -63,7 +64,7 @@ class Trie:
 
         return words
 
-    def _get_words(self, node, base, words):
+    def _get_words(self, node: TrieNode, base: str, words: list) -> list:
         if node.is_word:
             words.append(base)
         if len(node.children) > 0:
@@ -80,6 +81,7 @@ class BrowserHistory:
         self.head: DLLNode = DLLNode("")
         self.current: DLLNode = self.head
         self.history: dict = dict()
+        self.clear_history()
 
     # Returns the url of the current page.
     def current_page(self) -> str:
@@ -179,7 +181,9 @@ class BrowserHistory:
     # Erases entire browser history and reverts to initial state of
     # BrowserHistory.
     def clear_history(self) -> None:
-        self.__init__()
+        self.head = DLLNode("")
+        self.current = self.head
+        self.history = dict()
 
 
 # history = BrowserHistory()
