@@ -58,28 +58,31 @@ Shortest Path
 
         What if a graph has uniform edge weights e where e > 0?
             BFS, count nodes in path
-
+        
         What if a graph has nonuniform but strictly positive edge weights?
             DFS
-
+        
         What if a graph has nonuniform negative/positive edge weights?
-
 
         What if, instead of the length of the shortest path, I wanted to return the path itself?
 
-    If I have a directed acyclic graph (DAG) where c1 -> c2 means that I need to take course c1​ before c2​
+Valid Orderings
 
+    If I have a directed acyclic graph (DAG) where c1 -> c2 means that I need to take course c1 before c2.
+    
     What algorithm can I use to sequence my coursework without skipping courses?
         topological sort
-
+    
     How is this algorithm different from a standard BFS/DFS?
-
+    
     What would happen if the directed graph was cyclic and I tried using the same algorithm?
 
-    What is a minimum spanning tree?
+(Optional Section) MSTs 
 
+    What is a minimum spanning tree? 
+    
     How do I generate an MST for a graph with edge weights? Explain the algorithm in a few sentences instead of giving just the algorithm name.
-
+    
     If the graph is not connected, can I still create an MST? Why or why not? What about a Minimum Spanning Forest
 
 """
@@ -107,7 +110,7 @@ def to_adjacency_list(edges: list[list[str]]) -> dict[str, list[str]]:  # noqa: 
 
 def to_adjacency_matrix(edges: list[list[str]]) -> list[list[str]]:  # noqa: shadowed name
     adjacency_list = to_adjacency_list(edges)
-    matrix: list[list[str]] = list()
+    matrix: list[list[str]] = list(list(str))
     # iterating over the edge pairs
     for row in adjacency_list.items():
         matrix_row = []  # create a new row for each key/vertex
@@ -159,6 +162,7 @@ def find_shortest_path_distance(s: str, d: str, edges: list[list[str]]) -> int:
     return -1
 
 
+# Modify the above algorithm to return the path itself.
 def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
     # homogeneous weights & bidirectional -> BFS first solution is optimal
 
@@ -175,6 +179,7 @@ def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
     # traverse graph BFS
     agenda: deque = deque([[s], ])
     while agenda:
+        print(agenda)
         current_path = agenda.popleft()
         for node in adjacency_dict[current_path[-1]]:
             if node not in current_path:
@@ -186,8 +191,31 @@ def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
 
     return []
 
+
+# Modify the above algorithm to work if each connection costs k where k > 0.
 def find_shortest_path_wt(s: str, d: str, edges: list[list[str]], k: int) -> list[str]:
-    pass
+    # A* without heuristic; Dijkstra's Algorithm
+    # D EYE KA STRAs
+
+    # best first?
+
+    # construct adjacency list
+    adjacency_dict: dict[str, list[str]] = dict()
+    for edge in edges:
+        if edge[0] in adjacency_dict:
+            adjacency_dict[edge[0]] += [edge[1]]
+        else:
+            adjacency_dict[edge[0]] = [edge[1]]
+        if edge[1] not in adjacency_dict:
+            adjacency_dict[edge[1]] = []
+
+    # traverse graph Dijkstra's
+    node_dict: dict[str, list[int, str]] = dict(s=[0, ''])
+
+    print(adjacency_dict)
+
+
+    return 0
 
 
 '''
@@ -274,16 +302,3 @@ for testcase in testcases:
     testcase.execute()
 
 # ===== END DO NOT MODIFY =====
-
-    # adjacency_matrix: list[list] = list()
-    #
-    # # find matrix dimensions
-    # node_set: set = set()
-    # for node_pair in edges:
-    #     for node in node_pair:
-    #         if node not in node_set:
-    #             node_set.add(node)
-    #
-    # # construct matrix
-    # matrix = [[0] * len(node_set) for i in range(len(node_set))]
-    # adjacency_matrix = matrix
