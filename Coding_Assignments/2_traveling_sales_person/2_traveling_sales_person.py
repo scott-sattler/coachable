@@ -13,6 +13,11 @@ from plotly.graph_objs import Figure
 """
 additional requirements:
 - a folder "tsp_test_data" containing the test files
+    test data is in the following format:
+    boundary_x boundary_y
+    x1 y1
+    x2 y2
+    ...
 - tour.py must be in the same directory as this file
 - point.py must be in the same directory as this file
 - "tsp_test_data" must be in the same directory as this file
