@@ -49,6 +49,46 @@ General
 
     How can you detect a cycle in a graph?
         DFS while inspecting for previously visited vertices
+        
+    If you have a graph with N vertices, what is the maximum number of edges it could have?
+        n(n-1) directed graph; n(n-1)/2 undirected graph; n^2 directed graph with self loops
+
+    Recall that a binary tree is an example of a graph. If a binary tree has N nodes, what is the maximum number of 
+    edges it can have?
+        n - 1: n-n-n... always n - 1
+        
+
+Graph Traversals
+
+Assume the adjacency lists are in sorted order. For example, follow the edge O → B before O → E. Similarly, follow 3 → 2 
+before 3 → 7
+
+    Figure 2
+
+        Give the postorder of the graph when visited by DFS. Start from O.
+            W Y I M P S E B O
+        
+        Give the preorder of the graph when visited by DFS. Start from O.
+            O B E S I W Y M P 
+            
+        Give the BFS traversal of the graph. Start from O.
+            O E Y S W I P M Y
+        
+        Is there a topological order starting from O? If there is not, why not? If there is one, write the topological 
+        order.
+            no: loops - topological order can only be applied to DAGs
+
+    Figure 3
+
+        Give the postorder of the graph when visited by DFS. Start from node 10.
+        
+        Give the preorder of the graph when visited by DFS. Start from 1O.
+        
+        Give the level order of the graph. Start from 10.
+        
+        Is there a topological order starting from 10? If there is not, why not? If there is one, write the topological 
+        order.
+
 
 Shortest Path
 
@@ -81,7 +121,8 @@ Valid Orderings
 
     What is a minimum spanning tree? 
     
-    How do I generate an MST for a graph with edge weights? Explain the algorithm in a few sentences instead of giving just the algorithm name.
+    How do I generate an MST for a graph with edge weights? Explain the algorithm in a few sentences instead of giving 
+    just the algorithm name.
     
     If the graph is not connected, can I still create an MST? Why or why not? What about a Minimum Spanning Forest
 
@@ -90,7 +131,8 @@ Valid Orderings
 # ====================== CODING QUESTIONS ==========================
 
 '''
-Given a DAG that is represented as a collection of edges, i.e. ["n1", "n2"] means that n1 precedes n2 (visually, n1 -> n2),
+Given a DAG that is represented as a collection of edges, i.e. ["n1", "n2"] means that n1 precedes n2 
+(visually, n1 -> n2),
 Create an adjacency list for it. def to_adjacency_list(edges: list[list[str]]) -> dict[str, list[str]]:
 Create an adjacency matrix for it def to_adjacency_matrix(edges: list[list[str]]) -> list[list[str]:
 '''
@@ -110,7 +152,7 @@ def to_adjacency_list(edges: list[list[str]]) -> dict[str, list[str]]:  # noqa: 
 
 def to_adjacency_matrix(edges: list[list[str]]) -> list[list[str]]:  # noqa: shadowed name
     adjacency_list = to_adjacency_list(edges)
-    matrix: list[list[str]] = list(list(str))
+    matrix: list[list[str]] = list(list())
     # iterating over the edge pairs
     for row in adjacency_list.items():
         matrix_row = []  # create a new row for each key/vertex
@@ -212,14 +254,33 @@ def find_shortest_path_wt(s: str, d: str, edges: list[list[str]], k: int) -> lis
     # traverse graph Dijkstra's
     node_dict: dict[str, list[int, str]] = dict(s=[0, ''])
 
-    print(adjacency_dict)
+    agenda: list[list[str, int, str]] = [[s, 0, ''], ]  # stack for DFS
+    visited: set = {s}
+    while agenda:
+        current_node = agenda.pop(0)
+        prev = current_node[0]
+        dist = current_node[1]
+        for node in adjacency_dict[current_node[0]]:
+            if node not in visited:
+                updated_node = [node, dist + k, prev]
+                agenda.append(updated_node)
+                visited.add(node)
+            if node == d:
+                return "traverse back"
+        else:
+            updated_node = current_node
+        agenda.append(updated_node)
+        agenda.sort(key=lambda x: x[1])
 
 
-    return 0
+
+    return []
 
 
 '''
-Given a list of course prerequisites each in the form [0, 1] where 0 is a prerequisite of 1 and n, the total number of courses, write a function to output a valid course ordering, or None if not possible. Courses are numbered from 0 to n-1.
+Given a list of course prerequisites each in the form [0, 1] where 0 is a prerequisite of 1 and n, the total number of 
+courses, write a function to output a valid course ordering, or None if not possible. Courses are numbered from 0 to 
+n-1.
 '''
 
 
@@ -228,7 +289,10 @@ def find_valid_course_ordering_if_exists(prerequisites: list[list[int]], n: int)
 
 
 '''
-Suppose you’re given a list of graph edges where each edge is of the form ("e1", "e2", 3), meaning that "e1" is connected to "e2" and has an edge weight of 3. The graph is connected. Write an algorithm to print out the an MST of the graph.
+Optional Question. Comment in the testcase in the test engine code if you want to test this. 
+Suppose you’re given a list of graph edges where each edge is of the form ("e1", "e2", 3), meaning that "e1" is 
+connected to "e2" and has an edge weight of 3. The graph is connected. Write an algorithm to print out the an MST of the 
+graph.
 '''
 
 
