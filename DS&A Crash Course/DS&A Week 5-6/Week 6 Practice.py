@@ -1,7 +1,7 @@
 """ Week 6 Practice """
 
 """
-Graphs
+### Graphs ###
 
 Free Response Questions
 
@@ -66,29 +66,37 @@ before 3 → 7
     Figure 2
 
         Give the postorder of the graph when visited by DFS. Start from O.
-            W Y I M P S E B O
+            M W Y I M P E B O
         
         Give the preorder of the graph when visited by DFS. Start from O.
-            O B E S I W Y M P 
+            O B E S I W M Y P
             
         Give the BFS traversal of the graph. Start from O.
-            O E Y S W I P M Y
+            O B E Y S W I M P
         
         Is there a topological order starting from O? If there is not, why not? If there is one, write the topological 
         order.
             no: loops - topological order can only be applied to DAGs
+            topological sort orders the vertices of directed edges from a parent vertex to neighbor
+                parents are undefined in cycles
 
     Figure 3
 
         Give the postorder of the graph when visited by DFS. Start from node 10.
+            !FIX: 5 4 8 6 7 1 2 3 9 10
+            
         
         Give the preorder of the graph when visited by DFS. Start from 1O.
+            10 9 3 2 1 7 6 8 4 5
         
         Give the level order of the graph. Start from 10.
+            10 9 3 5 8 2 7 1 6 8
         
         Is there a topological order starting from 10? If there is not, why not? If there is one, write the topological 
         order.
-
+            no: loops - topological order can only be applied to DAGs
+            topological sort orders the vertices of directed edges from a parent vertex to neighbor
+                parents are undefined in cycles
 
 Shortest Path
 
@@ -100,11 +108,13 @@ Shortest Path
             BFS, count nodes in path
         
         What if a graph has nonuniform but strictly positive edge weights?
-            DFS
+            A* w/o heuristic; Dijkstra's Algorithm
         
         What if a graph has nonuniform negative/positive edge weights?
+            eg Bellman–Ford Algorithm
 
         What if, instead of the length of the shortest path, I wanted to return the path itself?
+            keep list of paths in agenda
 
 Valid Orderings
 
@@ -114,17 +124,128 @@ Valid Orderings
         topological sort
     
     How is this algorithm different from a standard BFS/DFS?
+        it requires a DAG
     
     What would happen if the directed graph was cyclic and I tried using the same algorithm?
+        it would fail: topological sort orders adjacent vertices by outgoing and incoming - a cycle is ambiguous
 
-(Optional Section) MSTs 
+Intermediate Processing BFS/DFS
 
-    What is a minimum spanning tree? 
+    For each statement, determine if it is true or false in both scenarios. Provide a counterexample if it is false or 
+    explain your solution if it is true.
+    
+    Scenario 1 DFS. Consider the execution of depth-first search on a digraph G from vertex s, beginning with the 
+    function call dfs(G, s). Suppose that dfs(G, v) is called during the depth-first search. Which of the following 
+    statements can you infer at the moment when dfs(G, v) is called?
+    
+    Scenario 2 BFS. Consider the execution of breadth-first search on a digraph G, starting from vertex s. Suppose that 
+    vertex v is removed from the queue during the breadth-first search. Which of the following statements can you infer 
+    at the moment when v is removed from the queue?
+
+    Statements
+    
+    G contains a directed path from s → v
+    T T
+    
+    The function-call stack contains a directed path from s → v
+        
+    
+    If G includes an edge v → w for which w has been previously marked, then G has a directed cycle containing v
+        
+    
+    If G includes an edge v → w for which w is currently a vertex on the function-call stack, then G has a directed 
+    cycle containing v
+        
+
+(Optional Section) MSTs
+
+    What is a minimum spanning tree?
+        acyclic minimum edge weight connecting all vertices
     
     How do I generate an MST for a graph with edge weights? Explain the algorithm in a few sentences instead of giving 
     just the algorithm name.
+        Kruskal's Algorithm: sort by edge weight ascending, add smallest edges which do not form cycles
     
     If the graph is not connected, can I still create an MST? Why or why not? What about a Minimum Spanning Forest
+        with Kruskal's Algorithm, yes; but not with Prim’s algorithm.
+
+
+### Heaps ###
+
+Free Response Questions
+
+    What underlying data structure(s) can a heap use?
+        tree; list
+    
+    What is the difference between a min and a max heap?
+        node less/greater than or equal to children; recursively true
+        
+    What is the runtime of pushing an element into a heap?
+        O(log N)
+    
+    What is the runtime of popping an element out of a heap?
+        O(log N)
+    
+    We can store integers in a heap. What about an arbitrary object? Which ones can we keep, and which ones can’t we?
+        see below.
+    
+    If we wanted to store some of those objects we can’t keep, what concept do we need to add to those objects?
+        an orderable property; eg [red, blue, green] cannot be ordered without an orderable property - assigning these 
+        words their respective wavelength [(red, 700), ... ]can then be ordered by ascending/descending wavelength
+    
+    If I wanted to find the K most minor elements in a stream, would I use a min or a max heap of size K? Why?
+        min heap of K size contains K most minor elements
+    
+    What if I wanted to find the K most significant elements in a stream? Why?
+        max heap of K size contains K largest elements
+    
+    If I have a collection of N elements, and I insert each of them into a min heap, and then pop + print each element 
+    from the heap. What did I just do?
+        sort by ascending
+    
+    What if I inserted each of them into a max heap and did the same thing?
+        sort by descending
+    
+    Suppose I insert the following sequence of numbers into a min heap: 5, 7, 9, 2, 4. 
+    
+        What does the min heap look like?
+            2 4 9 7 5
+        
+        Now suppose I pop twice. What does the heap look like now?
+            5 7 9
+        
+        Now suppose I insert 3, 9, 12. What does the heap look like now?
+            3 5 9 7 9 12
+        
+
+True or False
+
+    Determine if the statements are true or false. If false, provide a counter-example. If true, explain why.
+    
+        Let a[] be a max-oriented binary heap that contains the N distinct integers 1, 2, . . . , N in a[1] through 
+        a[N]. Then, key N must be in a[1]; key N − 1 must be in either a[2] or a[3]; and key N − 2 must be in either 
+        a[2] or a[3]. 
+        
+        The order of growth of the total number of compares to insert N distinct keys in descending order into an 
+        initially empty max-oriented binary heap is N.
+            order of growth of total number of compares 
+            is proportional to maximum height, where (n - 1) elements have a maximum height of log_2(n)
+        
+        A 3-heap is an array representation (using 1-based indexing) of a complete 3-way tree, where the key in each 
+        node is greater than (or equal to) its children’s keys. In the worst case, the number of compares to insert a 
+        key in a 3-heap containing N keys is ∼ 1 log3 N.
+        
+Number of Comparisons
+        
+    See the binary heap in Figure A. Supposed the last operation was insert(x). How many values could it possibly have 
+    been? Hint: Try to identify which values specifically would be possible.
+        22 ... unclear
+        
+    Suppose you delete the maximum key from the binary heap in figure A. How many keys are involved in one (or more) 
+    comparisons?
+        8: 37 35 34 36 30 28 29 19
+        
+
 
 """
 
@@ -173,7 +294,7 @@ Modify the above algorithm to return the path itself. def find_shortest_path(s: 
 Modify the above algorithm to work if each connection costs k where k > 0. def find_shortest_path(s: str, d: str, edges: list[list[str]], k: int) -> list[str]:
 '''
 
-from collections import deque
+from collections import deque  # noqa
 
 
 def find_shortest_path_distance(s: str, d: str, edges: list[list[str]]) -> int:
@@ -271,8 +392,6 @@ def find_shortest_path_wt(s: str, d: str, edges: list[list[str]], k: int) -> lis
             updated_node = current_node
         agenda.append(updated_node)
         agenda.sort(key=lambda x: x[1])
-
-
 
     return []
 
