@@ -9,6 +9,7 @@ Complete the StreamHandlerKLargest class that has a capacity k by filling in the
 class StreamHandlerKLargest:
     def __init__(self, k: int) -> None:
         self.k = k
+        self.heap = list()
 
     '''
     This method adds the stream element to the collection. 
@@ -16,15 +17,29 @@ class StreamHandlerKLargest:
     '''
 
     def add_stream_element(self, e: int) -> None:
-        pass
+        self.heap.append(e)
+        self.heapify()
 
     ''' 
     This method returns the k largest elements seen so far.
     '''
 
     def k_largest(self) -> list[int]:
-        return []
+        k_largest = list()
+        for _ in range(self.k):
+            k_largest += self.pop_root()
+            self.heapify()
+        return k_largest
 
+    # pop
+    def pop_root(self):
+        if self.heap:
+            self.heap[-1], self.heap[0] = self.heap[0], self.heap[-1]
+        return self.heap[-1] if len(self.heap) > 0 else []
+
+    # heapify
+    def heapify(self):
+        pass
 
 '''
 Complete the StreamHandlerKSmallest class that has a capacity k by filling in the methods.
@@ -80,6 +95,8 @@ class Datapoint:
         return (self.a, self.b, self.c)
 
     # TODO: you may need to add additional methods here.
+    def score(self, data: Datapoint):
+        return 2*self.a + 5*self.b + 10*self.c
 
 
 # Return them as tuples, using the to_tuple method in the Datapoint class.
