@@ -16,9 +16,10 @@ General
     What are the differences between graphs and trees?
         trees are a subset of graphs
         trees are exclusively digraphs
-        trees always have 1 parent and >0 children
+        trees always have 1 parent and >0 neighbor
             bst: r > p > l
         trees can provide structural time complexity advantages
+          bisects data: many operations in log(n)
 
     For the graph (Figure 1), write the Adjacency Matrix and Adjacency List representations.
             1   2   3   4   5   6
@@ -56,7 +57,8 @@ General
     Recall that a binary tree is an example of a graph. If a binary tree has N nodes, what is the maximum number of 
     edges it can have?
         n - 1: n-n-n... always n - 1
-        
+
+        height (full/complete): ~ 2^n or 2^(n-1)
 
 Graph Traversals
 
@@ -80,17 +82,25 @@ before 3 → 7
             topological sort orders the vertices of directed edges from a parent vertex to neighbor
                 parents are undefined in cycles
 
+  why BFS vs DFS:
+
+        c          
+        d   e g  t   d
+      a        
+        b  f  x  n  z  y  l
+
+
     Figure 3
 
         Give the postorder of the graph when visited by DFS. Start from node 10.
             !FIX: 5 4 8 6 7 1 2 3 9 10
+            1 6 8 7 2 5 4 3 9 10
             
-        
         Give the preorder of the graph when visited by DFS. Start from 1O.
             10 9 3 2 1 7 6 8 4 5
         
         Give the level order of the graph. Start from 10.
-            10 9 3 5 8 2 7 1 6 8
+            review: 10 9 3 5 8->?4 2 7 1 6 8
         
         Is there a topological order starting from 10? If there is not, why not? If there is one, write the topological 
         order.
@@ -171,6 +181,13 @@ Intermediate Processing BFS/DFS
 
 
 ### Heaps ###
+
+from queue import PriorityQueue
+from queue import Queue
+
+pq = PriorityQueue()
+pq.put(-5)
+pq.put(-7)
 
 Free Response Questions
 

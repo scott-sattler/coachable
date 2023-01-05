@@ -134,7 +134,7 @@ def find_valid_course_ordering_if_exists(prerequisites: list[list[int]], n: int)
     while no_incoming:
         node = no_incoming.pop()
         topologically_ordered.append(node)
-        # decrement neighbor's in-degree
+        # decrement neighbors' in-degree
         for neighbor in adjacency_list[node]:
             in_degrees[neighbor] -= 1
             if in_degrees[neighbor] == 0:
