@@ -234,6 +234,6 @@ def test_output_mst_1():
 
 # test_find_shortest_path_wt_1()
 
-# test_find_valid_course_ordering_if_exists_1()
+test_find_valid_course_ordering_if_exists_1()
 test_find_valid_course_ordering_if_exists_2()
 # test_output_mst_1()
