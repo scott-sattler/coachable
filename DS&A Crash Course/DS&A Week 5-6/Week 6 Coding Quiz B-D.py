@@ -116,26 +116,34 @@ def test_question9_case1():
 
 
 def test_question9_case2():
-    assert question9([[0, 1, 0], [1, 0, 0], [0, 0, 0]]) == 2
+    assert question9([[0, 1, 0],
+                      [1, 0, 0],
+                      [0, 0, 0]]) == 2
 
 
 def test_question9_case3():
-    assert question9([[0, 0, 0], [0, 0, 0], [0, 0, 0]]) == 3
+    assert question9([[0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0]]) == 3
 
 
 def test_question9_case4():
-    assert question9([[0, 1, 0], [1, 0, 1], [0, 1, 0]]) == 1
+    assert question9([[0, 1, 0],
+                      [1, 0, 1],
+                      [0, 1, 0]]) == 1
 
 
 def test_question9_case5():
-    assert question9([[0, 1, 1], [1, 0, 1], [1, 1, 0]]) == 1
+    assert question9([[0, 1, 1],
+                      [1, 0, 1],
+                      [1, 1, 0]]) == 1
 
 
 # assert question9([[0]]) == 1
-# assert question9([[0, 1, 0], [1, 0, 0], [0, 0, 0]]) == 2
-# assert question9([[0, 0, 0], [0, 0, 0], [0, 0, 0]]) == 3
-# assert question9([[0, 1, 0], [1, 0, 1], [0, 1, 0]]) == 1
-# assert question9([[0, 1, 1], [1, 0, 1], [1, 1, 0]]) == 1
+assert question9([[0, 1, 0], [1, 0, 0], [0, 0, 0]]) == 2
+assert question9([[0, 0, 0], [0, 0, 0], [0, 0, 0]]) == 3
+assert question9([[0, 1, 0], [1, 0, 1], [0, 1, 0]]) == 1
+assert question9([[0, 1, 1], [1, 0, 1], [1, 1, 0]]) == 1
 
 
 
