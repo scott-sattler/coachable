@@ -2,3 +2,38 @@ An important property of a problem that is being solved through dynamic programm
 subproblems. This is what distinguishes DP from divide and conquer in which storing the simpler values isn't necessary.
 
 
+Here is a list of the most important things to remember:
+
+    Recognize a dynamic programming problem. This is often the most difficult step and it has to do with recognizing
+    that there exists a recursive relation. Can your problem result be expressed as a function of results of the smaller
+    problems that look the same?
+
+    Determine the number of changing parameters. Express your problem in terms of the function parameters and see how
+    many of those parameters are changing. Typically you will have one or two, but technically this could be any number.
+    Typical examples for one parameter problems are fibonacci or a coin change problem, for two parameter is edit
+    distance.
+
+    Clearly express the recursive relation. Once you figure out that the recursive relation exists and you specify the
+    problems in terms of parameters, this should come as a natural step. How do problems relate to each other. That is,
+    assuming that you have computed the subproblems, how would you compute the main problem.
+
+    What are your base cases? When you break down sub-problems into smaller sub-problems and you break down those even
+    further, what is the point where you cannot break it anymore? Do all these subproblems end up depending on the same
+    small subproblem or several of them?
+
+    Decide if you want to implement it iteratively or recursively and be comfortable with both. Know the trade-offs
+    between one or the other, such as recursive stack overflow, sparsity of computation, think if this is a repeated
+    work or something that you always do online, etc.
+
+    Add memoization. If you’re implementing it recursively, add memoization. If you’re doing it iteratively, this will
+    come for free. Adding memoization should be super mechanical. Just see if you have memoized the state at the
+    beginning of your function and add it to memoization before each return statement. Memoization value should almost
+    always be the result of your function.
+
+    Time complexity = (# of possible states * work done per each state). This should also be relatively mechanical.
+    Count the number of states that you can have. This will be linear if you have a single parameter, quadratic if you
+    have two and so on. Think about the work done per each state - that is the work that you have to do assuming that
+    you’ve computed all of the subproblems.
+
+Learn ideas, don’t learn problems. Number of ideas is significantly smaller and it’s an easier space to conquer which
+will also serve you much better.

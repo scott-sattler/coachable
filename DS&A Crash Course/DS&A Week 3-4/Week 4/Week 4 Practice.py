@@ -4,19 +4,30 @@ Free Response Questions
 Strings
 
     What is a string? How is a string created in memory?
+    immutable object of str type; as an interned dictionary
+    in CPython they adopt C's implementation: an array of chars
+    details beyond that point get hairy...
 
     How can we calculate the frequencies of each character in a string?
+    frequency map
 
     What is an anagram? How can we check if 2 strings are an anagram?
+    same chars and frequency
 
     What are 2 ways to determine if a string is a palindrome?
 
+
     What is the runtime to concatenate a string with a character?
+    O(len(str) + len(char)) -> O(N+M)
 
     What is the difference between substring vs. subsequence?
+    substring is contiguous, and includes empty strings
+    subsequence: remove (all > x >= 0) chars from string
 
     Let s = 'coachable rocks'. Can you give an example of a subsequence of s that is not a substring s? What about a
     substring that is not a subsequence?
+    subsequence not a substring: coc
+    substring not a subsequence: ""
 
 Sorting
 
