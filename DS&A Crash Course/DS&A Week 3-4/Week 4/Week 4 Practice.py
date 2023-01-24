@@ -119,7 +119,7 @@ Match Sorting Algorithms
         insertion sort: rightmost elements do not appear to have been moved; leftmost consistent with selection
         leftmost exact match to final position
     b) [2, 0, 4, 6, 5, 3, 7, 15, 27, 21, 17, 10, 16, 8, 24, 18]
-        quicksort: if 7 is chosen as the pivot, left/right subarrays consistent with less/greater than
+        quicksort: if 7 is chosen as the pivot, left/right subarrays are consistent with less/greater than ordering
     c) [0, 2, 3, 7, 8, 10, 15, 16, 17, 21, 24, 27, 4, 6, 18, 5]
         insertion sort: rightmost elements do not appear to have been moved; leftmost consistent with insertion
         leftmost in order, but not necessarily in final position
