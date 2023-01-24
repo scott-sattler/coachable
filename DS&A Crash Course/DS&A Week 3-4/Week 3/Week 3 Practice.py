@@ -20,23 +20,37 @@ Hashmaps
 
     5. Here are some hash functions: Which one(s) of them are good and why? How would you improve the bad ones?
         a. Hashing a phone number - use the area code.
-
+            not good: massive number of collisions. input is not uncommon enough. entire number would be an improvement
 
         b. Hashing a social security number - use the last four digits.
-
+            not good: same as above, although less common. since SS's are unique, the entire number could be used
 
         c. Hashing a string - use the sum of each of the character's ASCII codes
-
+            decent or not bad: to reduce collisions, you could incorporate information, such as char index
 
         d. Hashing a Person object - using the Person's age
-
+            not good: massive number of collisions. input is not uncommon enough. additional information such as SS
+            could be used to improve
 
     6. How are collisions handled in linear probing? How are collisions handled in separate chaining? Describe the
     differences in detail.
+        linear probing handles collisions by looking for the next free index, typically(?) to the right
+        separate chaining handles collisions by creating a linked list of collision values
 
     7. Suppose I implement a hashmap with the hash function h(x) = x mod 10, a list of length 10, and with linear
     probing. I insert the elements 32, 47, 42, 43, 15, 19, 16, 27 in that order. Write out what the list of the hashmap
     looks like after each insert.
+        3, 4, 4, 4, 1, 1, 1, 2
+        32
+        32 47
+        32 47 42
+        32 47 42 43
+        15 32 47 42 43
+        15 19 32 47 42 43
+        15 19 32 47 42 43 16
+        15 19 32 47 42 43 16 27
+        0  1  2  3  4  5  6  7  8  9
+           15 19 32 47 42 43 16 27
 
 Recursion
 
