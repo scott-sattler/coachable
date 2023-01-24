@@ -5,22 +5,31 @@ Free Response Questions
 Hashmaps
 
     1. What does a hashmap do? What are the functions a hashmap class provides?
+        hashmaps take a hashing function, and maps some input to the hashed index (hash value -> list index)
+        each hash index contains a key-value pair, where some object is typically stored (linked to)
+        in Python, for example, keys(), values(), items() (key-value pairs), update (add to hashmap), and get()...
 
     2. What is the benefit of using a hashmap over an array or linked list?
+        versatility in the case of an array (e.g. ability to store an additional object), and runtime in the case of LL
 
     3. What are the runtimes of the get/set functions in a hashmap? Best, average, and worst-case?
+        get/set: O(1); O(1); O(n) (all keys collided, with the last-most element being the get/set value)
 
     4. What type of input gives the worst case for hashmap? How can we prevent this from happening?
+        all keys collided, with the last-most element being the get/set value
 
     5. Here are some hash functions: Which one(s) of them are good and why? How would you improve the bad ones?
-
         a. Hashing a phone number - use the area code.
+
 
         b. Hashing a social security number - use the last four digits.
 
+
         c. Hashing a string - use the sum of each of the character's ASCII codes
 
+
         d. Hashing a Person object - using the Person's age
+
 
     6. How are collisions handled in linear probing? How are collisions handled in separate chaining? Describe the
     differences in detail.
@@ -32,13 +41,23 @@ Hashmaps
 Recursion
 
     1. What is recursion? How do you make sure recursion does not run infinitely?
+        a function that calls itself; base case
 
     2. How do you convert a function with iteration (e.g., a for loop) to a recursive function? For example, how can I
     loop through numbers in a list using recursion?
+        make the goal emulate iteration, e.g.:
+            def recursive_iteration(index, list):
+                if index = len(list) - 1
+                    return
+                return recursive_iteration(index + 1, list)
 
     3. What is binary search? What is the requirement for the thing (e.g., list) that you are doing a binary search on?
+        binary search bisects an ordered sequence to find a specified value
+        binary search requires an ordered sequence
 
     4. What is the runtime and space complexity for binary search?
+        computational complexity: O(log(n))
+        space complexity: O(1) iterative: O(log(n)) recursive (call stack)
 
 Runtime Analysis
 
