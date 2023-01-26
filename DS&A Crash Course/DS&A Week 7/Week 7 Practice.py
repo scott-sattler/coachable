@@ -13,6 +13,7 @@ Free Response Questions
         poor time complexity of recursive solution
         ...
         when solutions to subproblems can be used to solve larger problems
+        optimal substructure (optimal solution can be constructed from optimal solutions to subproblems)
 
     What is the difference between top-down and bottom-up dynamic programming?
         bottom-up solves the base case, and increases size of subproblem
@@ -26,17 +27,22 @@ Free Response Questions
 
     Oftentimes, the answer  f(n) may only require the result from f(n-1). What kind of space/memory optimization can we
     do if this is the case? If it helps, you can give an example of a specific problem.
+        memoization/tabulation
 
     What if we had a f(r, c) that relied only on f(r-1, c) for some arbitrary c? What kind of space/memory optimization
     can we do if this is the case? If it helps, you can give an example of a specific problem.
+        memoization/tabulation
 
     Fibonacci is one example of a 1-dimensional recurrence relation optimized with dynamic programming. Identify and
     share 3 other classes of dynamic programming problems that seem similar and describe what makes them feel similar.
+        shortest/longest common subsequence
+        knapsack problem
+        coin change problem
+        longest increasing subsequence
 
 
     Is this statement true or false?
-
         "Dynamic programming only helps problems that have a brute-force recursive solution."
-
+        False
 
 """
