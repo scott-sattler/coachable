@@ -120,6 +120,7 @@ def fn_a(n: int) -> int:
     if n == 1:
         return n
     return fn_a(n - 1) + 1
+# O(n): linear reduction in input
 
 
 # Code Block B
@@ -127,6 +128,7 @@ def fn_b(n: int) -> int:
     if n == 1:
         return n
     return fn_b(n - 1) + fn_b(n - 1)
+# O(2^n): each recursive call doubles the number of calls, for n times
 
 
 # Code Block C
@@ -134,7 +136,7 @@ def fn_c(n: int) -> int:
     if n == 1:
         return n
     return fn_c(n - 1) * n
-
+# O(n): linear reduction in input (runtime is unaffected by constant factor)
 
 # Code Block D
 def fn_d(n: int) -> int:
@@ -144,6 +146,9 @@ def fn_d(n: int) -> int:
     for i in range(n):
         count += i
     return fn_d(n // 2) + fn_d(n // 2) + count
+# O(n*log(n) + 2^log(n)) -> O(n*log(n) + n) -> O(n*log(n)):
+# n operations (for loop) log(n) times (input is being reduced by half); disregard lower orders
+# note: 2^log_2(n) -> n
 
 
 # Code Block E
@@ -151,17 +156,19 @@ def fn_e(n: int) -> int:
     if n == 0:
         return 1
     return fn_e(n // 2) + fn_e(n // 2)
-
+# O(2^log(n)) -> O(n): input is being reduced by half, while doubling the number of calls
+# note: 2^log_2(n) -> n
 
 # Code Block F
 def fn_f(n: int) -> int:
     if n + 1 < 0:
         return n
     return fn_f(n // 2) + fn_f(n // 2)
-
+# inf: the if statement reduces to n < -1; the floor division will (bottom out at or) never result in n < 0; hence, inf
 
 # Code Block G
 def fn_g(n: int, m: int) -> int:
     if n <= 0 or m <= 0:
         return 1
     return fn_g(n // 2, m) + fn_g(n, m // 2)
+# O(2^(log(n) + log(m)) -> 2^log(n*m)): as either n or m <=0 ends the recursion tree, there is a race to 0, by halves...
