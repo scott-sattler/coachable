@@ -112,6 +112,7 @@ Runtime Analysis
     5, 6, 7, 8... and see how it grows. Or perhaps try 2, 4, 8, 16, 32... depending on the problem.
 
     3. (2) will help you see the pattern. Once you see the pattern, it can be easier to try and describe it.
+
 """
 
 
@@ -120,7 +121,9 @@ def fn_a(n: int) -> int:
     if n == 1:
         return n
     return fn_a(n - 1) + 1
-# O(n): linear reduction in input
+# 1. return values: 2 4 8 16
+# 2. n -> n
+# 3. O(n): linear reduction in input
 
 
 # Code Block B
@@ -128,7 +131,9 @@ def fn_b(n: int) -> int:
     if n == 1:
         return n
     return fn_b(n - 1) + fn_b(n - 1)
-# O(2^n): each recursive call doubles the number of calls, for n times
+# 1. return values: 2 8 128 32768
+# 2. n -> 2^n / 2
+# 3. O(2^n): each recursive call doubles the number of calls, for n times
 
 
 # Code Block C
@@ -136,7 +141,10 @@ def fn_c(n: int) -> int:
     if n == 1:
         return n
     return fn_c(n - 1) * n
-# O(n): linear reduction in input (runtime is unaffected by constant factor)
+# 1. return values: 2 24 40320 20922789888000
+# 2. n -> n!
+# 3. O(n): linear reduction in input (runtime is unaffected by constant factor)
+
 
 # Code Block D
 def fn_d(n: int) -> int:
@@ -146,9 +154,11 @@ def fn_d(n: int) -> int:
     for i in range(n):
         count += i
     return fn_d(n // 2) + fn_d(n // 2) + count
-# O(n*log(n) + 2^log(n)) -> O(n*log(n) + n) -> O(n*log(n)):
-# n operations (for loop) log(n) times (input is being reduced by half); disregard lower orders
-# note: 2^log_2(n) -> n
+# 1. return values: 3 12 52 224
+# 2. n -> uh... double n-1 summation from 0 to n, while n is being halved, until n <= 1
+# 3. O(n*log(n) + 2^log(n)) -> O(n*log(n) + n) -> O(n*log(n)):
+#    n operations (for loop) log(n) times (input is being reduced by half); disregard lower orders
+#    note: 2^log_2(n) -> n
 
 
 # Code Block E
@@ -156,19 +166,31 @@ def fn_e(n: int) -> int:
     if n == 0:
         return 1
     return fn_e(n // 2) + fn_e(n // 2)
-# O(2^log(n)) -> O(n): input is being reduced by half, while doubling the number of calls
-# note: 2^log_2(n) -> n
+# 1. return values: 4 8 16 32
+# 2. n -> 2n
+# 3. O(2^log(n)) -> O(n): input is being reduced by half, while doubling the number of calls
+#    note: 2^log_2(n) -> n
+
 
 # Code Block F
 def fn_f(n: int) -> int:
     if n + 1 < 0:
         return n
     return fn_f(n // 2) + fn_f(n // 2)
-# inf: the if statement reduces to n < -1; the floor division will (bottom out at or) never result in n < 0; hence, inf
+# 1. return values: inf inf inf inf
+# 2. n -> inf
+# 3. inf: the if statement reduces to n < -1; positive floor division will bottom out at 0, and never result in n < 0
+
 
 # Code Block G
 def fn_g(n: int, m: int) -> int:
     if n <= 0 or m <= 0:
         return 1
     return fn_g(n // 2, m) + fn_g(n, m // 2)
-# O(2^(log(n) + log(m)) -> 2^log(n*m)): as either n or m <=0 ends the recursion tree, there is a race to 0, by halves...
+# 1. return values:
+# 2. n ->
+# 3. inf: as either n or m <=0 ends the recursion tree, there is a race to 0, by halves...
+
+# O(2^(log(n) + log(m)) -> 2^log(n*m) -> O(n*m)):
+# as either n or m <=0 ends the recursion tree, there is a race to 0, by halves...
+# calls will be made until
