@@ -6,25 +6,44 @@ Free Response Questions
 Trees
 
     Explain what a binary tree is using a recursive definition.
+        a data structure that is traversed using two recursive calls, one for each left and right child
+        the traversal method, pre, post, and in order, is determined by the position of node inspection
+        preorder inspects the current node first, then makes both recursive calls
+        postorder recurses the left and right children, then inspects the current node
+        inorder inspects the current node between the left and right recursive calls
+        level order uses BFS with a queue
 
     What are the different traversals that we can do on a binary tree?
+        pre/post/in/level order
 
     Your friend claims that “the time complexity of traversing a tree recursively is O(n), where n is the number of
     nodes in the tree.” Are they correct? Why/why not?
+        yes.
 
     Your friend claims that “the worst-case space complexity of traversing a tree recursively is O(1), because we are
     not using extra space to hold a queue like a BFS would.” Are they correct? Why/why not? What if the tree is
     balanced?
+        no. worst case of a tree would 1 node per level, effectively a linked list, which produces a call stack of O(n)
+        balanced tree: worst case call stack is O(log(n))
 
     What is the difference between a binary tree and a binary search tree (BST)?
+        a binary tree is an unordered graph where every node has, at most, two children; permits duplicates; O(n) runtime
+        binary search tree imposes order: relative to parent node, left is < and right is >; no duplicates; O(n) runtime
+        note: BSTs can handle duplicates via node lists, or comparison operator and significant algorithm modification
+        balanced binary search trees exhibit O(log(n)) runtime
 
     What is the runtime of searching for an element in a BST? What about the space complexity?
+        unbalanced: O(n) runtime; O(n) auxiliary: maximum call stack
+        balanced: O(log(n)) runtime; O(log(n)) auxiliary: maximum call stack
 
     What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited to search for
     the existence of 6?
 
+
+
     What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited, to search for
     the existence of 0?
+
 
     What’s the “best” BST structure, given the numbers [1,2,3,4,5,6,7], in terms of the expected number of nodes visited
     to search for the existence of an arbitrary positive or negative number?
@@ -214,22 +233,49 @@ Tries
     General
 
         What is a trie?
+            a data structure used to efficiently store and find strings and stubstrings (e.g. prefixes)
+            a trie typically has, at each node, a boolean and a hashmap of subsequent chars
 
         When do we use a trie?
+            when you want performant string lookups, where the strings may overlap (e.g. str, string, strings)
+            note: for 'overlap' to occur, string subsequences need to start with a similar sequence of at least one char
 
         How do we know that “dog” is an actual word in our trie and is not just a prefix of the word “doghouse”?
+            the boolean, which can be either an explicit boolean attached to the given node, or implicitly via specific
+            hash key
 
         Suppose our dictionary has n words and the longest of them is m characters long. What is the time and space
         complexity of building our trie?
+            O(n*m) runtime; O(n * m) space
+            note: a major advantage of tries occurs when strings
 
     Building a Trie
 
         Start with an empty trie and insert the words "hello", "help", "held", "helden", "helderman", "helping" into
         this trie. Draw the resulting trie in tree structure.
+             'h'
+              |
+             'e'
+              |
+             'l'
+          /   |   \
+        'd'  'l'  'p'
+         |    |
+        'e'  'o'
+       /  \
+     'n'  'r'
+           |
+          'm'
+           |
+          'a'
+           |
+          'n'
 
         Trace through how you would search for "helping" in this trie.
+            'h' -> 'e' -> 'l' -> 'p' -> 'i' -> 'n' -> 'g', bool?
 
         Trace how you would find all words starting with the prefix "he" in this Trie.
+            'h' -> 'e', .keys(), exhaustively traverse each subsequent edge of 'e', record word when bool is True.
 
 
 """
