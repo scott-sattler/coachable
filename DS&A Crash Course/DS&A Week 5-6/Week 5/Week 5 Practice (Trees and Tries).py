@@ -38,34 +38,57 @@ Trees
 
     What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited to search for
     the existence of 6?
-
-
+        unbalanced: 1 -> 2 -> 3 -> 4 -> 5
+           1
+         /  \
+        null 2
+            / \
+          null 3
+               ...
 
     What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited, to search for
     the existence of 0?
-
+        unbalanced: 5 -> 4 -> 3 -> 2 -> 1
+            5
+           / \
+          4  null
+         / \
+        3  null
+        ...
 
     What’s the “best” BST structure, given the numbers [1,2,3,4,5,6,7], in terms of the expected number of nodes visited
     to search for the existence of an arbitrary positive or negative number?
+        O(log(n)) structure (bisected)
+                 4
+               /   \
+              2     6
+            /  \   / \
+           1   3  5   7
 
     If I want to compute the size of each subtree in a tree, which traversal(s) could I use? If some do not work,
     explain why not.
 
-    If I wanted to print out the tree node values level by level, which traversal(s) could I use?   If some do not work,
+
+    If I wanted to print out the tree node values level by level, which traversal(s) could I use? If some do not work,
     explain why not
 
-    If I wanted to sum all the node values in the tree, which traversal(s) could I use?  If some do not work, explain
-    why not
 
-    If I wanted to sum all the node values in each subtree in a tree, which traversal(s) could I use?  If some do not
+    If I wanted to sum all the node values in the tree, which traversal(s) could I use? If some do not work, explain
+    why not
+        pre/in/post/level/bfs
+        all traversals that visit each node work; all traversals work
+
+    If I wanted to sum all the node values in each subtree in a tree, which traversal(s) could I use? If some do not
     work, explain why not.
+
+
 
 Tree Traversals Orderings
 
     Give the preorder, postorder, inorder, and level order traversals for each of the following trees. Assume that 
     children are processed left to right.
 
-    Binary Tree
+    1. Binary Tree
     
         1
        / \
@@ -76,7 +99,12 @@ Tree Traversals Orderings
           6   7
                \
                 8
-    
+
+    preorder:       1 2 4 3 5 6 7 8
+    postorder:      4 2 6 8 7 5 3 1
+    inorder:        4 2 1 3 6 5 7 8
+    level order:    1 2 3 4 5 6 7 8
+
     2. N-Ary Tree (Nodes can have more than 2 children)
     
          1
@@ -88,6 +116,11 @@ Tree Traversals Orderings
        9    10   11
             | \   \
            12  13  14
+
+    preorder:       1 2 5 3 6 9 7 4 8 10 12 13 11 14
+    inorder:        5 2 9 6 3 7 1 4 8 12 10 13 11 14
+    postorder:      5 2 9 6 7 3 12 13 10 14 11 8 4 1
+    level order:    1 2 3 4 5 6 7 8 9 10 11 12 13 14
 
 Identifying Recursive Relationships
 
@@ -233,7 +266,7 @@ Tries
     General
 
         What is a trie?
-            a data structure used to efficiently store and find strings and stubstrings (e.g. prefixes)
+            a data structure used to efficiently store and find strings and certain stubstrings (e.g. prefixes)
             a trie typically has, at each node, a boolean and a hashmap of subsequent chars
 
         When do we use a trie?
@@ -247,7 +280,7 @@ Tries
         Suppose our dictionary has n words and the longest of them is m characters long. What is the time and space
         complexity of building our trie?
             O(n*m) runtime; O(n * m) space
-            note: a major advantage of tries occurs when strings
+            note: a major advantage of tries occurs when strings 'overlap'
 
     Building a Trie
 

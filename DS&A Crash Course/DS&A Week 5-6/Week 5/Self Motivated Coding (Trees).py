@@ -34,6 +34,16 @@ tree_root.right = TreeNode(2, None, None)
 tree_root.right.left = TreeNode(6, None, None)
 tree_root.right.right = TreeNode(10, None, None)
 
+tree_root = TreeNode(1, None, None)
+tree_root.left = TreeNode(2, None, None)
+tree_root.left.left = TreeNode(4, None, None)
+
+tree_root.right = TreeNode(3, None, None)
+tree_root.right.right = TreeNode(5, None, None)
+tree_root.right.right.left = TreeNode(6, None, None)
+tree_root.right.right.right = TreeNode(7, None, None)
+tree_root.right.right.right.right = TreeNode(8, None, None)
+
 
 output = []
 
@@ -42,9 +52,9 @@ def traverse(node):
     if not node:
         return None
 
-    output.append(node.val)
     traverse(node.left)
     traverse(node.right)
+    output.append(node.val)
 
 
 traverse(tree_root)
