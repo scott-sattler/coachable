@@ -76,9 +76,9 @@ class NearestPointSet:
         # get midpoint bounds: d<-x->d
         l_mid = midpoint - 1
         r_mid = midpoint + 1
-        while l_mid > low and self.points[l_mid].x <= upper_bound_d.d:
+        while l_mid > low and self.points[l_mid].x <= upper_bound_d.d:  # todo <= or <
             l_mid -= 1
-        while r_mid < high and self.points[r_mid].x <= upper_bound_d.d:
+        while r_mid < high and self.points[r_mid].x <= upper_bound_d.d:  # todo
             r_mid += 1
 
         # sort y (in place)
