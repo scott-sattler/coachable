@@ -1,3 +1,4 @@
+from collections import deque
 
 
 class TreeNode:
@@ -34,29 +35,39 @@ tree_root.right = TreeNode(2, None, None)
 tree_root.right.left = TreeNode(6, None, None)
 tree_root.right.right = TreeNode(10, None, None)
 
-tree_root = TreeNode(1, None, None)
-tree_root.left = TreeNode(2, None, None)
-tree_root.left.left = TreeNode(4, None, None)
+# tree_root = TreeNode(1, None, None)
+# tree_root.left = TreeNode(2, None, None)
+# tree_root.left.left = TreeNode(4, None, None)
+#
+# tree_root.right = TreeNode(3, None, None)
+# tree_root.right.right = TreeNode(5, None, None)
+# tree_root.right.right.left = TreeNode(6, None, None)
+# tree_root.right.right.right = TreeNode(7, None, None)
+# tree_root.right.right.right.right = TreeNode(8, None, None)
 
-tree_root.right = TreeNode(3, None, None)
-tree_root.right.right = TreeNode(5, None, None)
-tree_root.right.right.left = TreeNode(6, None, None)
-tree_root.right.right.right = TreeNode(7, None, None)
-tree_root.right.right.right.right = TreeNode(8, None, None)
 
-
-output = []
+output = list()
+sub_count = dict()
 
 
 def traverse(node):
+    return hf_traverse(node)
+
+
+def hf_traverse(node):
     if not node:
-        return None
+        return 0
 
-    traverse(node.left)
-    traverse(node.right)
+    count = 0
+    count += hf_traverse(node.left)
+    count += hf_traverse(node.right)
     output.append(node.val)
+    sub_count[node.val] = count
+
+    return count + 1
 
 
-traverse(tree_root)
+print(traverse(tree_root))
 print(output)
+print(sub_count)
 
