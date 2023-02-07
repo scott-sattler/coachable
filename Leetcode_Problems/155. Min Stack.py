@@ -40,23 +40,36 @@ Constraints:
 
 """
 
+# import heapq
+
 
 class MinStack:
 
     def __init__(self):
-        pass
+        self.stack = list()
+        self.min = float('inf')
+        self.min_index = None
 
     def push(self, val: int) -> None:
-        pass
+        self.stack.append(val)
+        if len(self.stack) > 1:
+            self.stack[-1], self.stack[-2] = self.stack[-2], self.stack[-1]
 
     def pop(self) -> None:
-        pass
+        # return self.stack.pop()
+        value = self.stack[-1]
+        del self.stack[-1]
+        return value
 
     def top(self) -> int:
-        pass
+        return self.stack[-1]
 
     def getMin(self) -> int:
-        pass
+        # heap ...
+
+
+
+
 
 # Your MinStack object will be instantiated and called as such:
 # obj = MinStack()
