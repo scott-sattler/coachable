@@ -242,7 +242,7 @@ Identifying Recursive Relationships
     is_symmetric(D) = True. A tree is symmetric if the left and right subtrees are mirror images of each other.
         a. is_symmetric(A) ... is_symmetric(E) =
         b. Base Case: if is_symmetric(input) ("root") is None: return None
-        c. Recurrence Relation: is_symmetric(root) = is_symmetric(left) + is_symmetric(right)
+        c. Recurrence Relation: is_symmetric(root) = is_symmetric(left), is_symmetric(right)
         d.
         e.
 
