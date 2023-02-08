@@ -225,16 +225,26 @@ Identifying Recursive Relationships
 
     2. sum(root) finds the sum of all the nodes in the binary tree. size(A) = 1+3+8+6+4+&+10+14+12= 65
         a. sum(A) = 65; sum(B) = 15; sum(C) = 66; sum(D) = 23; sum(E) = 48
-        b. Base Case: if input ("root") is None: return 0
-        c. Recurrence Relation: sum(root) = sum(left) + sum(right) + parent
+        b. Base Case: if sum(input) ("root") is None: return 0
+        c. Recurrence Relation: sum(root) = sum(left) + sum(right) + current
         d. Yes: Verified. sum(A; root) = 8 + (3 + 1 + 6 + 4 + 7) + (10 + 14 + 12) = 8 + 21 + 36 = 65
-        e. Similar bu tnot same solution works; recursive calls must be made for each child (n-children).
+        e. Similar but not identical solution works; recursive calls must be made for each child (n-children).
 
     3. max(root) finds the maximum value among all nodes in a binary tree. max(A) = 14 since it is the largest element
     in the tree.
+        a. max(A), ... max(E) = 14, 5, 11, 5, 10
+        b. Base Case: if max(input) ("root") is None: return float('-inf')
+        c. Recurrence Relation: max(root) = max(max(left), max(right), current)
+        d. Yes: Verified. max(A; root) = max(7, ... max(12, -inf, 14), 8) -> 14
+        e. Similar but not identical solution works; recursive calls must be made for each child (n-children).
 
     4. is_symmetric(root) returns True if the tree is symmetric and False if it is not. is_symmetric(A) = False and
     is_symmetric(D) = True. A tree is symmetric if the left and right subtrees are mirror images of each other.
+        a. is_symmetric(A) ... is_symmetric(E) =
+        b. Base Case: if is_symmetric(input) ("root") is None: return None
+        c. Recurrence Relation: is_symmetric(root) = is_symmetric(left) + is_symmetric(right)
+        d.
+        e.
 
     5. height(root) finds the height of the tree. The distance from the root to the lowest child. height(A) = 3 because
     12 is 3 levels down from the 8.
