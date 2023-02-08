@@ -30,10 +30,39 @@ Constraints:
 
 """
 
-class Solution:
-    # first attempt: previously solved similar
-    # time complexity:
-    # space complexity (auxiliary):
-    def isValid(self, s: str) -> bool:
-        pass
 
+class Solution:
+    # second attempt: previously solved
+    # time complexity: O(n)
+    # space complexity (auxiliary): O(n) (O(n))
+    def isValid(self, s: str) -> bool:  # noqa: naming convention
+        stack = list()
+        lookup = {
+            ')': '(',
+            '}': '{',
+            ']': '['
+        }
+
+        for char in s:
+            if char in ['(', '{', '[']:
+                stack.append(char)
+            else:
+                if len(stack) < 1 or stack.pop() != lookup[char]:
+                    return False
+
+        return True if len(stack) == 0 else False
+
+
+input_strs = [
+    "(){}[]",   # T
+    "({[)}]",   # F
+    "]",        # F
+    "}{",       # F
+    "((()))",   # T
+    "(()[)]",   # F
+
+
+]
+
+for each in input_strs:
+    print(each, Solution().isValid(each))
