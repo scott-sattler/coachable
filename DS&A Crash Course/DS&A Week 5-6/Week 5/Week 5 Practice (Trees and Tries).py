@@ -67,11 +67,24 @@ Trees
 
     If I want to compute the size of each subtree in a tree, which traversal(s) could I use? If some do not work,
     explain why not.
+        postorder makes the process easier... but I'm not sure other methods would be impossible to implement (just
+        impractical)
 
+
+        def fn(node):
+            if not node:
+                return 0
+
+            count = 0
+            count += fn(node.left)
+            count += fn(node.right)
+            sub_count[node.val] = count
+
+            return count + 1
 
     If I wanted to print out the tree node values level by level, which traversal(s) could I use? If some do not work,
     explain why not
-
+        preferably level order, or BFS...
 
     If I wanted to sum all the node values in the tree, which traversal(s) could I use? If some do not work, explain
     why not
@@ -80,7 +93,7 @@ Trees
 
     If I wanted to sum all the node values in each subtree in a tree, which traversal(s) could I use? If some do not
     work, explain why not.
-
+        postorder
 
 
 Tree Traversals Orderings
@@ -131,21 +144,21 @@ Identifying Recursive Relationships
     Please identify the base case and recurrence relationship for the following relationships in binary trees. For each 
     question, please answer the following.
     
-        Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify 
+        a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
         understanding of the question.
         
-        Base Case - When does the recursion stop?
+        b. Base Case - When does the recursion stop?
         
-        Recurrence Relation - How can you solve for the parent using the solution for the children? You can describe 
+        c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can describe
         this with an equation or in English - whichever is more effective at communicating your approach.
         
-        Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of these as 
-        test cases - we will be pretty critical if your proposed solution does not work on the provided examples.
+        d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of these
+        as test cases - we will be pretty critical if your proposed solution does not work on the provided examples.
         
-        N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree? Does the 
-        same solution work? If not, what additional changes need to be made?
+        e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree? Does
+        the same solution work? If not, what additional changes need to be made?
     
-    Here is an example of size(root)  computing the size of a binary tree. Please complete the rest following this 
+    Here is an example of size(root) computing the size of a binary tree. Please complete the rest following this
     format.
 
     Example Binary Trees
@@ -204,24 +217,34 @@ Identifying Recursive Relationships
 
     1. Example. size(root) finds the number of nodes in a binary tree. For case A, size(A) = 9 since there are 9 nodes
     in the tree.
-
-    size(B) = 5, size(C) = 11, size(D) = 7, size(E) = 9
-
-    Base Case: if root is None: return 0 in other words size(None) = 0
-
-    Recurrence Relation: size(root) = size(left) + size(right) + 1
-
-    Yes: Verified. size(left/3) = 5, size(right/10) = 3, size(root) = 5+3+1 = 9 You should verify all 5 of them.
-
-    A similar solution works but instead. size(root) = 1 + sum(root.child) for each child node.
+        a. size(B) = 5, size(C) = 11, size(D) = 7, size(E) = 9
+        b. Base Case: if root is None: return 0 in other words size(None) = 0
+        c. Recurrence Relation: size(root) = size(left) + size(right) + 1
+        d. Yes: Verified. size(left/3) = 5, size(right/10) = 3, size(root) = 5+3+1 = 9 You should verify all 5 of them.
+        e. A similar solution works but instead. size(root) = 1 + sum(root.child) for each child node.
 
     2. sum(root) finds the sum of all the nodes in the binary tree. size(A) = 1+3+8+6+4+&+10+14+12= 65
+        a. sum(A) = 65; sum(B) = 15; sum(C) = 66; sum(D) = 23; sum(E) = 48
+        b. Base Case: if sum(input) ("root") is None: return 0
+        c. Recurrence Relation: sum(root) = sum(left) + sum(right) + current
+        d. Yes: Verified. sum(A; root) = 8 + (3 + 1 + 6 + 4 + 7) + (10 + 14 + 12) = 8 + 21 + 36 = 65
+        e. Similar but not identical solution works; recursive calls must be made for each child (n-children).
 
     3. max(root) finds the maximum value among all nodes in a binary tree. max(A) = 14 since it is the largest element
     in the tree.
+        a. max(A), ... max(E) = 14, 5, 11, 5, 10
+        b. Base Case: if max(input) ("root") is None: return float('-inf')
+        c. Recurrence Relation: max(root) = max(max(left), max(right), current)
+        d. Yes: Verified. max(A; root) = max(7, ... max(12, -inf, 14), 8) -> 14
+        e. Similar but not identical solution works; recursive calls must be made for each child (n-children).
 
     4. is_symmetric(root) returns True if the tree is symmetric and False if it is not. is_symmetric(A) = False and
     is_symmetric(D) = True. A tree is symmetric if the left and right subtrees are mirror images of each other.
+        a. is_symmetric(A) ... is_symmetric(E) =
+        b. Base Case: if is_symmetric(input) ("root") is None: return None
+        c. Recurrence Relation: is_symmetric(root) = is_symmetric(left), is_symmetric(right)
+        d.
+        e.
 
     5. height(root) finds the height of the tree. The distance from the root to the lowest child. height(A) = 3 because
     12 is 3 levels down from the 8.
