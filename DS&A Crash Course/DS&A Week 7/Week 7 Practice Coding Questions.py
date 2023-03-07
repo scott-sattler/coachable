@@ -117,15 +117,15 @@ def unique_paths_bottom_up_opt(m: int, n: int) -> int:
 def unique_paths_bottom_up_opt_obst(obstacles: list[list[int]]) -> int:
     m = len(obstacles)
     n = len(obstacles[0])
-    table_min = [1 for _ in range(m)]
+    table = [1 for _ in range(m)]
 
     for i in range(1, n):
         for j in range(1, m):
             if obstacles[i][j] == 0:
-                table_min[j] = table_min[j] + table_min[j - 1]
+                table[j] = table[j] + table[j - 1]
             else:
-                table_min[j] = 0
-    return table_min[-1]
+                table[j] = 0
+    return table[-1]
 
 
 # path lists
