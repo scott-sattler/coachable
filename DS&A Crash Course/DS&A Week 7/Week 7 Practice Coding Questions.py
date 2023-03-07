@@ -73,7 +73,7 @@ def _unique_paths_top_down(memo, i: int, j: int, m: int, n: int) -> int:
 
 # Question 2. Solve the above problem using Bottom Up Dynamic Programming
 # time: O(m * n)
-# auxiliary O(m * x)
+# auxiliary O(m * n)
 def unique_paths_bottom_up(m: int, n: int) -> int:
     # iteration
     # tabulation
