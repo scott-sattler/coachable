@@ -24,6 +24,8 @@ Free Response Questions
     “Memoization” can be thought of as “caching” all the recursive calls that have already happened. What might be a
     reason why I wouldn’t want to do that?
         the data is not useful, or unnecessary
+        no subproblem overlap or optimal substructure
+        i.e. subprolbems are not useful in solving larger problems
 
     Oftentimes, the answer  f(n) may only require the result from f(n-1). What kind of space/memory optimization can we
     do if this is the case? If it helps, you can give an example of a specific problem.
@@ -35,10 +37,15 @@ Free Response Questions
 
     Fibonacci is one example of a 1-dimensional recurrence relation optimized with dynamic programming. Identify and
     share 3 other classes of dynamic programming problems that seem similar and describe what makes them feel similar.
-        shortest/longest common subsequence
-        knapsack problem
-        coin change problem
-        longest increasing subsequence
+        strings: (e.g.) min/max subsequences
+        matrices: (e.g.) min/max paths; 2D combinations
+        counting: (e.g.) knapsack problem; coin change problem
+
+        attempt to coherently categorize:
+        optimization min/max graphs
+        optimization min/max strings
+        target combination/permutation
+        other?
 
 
     Is this statement true or false?
