@@ -17,8 +17,8 @@ Free Response Questions
 
     3. What is the difference between top-down and bottom-up dynamic programming?
         bottom-up solves the base case, and increases size of subproblem
-            typically requires loop
-        top-down solves more 'naturally', and will, for example, check the cache/memoization to reduce computation
+            typically requires iteration
+        top-down solves more 'naturally', and decreases size of subproblem
             typically requires recursion
 
     4. “Memoization” can be thought of as “caching” all the recursive calls that have already happened. What might be a
@@ -29,10 +29,12 @@ Free Response Questions
 
     5. Oftentimes, the answer  f(n) may only require the result from f(n-1). What kind of space/memory optimization can
     we do if this is the case? If it helps, you can give an example of a specific problem.
+***
         memoization/tabulation
 
     6. What if we had a f(r, c) that relied only on f(r-1, c) for some arbitrary c? What kind of space/memory
     optimization can we do if this is the case? If it helps, you can give an example of a specific problem.
+***
         memoization/tabulation
 
     7. Fibonacci is one example of a 1-dimensional recurrence relation optimized with dynamic programming. Identify and
