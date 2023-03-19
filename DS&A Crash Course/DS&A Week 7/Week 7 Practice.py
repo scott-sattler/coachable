@@ -57,7 +57,7 @@ Dynamic Programming and Recurrence Examples
 
     Each of the below problems can be solved with recursion. Please  answer the following for each one.
 
-    1. Unit Tests. Identify the solution cases up to n= 4. For 2D, do all cases up to (3,3)
+    1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
 
     2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by giving a
     qualitative explanation in plain English.
@@ -73,6 +73,20 @@ Dynamic Programming and Recurrence Examples
 Problems That Can Be Solved with Recursion
 
     1. Number of paths up a staircase of length N where you take 1 or 2 steps each time. Example provided.
+        1. 0 stairs 0 solutions; 1 1; 2 2; 3 3
+        2. T(n) = c + T(n - 1) + T(n - 2); if remaining_stairs == 0: return 1;
+           recurrence: at each step, you can choose either 1 or two steps. the recursive stack acts as tree nodes
+           base case: when no choices can be made (no stairs remain), you count a unique outcome
+        3. 13 - used tree by hand
+        code at bottom
+        def steps(n):
+            if n < 1:
+                return 1 * (n + 1)
+            return steps(n - 1) + steps(n - 2)
+
+        4. 13
+        5. O(2^n)
+
 
     2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n]
 
@@ -152,3 +166,52 @@ OPTIONAL: Binary Tree Recursive Challenge Problems
 
 
 """
+
+
+def steps(n):
+    if n < 1:
+        return 1 * (n + 1)
+    return steps(n - 1) + steps(n - 2)
+
+
+ans = steps(6)
+print(ans)
+
+
+# 6 7
+# % 5 -> 1 2
+# % 6 -> 0 1
+#
+def steps_inv(n):
+    if n > 5:
+        return ((n % 6) - 1) ** 2  # **2 <-> abs()
+    return steps_inv(n + 1) + steps_inv(n + 2)
+
+
+ans = steps_inv(6)
+print(ans)
+
+
+def steps_b_up_no_cache(n):
+    pass
+
+
+ans = steps_b_up_no_cache(6)
+print(ans)
+
+
+
+def steps_t_down_memo(n, memo):
+    memo = dict()
+    return _steps_t_down_memo(n, memo)
+
+
+def _steps_t_down_memo(n, memo):
+    if n < 1:
+        return 1 * (n + 1)
+
+    pass
+
+
+
+
