@@ -99,45 +99,54 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            T(n) = n * T(n - 1); if n == 0: return 1
+            T(n) = 1 + T(n - 1); if n == 0: return 1
             recurrence: the 1st element can be in (n - 0) positions, the 2nd element (n - 1) positions, 3rd (n - 2)...
                         each element can take each position, the number of ways all other elements can be dif. ordered
                         while it is in that position
                         [1, 2, 3, 4], [1, 3, 2, 4], ...
-                        but that just describes factorial (permutations), to get the actual recurrence relation, I just
-                        used existing knowledge of recurrence relations, vaguely recalling I had seen n! before
             base case: factorials cannot be negative (cannot have negative orderings); 0 elements contain 1 ordering
 
         3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
             720; [1, 1, 2, 6... ]; algorithm at bottom below
 
         4. Top Down Approach. Compute a small example using a top-down approach with memoization. (n=6,m=6)
-            720; algorithm at bottom below
+            720; [6, 30, 120, 360, ...]; algorithm at bottom below
 
         5. Complexity Analysis. Identify the optimal runtime and space complexity.
             optimal run/space, Ω(n), is the closed form n! with Ω(1) or Ω(n) time-complexity and Ω(1) auxiliary space
-                Ω(1) or Ω(n) depends on multiplication implementation
+                Ω(1) vs Ω(n) depends on multiplication implementation
             DP memo: O(n) runtime; O(n + n) -> O(n) aux space (callstack + memo)
             DP table: O(n) runtime; O(1) -> O(1) aux space (optimized table; O(n) unoptimized table)
             naive recursive: O(n); O(n)
 
         6. Is DP worth it? Does dynamic programming improve the runtime compared to a recursive approach?
-            not really (?); asymptotically identical, practically, probably worse (?)
+            not really (?), optimized tabulation saves space; asymptotically identical, practically, probably worse (?)
 
     3. Unique Paths: The number of paths from the top left corner of a grid to the bottom right corner when moving only
     down and to the right.
         1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
+            using [n - 1][m - 1] grid:
+            0 0, 0; 1 1, 1; 2 2, 2; 3 3, 6
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
+            T(n, m) = T(n - 1, m) + T(n, m - 1) + c; if (n, m) == (0, 0): return 1
+            recurrence: each square (n, m) is the sum of paths with a choice down or right
+            base case: reaching the square (0, 0) indicates a unique path has been found
 
         3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
+            using [n - 1][m - 1] grid:
+
 
         4. Top Down Approach. Compute a small example using a top-down approach with memoization. (n=6,m=6)
+            using [n - 1][m - 1] grid:
+            252; algorithm at bottom below
 
         5. Complexity Analysis. Identify the optimal runtime and space complexity.
 
+
         6. Is DP worth it? Does dynamic programming improve the runtime compared to a recursive approach?
+
 
     4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
         1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
@@ -407,7 +416,51 @@ print('3. unique paths...')
 
 
 # 3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
+def paths_b_up(n, m):
+    table = [[1 for _ in range(n)] for _ in range(m)]
+
+    for i in range(1, m):
+        for j in range(1, n):
+            table[i][j] = table[i][j - 1] + table[i - 1][j]
+
+    return table[-1][-1]
+
+
+ans = paths_b_up(6, 6)
+print(ans)
+
+
+def paths_b_up_optimized(n, m):
+    table = [1 for _ in range(n)]
+
+    for _ in range(1, n):
+        for j in range(1, m):
+            table[j] = table[j] + table[j - 1]
+
+    return table[-1]
+
+
+ans = paths_b_up_optimized(6, 6)
+print(ans)
 
 
 # 4. Top Down Approach. Compute a small example using a top-down approach with memoization. (n=6,m=6)
+def paths_t_down(n, m):
+    memo = dict()
+    return _paths_t_down(n - 1, m - 1, memo)
 
+
+def _paths_t_down(n, m, memo):
+    if (n, m) == (0, 0):
+        return 1
+    if min(n, m) < 0:
+        return 0
+
+    if (n, m) not in memo:
+        memo[(n, m)] = _paths_t_down(n - 1, m, memo) + _paths_t_down(n, m - 1, memo)
+
+    return memo[(n, m)]
+
+
+ans = paths_t_down(6, 6)
+print(ans)
