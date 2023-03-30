@@ -160,14 +160,15 @@ tests = [
     (4, 6),
     (1, 7),
     (5, 7),
+    (6, 6),
 ]
 for i, j in tests:
-    print(i, unique_paths_bottom_up(i, j))
-    print(i, unique_paths(i, j))
-    print(i, unique_paths_top_down(i, j))
-    print(i, unique_path_lists(i, j))
+    print((i, j), unique_paths_bottom_up(i, j))
+    print((i, j), unique_paths(i, j))
+    print((i, j), unique_paths_top_down(i, j))
+    print((i, j), unique_path_lists(i, j))
 
-    print(i, unique_paths_bottom_up_opt(i, j))
+    print((i, j), unique_paths_bottom_up_opt(i, j))
     print('----')
 
 matrices = {
