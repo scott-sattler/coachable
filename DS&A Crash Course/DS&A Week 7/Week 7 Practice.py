@@ -69,7 +69,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            T(n) = c + T(n - 1) + T(n - 2); if remaining_stairs == 0: return 1;
+            value: T(n) = T(n - 1) + T(n - 2); if remaining_stairs == 0: return 1;
             recurrence: at each step, you can choose either 1 or two steps. the recursive stack acts as tree nodes
             base case: when no choices can be made (no stairs remain), you count a unique outcome
 
@@ -99,7 +99,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            T(n) = 1 + T(n - 1); if n == 0: return 1
+            value: T(n) = n * T(n - 1); if n == 0: return 1
             recurrence: the 1st element can be in (n - 0) positions, the 2nd element (n - 1) positions, 3rd (n - 2)...
                         each element can take each position, the number of ways all other elements can be dif. ordered
                         while it is in that position
@@ -130,8 +130,8 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            T(n, m) = T(n - 1, m) + T(n, m - 1) + c; if (n, m) == (0, 0): return 1
-            recurrence: each square (n, m) is the sum of paths with a choice down or right
+            value: T(n, m) = T(n - 1, m) + T(n, m - 1) + c; if (n, m) == (0, 0): return 1
+            recurrence: each square (n, m) is the sum of paths with a choice of down or right
             base case: reaching the square (0, 0) indicates a unique path has been found
 
         3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
