@@ -69,7 +69,8 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: T(n) = T(n - 1) + T(n - 2); if remaining_stairs == 0: return 1;
+            value: F(n) = F(n - 1) + F(n - 2); if remaining_stairs == 0: return 1
+                base case with boundary control: if n < 1: return 1 * (n + 1))
             recurrence: at each step, you can choose either 1 or two steps. the recursive stack acts as tree nodes
             base case: when no choices can be made (no stairs remain), you count a unique outcome
 
@@ -99,7 +100,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: T(n) = n * T(n - 1); if n == 0: return 1
+            value: F(n) = n * F(n - 1); if n == 0: return 1
             recurrence: the 1st element can be in (n - 0) positions, the 2nd element (n - 1) positions, 3rd (n - 2)...
                         each element can take each position, the number of ways all other elements can be dif. ordered
                         while it is in that position
@@ -113,7 +114,7 @@ Problems That Can Be Solved with Recursion
             720; [6, 30, 120, 360, ...]; algorithm at bottom below
 
         5. Complexity Analysis. Identify the optimal runtime and space complexity.
-            optimal run/space, Ω(n), is the closed form n! with Ω(1) or Ω(n) time-complexity and Ω(1) auxiliary space
+            optimal run/space, Ω(n), is the closed form n! with (Ω(1) or Ω(n)) time-complexity and Ω(1) auxiliary space
                 Ω(1) vs Ω(n) depends on multiplication implementation
             DP memo: O(n) runtime; O(n + n) -> O(n) aux space (callstack + memo)
             DP table: O(n) runtime; O(1) -> O(1) aux space (optimized table; O(n) unoptimized table)
@@ -130,22 +131,26 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: T(n, m) = T(n - 1, m) + T(n, m - 1) + c; if (n, m) == (0, 0): return 1
-            recurrence: each square (n, m) is the sum of paths with a choice of down or right
+            value: F(n, m) = F(n - 1, m) + F(n, m - 1); if (n, m) == (0, 0): return 1
+            recurrence: each square (n, m) is the sum of paths that lead to it, with a choice of down or right
             base case: reaching the square (0, 0) indicates a unique path has been found
 
         3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
             using [n - 1][m - 1] grid:
-
+            252; algorithm at bottom below
 
         4. Top Down Approach. Compute a small example using a top-down approach with memoization. (n=6,m=6)
             using [n - 1][m - 1] grid:
             252; algorithm at bottom below
 
         5. Complexity Analysis. Identify the optimal runtime and space complexity.
-
+            optimal run/space, Ω(n), is the closed form ? with Ω(?) time-complexity and Ω(?) auxiliary space
+            DP memo: O(n * m) runtime; O(n * m) aux space
+            DP table: O(n * m) runtime; O(n) aux space (optimized); O(n*m) (unoptimized)
+            naive recursive: O(2 ^ (n + m)) runtime; O(n + m) aux space (callstack)
 
         6. Is DP worth it? Does dynamic programming improve the runtime compared to a recursive approach?
+            yes; yes.
 
 
     4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
@@ -318,6 +323,7 @@ print('1. staircase...')
 
 
 # 3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
+# TODO: refactor
 def steps_b_up_tab(n):
     agenda = [[]]
     solutions = 0
