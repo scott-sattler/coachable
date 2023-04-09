@@ -43,7 +43,7 @@ def print_linked_list(linked_list: ListNode, verbose=True) -> None:
 
 
 # algorithm written in base 10
-# requires base 10 input (eg hex unsupported)
+# requires base 10 input (e.g. hex unsupported)
 def base_converter(from_base: int, value: int, to_base: int) -> int:
     reversed_out = []
 
