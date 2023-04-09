@@ -35,3 +35,31 @@ def print_linked_list(linked_list: ListNode, verbose=True) -> None:
         print_list.append(node.val)
         node = node.next
     print(print_list)
+
+
+"""###########################
+############ misc ############
+###########################"""
+
+
+# algorithm written in base 10
+# requires base 10 input (eg hex unsupported)
+def base_converter(from_base: int, value: int, to_base: int) -> int:
+    reversed_out = []
+
+    str_val = str(value)[::-1]
+    digits = len(str_val)
+    value = sum([from_base ** i * int(str_val[i]) for i in range(digits)])
+
+    while value >= to_base:
+        reversed_out.append(value % to_base)
+        value //= to_base
+    else:
+        reversed_out.append(value)
+
+    return int(''.join(map(str, reversed_out[::-1])))
+
+
+assert base_converter(10, 256, 4) == 10000
+assert base_converter(7, 256, 4) == 2023
+assert base_converter(8, 1205, 3) == 212220
