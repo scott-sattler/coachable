@@ -85,8 +85,4 @@ Write a function that, given a dictionary of the form Student Name: Score, retur
 of letter grades. Here, A is 90 to 100 inclusive, B is 80 to 89 inclusive, C is 70 to 79 inclusive, and anything else is an F.
 '''
 def convert_to_gradebook(input_dict: dict[str, int]) -> dict[str, int]:
-  return [
-    out := {},
-    letter := lambda e: chr(99 - ((e - 70) // 10)).capitalize() if 69 < e < 99 else (letter(e - 1) if e > 69 else chr(102).capitalize()),
-    [out.update({letter(v): 1}) if letter(v) not in out else out.update({letter(v): out[letter(v)] + 1}) for k, v in input_dict.items()]
-  ][0]  # D:
+  return [out := {}, letter := lambda e: chr(67 - ((e - 70) // 10)) if 69 < e < 99 else (letter(e - 1) if e > 69 else chr(70)), [out.update({letter(v): 1}) if letter(v) not in out else out.update({letter(v): out[letter(v)] + 1}) for k, v in input_dict.items()]][0]  # lol
