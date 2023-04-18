@@ -97,7 +97,7 @@ class Tour:
         new_node = Node(p)
         self.nodes += 1
 
-        if not pointer:
+        if not self.head:
             self.head = new_node
             return
 
