@@ -76,17 +76,13 @@ class Tour:
     # Computes and returns the distance of entire tour
     def distance(self):
         dist = 0
-        if not self.head:
-            return dist
+        p1 = self.head
+        p2 = p1.next if p1 else None
 
-        pointer = self.head
-        while pointer.next:
-
-            dist += pointer.point.distance_to(pointer.next.point)
-            pointer = pointer.next
-
-        if self.size() > 1:
-            dist += pointer.point.distance_to(self.head.point)
+        while p1 and p2:
+            dist += p1.point.distance_to(p2.point)
+            p1 = p1.next
+            p2 = p2.next if p2.next else self.head
 
         return dist
 
@@ -105,7 +101,7 @@ class Tour:
             self.head = new_node
             return
 
-        while pointer is not prev:
+        while pointer and pointer is not prev:
             pointer = pointer.next
 
         new_node.next = pointer.next
