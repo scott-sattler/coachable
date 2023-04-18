@@ -127,29 +127,6 @@ class Tour:
 
         self._insert_at(p, prev_node)
 
-    # # Insert a new Point p to the Tour using smallest increase heuristic
-    # def insert_smallest(self, p):
-    #     # smallest increase heuristic: min(insert node between every other node)
-    #     new_node = Node(p)
-    #     pointer = self.head
-    #     smallest = float('inf')
-    #     prev = pointer
-    #
-    #     while pointer:
-    #         new_node.next = pointer.next
-    #         pointer.next = new_node
-    #
-    #         new_dist = self.distance()
-    #         if new_dist < smallest:
-    #             smallest = new_dist
-    #             prev = pointer
-    #
-    #         pointer.next = new_node.next
-    #         pointer = pointer.next
-    #
-    #     # restore smallest increase
-    #     self._insert_at(p, prev)
-
     # Insert a new Point p to the Tour using smallest increase heuristic
     def insert_smallest(self, p):
         # smallest increase heuristic: min(insert node between every other node)
@@ -176,9 +153,8 @@ class Tour:
             p1 = p1.next
             p2 = p2.next if p2.next else self.head  # loop it
 
-        # restore smallest increase
+        # restore the smallest increase
         self._insert_at(p, min_node)
-
 
 
 # ##############################
@@ -186,7 +162,7 @@ class Tour:
 # ##############################
 
 
-import unittest
+import unittest  # noqa
 
 
 # from __future__ import annotations
@@ -197,12 +173,12 @@ import unittest
 class TestPoint(unittest.TestCase):
 
     def test_string(self):
-        a = Point(1, 2)
+        a = Point(1, 2)  # noqa
         self.assertEqual(str(a), '(1,2)')
 
     def test_distance(self):
-        a = Point(0, 0)
-        b = Point(0, 2)
+        a = Point(0, 0)  # noqa
+        b = Point(0, 2)  # noqa
         self.assertEqual(a.distance_to(b), 2.0)
 
         c = Point(4, 5)
@@ -346,7 +322,7 @@ class TestTour(unittest.TestCase):
         self.assertEqual(nearest_tour.size(), 1000)
 
 
-import pytest
+import pytest  # noqa
 
 # do not modify this function call
-retcode = pytest.main(['-v'])
+retcode = pytest.main(['-v'])  # noqa
