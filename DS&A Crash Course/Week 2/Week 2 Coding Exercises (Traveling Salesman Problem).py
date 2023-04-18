@@ -101,7 +101,7 @@ class Tour:
             self.head = new_node
             return
 
-        while pointer and pointer is not prev:
+        while pointer is not prev:
             pointer = pointer.next
 
         new_node.next = pointer.next
