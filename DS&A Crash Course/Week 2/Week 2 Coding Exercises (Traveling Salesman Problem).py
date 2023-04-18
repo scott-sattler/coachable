@@ -153,8 +153,31 @@ class Tour:
             p1 = p1.next
             p2 = p2.next if p2.next else self.head  # loop it
 
-        # restore the smallest increase
         self._insert_at(p, min_node)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ##############################
