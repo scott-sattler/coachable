@@ -142,17 +142,17 @@ Runtime Analysis
                     while m > 0:
                         m //= 2
 
-    def o_n_log_n_sqr(n: int) -> None:
-        for _ in range(n):
-            m = n
-            while m > 0:
-                p = m
-                m //= 2
-                while p > 0:
-                    p //= 2
+        def o_n_log_n_sqr(n: int) -> None:
+            for _ in range(n):
+                m = n
+                while m > 0:
+                    p = m
+                    m //= 2
+                    while p > 0:
+                        p //= 2
 
-    def o_two_n(n: int) -> None:
-        return o_two_n(n - 1) + o_two_n(n - 1)
+        def o_two_n(n: int) -> None:
+            return o_two_n(n - 1) + o_two_n(n - 1)
 
     3. When we say an algorithm has O(1) runtime, what does that say about the runtime in terms of the input?
         runtime is constant - unaffected by input
@@ -164,7 +164,8 @@ Runtime Analysis
         def square(n: int):
             return n ** 2
 
-    6. Given a table of code runtime (input size/runtime), can you determine what order of growth these functions have? Hint: Applying the doubling principle.
+    6. Given a table of code runtime (input size/runtime), can you determine what order of growth these functions have?
+    Hint: Applying the doubling principle.
         N (input)           100     200     300     400     500     600
 
         Code A Runtime      52      110     160     198     256     308
