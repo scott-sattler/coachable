@@ -152,13 +152,21 @@ Runtime Analysis
                         p //= 2
 
         def o_two_n(n: int) -> None:
+            data = [0, 0]
+            for i in range(n):
+                data += data[:]
+
+        recursive
+        def o_two_n(n: int) -> None:
             return o_two_n(n - 1) + o_two_n(n - 1)
+
 
     3. When we say an algorithm has O(1) runtime, what does that say about the runtime in terms of the input?
         runtime is constant - unaffected by input
 
     4. How can you calculate the runtime when operations are nested?
-        TODO: multiply them
+        TODO: verify
+        multiply them
 
     5. Give an example of an algorithm or write a function with O(1) runtime.
         def square(n: int):
@@ -166,13 +174,12 @@ Runtime Analysis
 
     6. Given a table of code runtime (input size/runtime), can you determine what order of growth these functions have?
     Hint: Applying the doubling principle.
+        TODO: verify
         N (input)           100     200     300     400     500     600
+        Code A Runtime      52      110     160     198     256     308       +58   +50   +38   +58   +52  -> N*k
+        Code B Runtime      1001    1012    1015    1023    1025    1026      +11   +3    +8    +3    +1   -> (log N)*k
+        Code C Runtime      52      183     341     779     1245    1831      +131  +158  +438  +466  +586 -> N^2
 
-        Code A Runtime      52      110     160     198     256     308
-
-        Code B Runtime      1001    1012    1015    1023    1025    1026
-
-        Code C Runtime      52      183     341     779     1245    1831
 
 Explain and Analyze Code
 
