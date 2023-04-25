@@ -49,7 +49,7 @@ Geometric Series
         summation from k=0 to inf of (a * r^k);
         a geometric series is the sum of an infinite series with a constant ratio between successive terms
 
-        compute closed forms
+        compute closed forms todo
 
         examples:
         convergence: r < 1
@@ -77,29 +77,34 @@ Geometric Series
         2^(n+1) - 1
 
     5. Compute 1 + 1/2 + 1/4 + 1/8.
-
+        todo
 
     6. Compute 1 + 1/2 + 1/4 + 1/8 + 1/16 + 1/32.
+        todo
 
     7. If you keep adding more terms to the geometric series, what does it look like you get closer to? I.e., what does
     the series 1 + 1/2 + 1/4 + 1/8 + .... equal?
-
+        todo
 
     8. Now assume the sum goes from 64 down to 0 like this:
-
         a. 64 + 32 + 16 + 8 + 4 + 2 + 1 + 1/2 + 1/4 + 1/8... What is this equal to?
+            todo
 
     1. Compute  9 + 90 + 900 + 9000 as a power of 10 minus an additional term.
+        todo
 
     1. What does 9000 + 900 + 90 + 9 + 9/10 + 9/100 + ... approach?
+        todo
 
     1. Compute 54 + 27 + 9 + 3 + 1.
+        todo
 
     1. Generalizing a sum of powers of 3, estimate 1 + 3 + 9 + ... + 3^n.
-
         a. What is the sum in terms of big O notation?
+            todo
 
         b. Try to get an exact answer in terms of n
+            todo
 
 Runtime Analysis
 
@@ -153,7 +158,7 @@ Runtime Analysis
 
         def o_two_n(n: int) -> None:
             data = [0, 0]
-            for i in range(n):
+            for _ in range(n):
                 data += data[:]
 
         recursive
