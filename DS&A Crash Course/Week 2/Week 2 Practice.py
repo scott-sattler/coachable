@@ -436,7 +436,7 @@ Linked List Code Analysis
             if self.head:
                 self.head = self.head.next
 
-    1. Describe function1​ and its runtime.
+    1. Describe function1 and its runtime.
 
     2. Describe function2 and its runtime.
 
@@ -454,10 +454,13 @@ Stacks
     print(stack.pop())
 
     1. What is printed when the above code is run?
+        2\n4\n3\n
 
     2. What is the current state of the stack after the above code is run?
+        stack(1, )
 
-    3. ive one real-life example of a Stack.
+    3. Give one real-life example of a Stack.
+        things placed on top of each other, such as plates
 
 Queues
 
@@ -471,10 +474,13 @@ Queues
     print(queue.dequeue())
 
     1. What is printed when this code is run?
+        1\n2\n3\n
 
     2. What is the current state of the queue after this code is run?
+        queue(4, )
 
     3. Give one real-life example of a Queue.
+        standing in a line to, e.g. buy tickets
 
 
 """
