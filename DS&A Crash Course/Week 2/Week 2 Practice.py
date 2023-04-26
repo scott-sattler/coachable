@@ -106,10 +106,6 @@ Geometric Series
         b. Try to get an exact answer in terms of n
             todo
 
-Runtime Analysis
-
-    1. What is the runtime to iterate through a list of size n?
-        O(n)
 
 Runtime Analysis
 
@@ -188,10 +184,297 @@ Runtime Analysis
 
 Explain and Analyze Code
 
-    Please answer the following for each block of code. You can assume nums is an integer array of size. n
+    Please answer the following for each block of code. You can assume nums is an integer array of size n
 
-    Determine the function for nums = [1,1,1,1,1]
+        a. Determine the function for nums = [1,1,1,1,1]
 
-    ...
+        b. Determine the function for nums = [1,2,3,4,5]
+
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+
+        d. What does this function do?
+
+        e. What is the runtime complexity? And why?
+
+        f. What is the space complexity? And why?
+
+    1.
+        def func_one(nums) -> int:
+            n = len(nums)
+            all_nums = []
+            for i in range(n):
+                for j in range(n):
+                    all_nums.append(nums[j])
+            output = 0
+            for value in all_nums:
+                output += value
+            return output
+
+    2.
+        def func_two(nums) -> int:
+            n = len(nums)
+            value = 0
+            for i in range(n):
+                for j in range(n):
+                    value += nums[j]
+            return value
+
+    3.
+        def func_three(nums) -> int:
+            n = len(nums)
+            value = 0
+            while n > 0:
+                value += nums[n - 1]
+                n //= 2
+            return value
+
+
+    4.
+        def func_four(nums) -> int:
+            double_nums = []
+            for num in nums:
+                double_nums.append(num + num)
+            return sum(double_nums)
+
+
+    5.
+        def func_five(nums) -> int:
+            power_sum = 1
+            for i in range(len(nums)):
+                for j in range(nums[i]):
+                    power_sum *= 2
+
+            total = 0
+            for i in range(power_sum)
+                total += 1
+            return total % 99
+
+
+    6.
+        def func_six(nums) -> int:
+            count = 0
+            for i in range(1, len(nums)-1):
+                if nums[i] < nums[i-1] * 2 and nums[i] > nums[i+1] / 2:
+                    count += 1
+            return count
+
+
+    7.
+        def func_seven(nums: list[int]):
+          N = len(nums)
+          total = 0
+          n = N
+          while n > 0:
+              for i in range(0, n):
+                  total += nums[i]
+              n = n // 2
+          return total
+
+    8.
+        def func_eight(nums: list[int]):
+          N = len(nums)
+          total = 0
+          i = 1
+          while i < N:
+              for j in range(0, i):
+                  total += nums[j]
+              i = i * 2
+          return total
+
+
+    9.
+        def func_nine(nums: list[int]):
+          N = len(nums)
+          total = 0
+          i = 1
+          while i < N:
+              for j in range(0, N):
+                  total += nums[j]
+              i = i * 2
+          return total
+
+    10.
+        # input: an arbitrarily large array of integers of size N
+        def func_10(arr: list[int]):
+            arr.sort() # This line is O(n log n) runtime.
+            reverse_arr = [arr[i] for i in range(len(arr)-1, -1, -1)]
+            complements = []
+
+            # zip just iterates through both arrays at the same time
+            for num1, num2 in zip(arr, reverse_arr):
+                complements.append(num1 + num2)
+
+          return compliments
+
+
+    11.
+    For this problem, just compute the runtime of func_11:
+
+        # This function has log(N) runtime
+        # Where N is the input integer
+        def helper_func(N):
+              # does something that takes log(N) runtime.
+              # Note that if N = 1, then the runtime is O(1)
+
+
+        # input: an arbitrarily large integer N
+        def func_11(N):
+            helper_func()
+            for i in range(N):
+                helper_func(i)
+                for j in range(N):
+                      helper_func(j)
+                helper_func(N)
+            return
+
+
+    12.
+    These 2 code blocks look similar but have different runtimes in big O notation.
+    How are they different? Why?
+
+        # Block (A)
+        def fn_a(N):
+          count = 0
+          i = 1
+          while i < N:
+              for j in range(0, i):
+                  count += 1
+              i = i * 2
+          return count
+
+        # Block (B):
+        def fn_b(N)
+          count = 0
+          i = 1
+          while i < N:
+              for j in range(0, N):
+                  count += 1
+              i = i * 2
+          return count
+
+Linked List
+
+    1. What is a linked list? How is it built? What is the underlying data structure used?
+
+    2. What is the runtime to insert an element to the front of a linked list?
+
+    3. What is the runtime to search if a specific element is in a linked list?
+
+    4. What is one example of when a linked list is preferred over an array of a fixed size?
+
+    5. What is one example of when an array of fixed size is preferred over a linked list?
+
+    6. Describe how you would insert an element into the front of a linked list. How is this different from inserting to
+    the end of one?
+
+    7. How would you identify if there is a cycle in a linked list?
+
+    8. Please walk through your approach using the following examples, including all intermediate steps.
+
+         Linked list with cycle (d -> a)
+
+         a --> b --> c --> d
+
+         ^                 |
+
+         |                 V
+
+         <-----------------
+
+         Linked list with no cycle 1 --> 4 --> 3 --> 2 --> None
+
+    9. Explain how you would reverse a linked list. Explain using the following example.
+
+        a. 1 --> 4 --> 3 --> 2 --> None
+
+    10. How do you iterate through a linked list? Describe this process in detail if you want to print every element in
+    a linked list.
+
+    11. How can we use linked lists to implement a stack?
+
+    12. Why do you need two pointers for a queue but not required to implement a stack?
+
+    13. When would you want to use a doubly linked list?
+
+    14. What are the differences between stack/queue/deque? What are their core functions and runtimes?
+
+    15. What are some challenges when iterating through a circular linked list?
+
+    16. Why are queues better than stacks for ticket lines?
+
+Linked List Code Analysis
+
+    Below is a LinkedList class.
+
+    class Node:
+        def __init__(self, val):
+            self.val = val
+            self.next = None
+
+
+    class LinkedList:
+        def __init__(self, node):
+            # head references first node in chain of nodes
+            self.head = node
+
+        def function1(self, new_node):
+            new_node.next = self.head
+            self.head = new_node
+
+        def function2(self, new_node):
+            if self.head is None:
+                self.head = new_node
+            return
+
+            cur = self.head
+            while(cur.next):
+                cur = cur.next
+            cur.next = new_node
+
+        def function3(self):
+            if self.head:
+                self.head = self.head.next
+
+    1. Describe function1​ and its runtime.
+
+    2. Describe function2 and its runtime.
+
+    3. Describe function3 and its runtime.
+
+Stacks
+
+    stack = Stack()
+    stack.push(1)
+    stack.push(2)
+    print(stack.pop())
+    stack.push(3)
+    stack.push(4)
+    print(stack.pop())
+    print(stack.pop())
+
+    1. What is printed when the above code is run?
+
+    2. What is the current state of the stack after the above code is run?
+
+    3. ive one real-life example of a Stack.
+
+Queues
+
+    queue = Queue()
+    queue.enqueue(1)
+    queue.enqueue(2)
+    print(queue.dequeue())
+    queue.enqueue(3)
+    queue.enqueue(4)
+    print(queue.dequeue())
+    print(queue.dequeue())
+
+    1. What is printed when this code is run?
+
+    2. What is the current state of the queue after this code is run?
+
+    3. Give one real-life example of a Queue.
+
 
 """
