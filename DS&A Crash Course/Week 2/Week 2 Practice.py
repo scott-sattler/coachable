@@ -355,34 +355,115 @@ Explain and Analyze Code
 
 Linked List
 
-    1. What is a linked list? How is it built? What is the underlying data structure used?
+    1. (a) What is a linked list? (b) How is it built? (c) What is the underlying data structure used?
+        (a) a linked list is a series of nodes connected by references to the next node.
+        (b) linked lists are built by connecting new nodes the last linked node (either a dummy, head, or last node)
+        (c) the underlying data structure of linked lists is a node, which typically contains data (e.g. value) and a
+        reference to the next node
 
     2. What is the runtime to insert an element to the front of a linked list?
+        as we'll already have a direct reference to the element, and the remaining operations are constant, O(1)
 
     3. What is the runtime to search if a specific element is in a linked list?
+        in the worst the sought element will be the last element, hence, n, or O(n)
 
     4. What is one example of when a linked list is preferred over an array of a fixed size?
+        1. when the required list size is not known: linked lists are space optimal vs allocating fixed size arrays
+        2. frequent insertion/deletions: insertion/deletions do not require shifting other elements
+        3. ...
 
     5. What is one example of when an array of fixed size is preferred over a linked list?
+        1. small data set
+        2. where size is fixed, and unchanging
+        3. maximum memory/runtime performance is sought
+        4. ...
 
     6. Describe how you would insert an element into the front of a linked list. How is this different from inserting to
     the end of one?
+        pseudo code:
+            assign the new node's next_node reference to the current head node
+            reassign the head node reference to the new node
+        to insert a new node to the end of a linked list (append), you must first traverse the list or otherwise obtain
+        a reference to the last node
 
     7. How would you identify if there is a cycle in a linked list?
+        1. either use Floyd's cycle section algorithm (fast & slow pointers)
+        2. keep track of visited nodes
 
     8. Please walk through your approach using the following examples, including all intermediate steps.
 
-         Linked list with cycle (d -> a)
+        Linked list with cycle (d -> a)
+        a --> b --> c --> d
+        ^                 |
+        |                 V
+        <-----------------
 
-         a --> b --> c --> d
+        1. Floyd's cycle detection:
+            p1 & p2 start head
+            while p2 not None and p2.next not None and p1 != p2
+                p1 move 1
+                p2 move 2
 
-         ^                 |
+            p1 = p2 = a
+            p1.next = b
+            p2.next.next = c
+            b ?= c
+            p1.next = c
+            p2.next.next = a
+            c ?= a
+            p1.next = d
+            p2.next.next = c
+            d ?= c
+            p1.next = a
+            p2.next.next = a
+            a ?= a
+            return True
 
-         |                 V
+        2. record seen:
+            p1 start head
+            while not None
+                check for seen
+                record node
 
-         <-----------------
+           record a
+           a.next = b
+           seen b?
+           record b
+           b.next = c
+           seen c?
+           record c
+           c.next = d
+           seen d?
+           record d
+           d.next = a
+           seen a?
+           return True
 
          Linked list with no cycle 1 --> 4 --> 3 --> 2 --> None
+
+        1. Floyd's cycle detection:
+            p1 & p2 start head
+            while not None and p1 != p2
+                p1 move 1
+                p2 move 2
+
+            p1 = p2 = 1
+            p1.next = 4
+            p2.next.next = 3
+            4 ?= 3
+            p1.next = c
+            p2.next.next = a
+            c ?= a
+            p1.next = d
+            p2.next.next = c
+            d ?= c
+            p1.next = a
+            p2.next.next = a
+            a ?= a
+            return True
+
+        2. record seen:
+
 
     9. Explain how you would reverse a linked list. Explain using the following example.
 
