@@ -552,10 +552,17 @@ Linked List Code Analysis
                 self.head = self.head.next
 
     1. Describe function1 and its runtime.
+        inserts a new node as the head of the linked list; O(n)
 
     2. Describe function2 and its runtime.
+        inserts the provide node into an empty linked list, if the list is empty
+        if not, traverses to the end of the list, and appends the provided onto the end of the list
 
     3. Describe function3 and its runtime.
+        via traversal, reassigns the head of the linked list to the next node until the assignment is None...
+        without a reference to the head node, this will effectively delete the linked list
+        (self.head = None) is O(1) while function3 is O(n)
+
 
 Stacks
 
