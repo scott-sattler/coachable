@@ -463,7 +463,23 @@ Linked List
             return True
 
         2. record seen:
+            p1 start head
+            while not None
+                check for seen
+                record node
 
+            record 1
+            1.next = 4
+            seen 4?
+            record 4
+            4.next = 3
+            seen 3?
+            record 3
+            3.next = 2
+            seen 2?
+            record 2
+            2.next = None
+            return False
 
     9. Explain how you would reverse a linked list. Explain using the following example.
 
@@ -471,18 +487,36 @@ Linked List
 
     10. How do you iterate through a linked list? Describe this process in detail if you want to print every element in
     a linked list.
+        node = head
+        while node:
+            print(node.val)
+            node = node.next
+
+        starting with the head of the linked list as your inspected_node, print the value of this node (assuming it's
+        not a dummy node), then assign the destination of the current next_node pointer as the inspected_node_pointer
 
     11. How can we use linked lists to implement a stack?
+        insertions replace the head, which represents the top of the stack; O(1) time
 
     12. Why do you need two pointers for a queue but not required to implement a stack?
+        within the context of maintaining constant runtime for insertions and removals:
+        queues require two pointers: one pointer for inserting new nodes, and one pointer for removing from the queue
+        whereas a stack requires only one pointer at the head (the top of the stack)
 
     13. When would you want to use a doubly linked list?
+        when bidirectional traversal is required or otherwise advantageous
 
     14. What are the differences between stack/queue/deque? What are their core functions and runtimes?
+        stack: LIFO; add O(1); remove O(1); space O(n)
+        queue: FIFO; add inverse of remove O(1) or O(n); remove inverse of add O(n) or O(1); space O(n)
+        deque: FIFO or LIFO; add O(1); remove O(1); space O(n); note: runtime optimal implementation of a queue
 
     15. What are some challenges when iterating through a circular linked list?
+        finding relative location of cycle entry
+        todo: more?
 
     16. Why are queues better than stacks for ticket lines?
+        maximizes fairness (i.e. "situational independence") by minimizing temporal mode deviation between customers
 
 Linked List Code Analysis
 
