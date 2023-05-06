@@ -16,19 +16,22 @@ Logarithms and Exponents
 
     2. What does logarithm mean? If you were given log(n) = x, describe in plain English the relationship between
     n and x.
-        x is the number of times a number is multiplied by itself - orders of magnitude in base10
+        x is the number of times the number n is multiplied by itself - orders of magnitude in base10
 
     3. How much larger is 2^31 than 2^28? Hint: Do not compute them each.
         3 times larger
 
-    4. How much larger is 1 billion than 1 million ?
-        1,000 times larger
+    4. How much larger is 1 billion than 1 million?
+        1,000 times larger, base 10
+        log2(1_000), ~ log2(1024), so ~10
 
-    5. How much larger is log(1 million) than log(1 billion) ?
-        4 times larger
+    5. How much larger is log(1 million) than log(1 billion)?
+        log10(1 million) = 6
+        log10(1 billion) = 9
+        +3 larger
 
     6. If log(64) = y, write log(128) in terms of y.
-        y*2
+        y + 1
 
     7. If log(x) = 128, write 128 in terms of x without using the logarithm.
         x = 2^128
@@ -77,34 +80,34 @@ Geometric Series
         2^(n+1) - 1
 
     5. Compute 1 + 1/2 + 1/4 + 1/8.
-        todo
+        8/8 + 4/8 + 2/8 + 1/8 = (8 + 7)/8 = 15/8
 
     6. Compute 1 + 1/2 + 1/4 + 1/8 + 1/16 + 1/32.
-        todo
+        32/32 + 16/32 + 8/32 + 4/32 + 2/32 + 1/32 = (32 + 31)/32 = 63/32
 
     7. If you keep adding more terms to the geometric series, what does it look like you get closer to? I.e., what does
     the series 1 + 1/2 + 1/4 + 1/8 + .... equal?
-        todo
+        2
 
     8. Now assume the sum goes from 64 down to 0 like this:
         a. 64 + 32 + 16 + 8 + 4 + 2 + 1 + 1/2 + 1/4 + 1/8... What is this equal to?
-            todo
+            (2n - 1) + (1) = ~128
 
-    1. Compute  9 + 90 + 900 + 9000 as a power of 10 minus an additional term.
-        todo
+    9. Compute  9 + 90 + 900 + 9000 as a power of 10 minus an additional term.
+        10^n - 1
 
-    1. What does 9000 + 900 + 90 + 9 + 9/10 + 9/100 + ... approach?
-        todo
+    10. What does 9000 + 900 + 90 + 9 + 9/10 + 9/100 + ... approach?
+        10,000
 
-    1. Compute 54 + 27 + 9 + 3 + 1.
-        todo
+    11. Compute 54 + 27 + 9 + 3 + 1.
+        94
 
-    1. Generalizing a sum of powers of 3, estimate 1 + 3 + 9 + ... + 3^n.
+    12. Generalizing a sum of powers of 3, estimate 1 + 3 + 9 + ... + 3^n.
         a. What is the sum in terms of big O notation?
-            todo
+            O(n): n multiply and n add operations
 
         b. Try to get an exact answer in terms of n
-            todo
+            n(n + 1)
 
 
 Runtime Analysis
