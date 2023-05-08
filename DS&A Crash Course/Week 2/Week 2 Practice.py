@@ -49,29 +49,38 @@ Geometric Series
 
     1. What is a geometric series? Give 4 examples of different geometric series. If possible, compute their sum or
     explain why you can't.
-        summation from k=0 to inf of (a * r^k);
-        a geometric series is the sum of an infinite series with a constant ratio between successive terms
-
-        compute closed forms todo
+        - summation from k=0 to +inf of (a * r^k)
+        - a geometric series is the sum of an infinite series with a constant ratio between successive terms
+        - geometric series exhibit one of three behaviors:
+            a. convergence, i.e. they approach a finite value, which can be found by taking the limit of its closed
+            form, iff the absolute value of the ratio between successive terms is less than one
+            b. divergence, i.e. they infinitely diverge, iff the absolute value of the ratio between successive terms is
+            is greater than or equal to one
+            c. oscillation, i.e. they flip between two values, neither converging nor diverging, but oscillating iff the
+            ratio between successive terms is exactly -1; n(-1)^n
+        - note: all bounded series (i.e. contain boundaries) are finite in the absence of unbounded terms (infinities)
 
         examples:
         convergence: r < 1
             1. square numbers series a = 1 and r = k
                 closed form: (n/2)*(n + 1)
                 binomial coefficient: (n + 1) choose 2
-            2.
+            2. 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 + 1/2 + 1/4 + 1/8... -> 256
         divergence:
             3. r > 1 -> +inf
+                1 + 2 + 4 + 8 + 16 + 32... -> +inf
         oscillation:
             4. r = -1 -> ±a in (a*(r^k))
+                Grandi's Series: sum from k=0 to +inf of -1^k -> 1, -1, 1, -1, 1...
+                    notice: 0 if k % 2 == 0; -1 if k % 2 != 0
 
 
     2. We say a series "converges" if you can compute the sum. What types of geometric series converge? You don't need
     to prove it - just describing it is fine. You can also use examples to explain your idea.
-        any geometric series with r < 1, in (a * r^k), will converge, with the series approaching (converging to) 0 in
+        - any geometric series with r < 1, in (a * r^k), will converge, with the series approaching (converging to) 0 in
         the limit
-        a*.5^1 + a*.5^2 + a*.5^3 + ... a*((1/2)^k) ... as k -> inf, a*(1/inf) -> 0; lim a*(1/inf) -> 0
-        such convergence (when r < 1) produces the closed form (a / (1 - r)) in sum from k=0 to inf of a*(r^k)
+        - a*.5^1 + a*.5^2 + a*.5^3 + ... a*((1/2)^k) ... as k -> inf, a*(1/inf) -> 0; lim a*(1/inf) -> 0
+        - such convergence (when r < 1) produces the closed form (a / (1 - r)) in sum from k=0 to inf of a*(r^k)
 
     3. Compute 1 + 2 + 4 + 8 + 16 + 32 + 64 as a power of 2 minus an additional term.
         2^(n+1) - 1
@@ -503,8 +512,8 @@ Linked List
 
     12. Why do you need two pointers for a queue but not required to implement a stack?
         within the context of maintaining constant runtime for insertions and removals:
-        queues require two pointers: one pointer for inserting new nodes, and one pointer for removing from the queue
-        whereas a stack requires only one pointer at the head (the top of the stack)
+            queues require two pointers; one pointer for inserting new nodes, and one pointer for removing from the
+            queue whereas a stack requires only one pointer at the head (the top of the stack)
 
     13. When would you want to use a doubly linked list?
         when bidirectional traversal is required or otherwise advantageous
@@ -516,7 +525,7 @@ Linked List
 
     15. What are some challenges when iterating through a circular linked list?
         finding relative location of cycle entry
-        todo: more?
+        TODO: more?
 
     16. Why are queues better than stacks for ticket lines?
         maximizes fairness (i.e. "situational independence") by minimizing temporal mode deviation between customers
@@ -606,6 +615,5 @@ Queues
 
     3. Give one real-life example of a Queue.
         standing in a line to, e.g. buy tickets
-
 
 """
