@@ -217,6 +217,14 @@ Explain and Analyze Code
                 output += value
             return output
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
+
     2.
         def func_two(nums) -> int:
             n = len(nums)
@@ -225,6 +233,14 @@ Explain and Analyze Code
                 for j in range(n):
                     value += nums[j]
             return value
+
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     3.
         def func_three(nums) -> int:
@@ -235,6 +251,13 @@ Explain and Analyze Code
                 n //= 2
             return value
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     4.
         def func_four(nums) -> int:
@@ -243,6 +266,13 @@ Explain and Analyze Code
                 double_nums.append(num + num)
             return sum(double_nums)
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     5.
         def func_five(nums) -> int:
@@ -256,6 +286,13 @@ Explain and Analyze Code
                 total += 1
             return total % 99
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     6.
         def func_six(nums) -> int:
@@ -265,6 +302,13 @@ Explain and Analyze Code
                     count += 1
             return count
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     7.
         def func_seven(nums: list[int]):
@@ -277,6 +321,14 @@ Explain and Analyze Code
               n = n // 2
           return total
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
+
     8.
         def func_eight(nums: list[int]):
           N = len(nums)
@@ -288,6 +340,13 @@ Explain and Analyze Code
               i = i * 2
           return total
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     9.
         def func_nine(nums: list[int]):
@@ -299,6 +358,14 @@ Explain and Analyze Code
                   total += nums[j]
               i = i * 2
           return total
+
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     10.
         # input: an arbitrarily large array of integers of size N
@@ -313,6 +380,13 @@ Explain and Analyze Code
 
           return compliments
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     11.
     For this problem, just compute the runtime of func_11:
@@ -334,6 +408,13 @@ Explain and Analyze Code
                 helper_func(N)
             return
 
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
     12.
     These 2 code blocks look similar but have different runtimes in big O notation.
@@ -358,6 +439,14 @@ Explain and Analyze Code
                   count += 1
               i = i * 2
           return count
+
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
+        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
+        for n = 2, 4, 8, 16, 32.
+        d. What does this function do?
+        e. What is the runtime complexity? And why?
+        f. What is the space complexity? And why?
 
 Linked List
 
