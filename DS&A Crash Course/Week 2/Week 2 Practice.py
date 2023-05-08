@@ -196,19 +196,13 @@ Runtime Analysis
 
 Explain and Analyze Code
 
-    Please answer the following for each block of code. You can assume nums is an integer array of size n
-
-        a. Determine the function for nums = [1,1,1,1,1]
-
-        b. Determine the function for nums = [1,2,3,4,5]
-
+    Please answer the following for each block of code. You can assume nums is an integer array of size n.
+        a. Determine the function for nums = [1,1,1,1,1].
+        b. Determine the function for nums = [1,2,3,4,5].
         c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
         for n = 2, 4, 8, 16, 32.
-
         d. What does this function do?
-
         e. What is the runtime complexity? And why?
-
         f. What is the space complexity? And why?
 
     1.
