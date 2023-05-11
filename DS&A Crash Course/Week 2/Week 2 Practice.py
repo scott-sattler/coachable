@@ -199,116 +199,185 @@ Explain and Analyze Code
     Please answer the following for each block of code. You can assume nums is an integer array of size n.
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
 
     1.
-        def func_one(nums) -> int:
-            n = len(nums)
-            all_nums = []
-            for i in range(n):
-                for j in range(n):
-                    all_nums.append(nums[j])
-            output = 0
-            for value in all_nums:
-                output += value
-            return output
+        def func_one(nums) -> int:                  # T(n) where n = len(nums)
+            n = len(nums)                           # 1
+            all_nums = []                           # 1
+            for i in range(n):                      # n + 1
+                for j in range(n):                  # n * n + 1
+                    all_nums.append(nums[j])        # 1
+            output = 0                              # 1
+            for value in all_nums:                  # n * n + 1
+                output += value                     # n * n
+            return output                           # 1
+                                                    # 3*n^2 + n + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
+            sum([1] * 25) -> 25
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            sum([1,2,3,4,5] * 5) -> 75
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            3*n^2 + n + 8, evaluated at 2, 4, 8, 16, 32
+            -> 22 60 208 792 3112
+            or n^2
+            -> 4 16 64 256 1024
         d. What does this function do?
+            it appends each elements of nums, to a new list, len(nums) times, then sums the new list
         e. What is the runtime complexity? And why?
+            O(n^2); because we're performing n operations, n times
         f. What is the space complexity? And why?
+            O(n^2); because we're creating a list of size n, n times
 
     2.
-        def func_two(nums) -> int:
-            n = len(nums)
-            value = 0
-            for i in range(n):
-                for j in range(n):
-                    value += nums[j]
-            return value
+        def func_two(nums) -> int:                  # T(n) where n = len(nums)
+            n = len(nums)                           # 1
+            value = 0                               # 1
+            for i in range(n):                      # n + 1
+                for j in range(n):                  # n * n + 1
+                    value += nums[j]                # 1
+            return value                            # 1
+                                                    # n^2 + n + 6
 
         a. Determine the function for nums = [1,1,1,1,1].
+            5 * 5 -> 25
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            15 * 5 -> 75
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            n^2 + n + 6, evaluated at 2, 4, 8, 16, 32
+            -> 12 26 78 278 1062
+            or n^2
+            -> 4 16 64 256 1024
         d. What does this function do?
+            it multiplies the sum of nums by the length of nums
         e. What is the runtime complexity? And why?
+            O(n^2); to sum nums, each element must be accessed, which is then done by the length of nums (n times)
         f. What is the space complexity? And why?
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
     3.
-        def func_three(nums) -> int:
-            n = len(nums)
-            value = 0
-            while n > 0:
-                value += nums[n - 1]
-                n //= 2
-            return value
+        def func_three(nums) -> int:                # T(n) where n = len(nums)
+            n = len(nums)                           # 1
+            value = 0                               # 1
+            while n > 0:                            # log(n) + 1
+                value += nums[n - 1]                # 1
+                n //= 2                             # 1
+            return value                            # 1
+                                                    # n + 6
 
         a. Determine the function for nums = [1,1,1,1,1].
+            nums[4] + nums[1] + nums[0] -> 3
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            nums[4] + nums[1] + nums[0] -> 5 + 2 + 1 -> 8
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            n + 6, evaluated at 2, 4, 8, 16, 32
+            -> 8 10 14 22 38
+            or n
+            -> 2 4 8 16 32
         d. What does this function do?
+            inclusive of zero, decrements the nums index by half, from (len - 1), while adding the value at each index
+            to a running total
         e. What is the runtime complexity? And why?
+            O(n); the input is an array of size n, where the algorithm performs constant time operations on each element
         f. What is the space complexity? And why?
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
     4.
-        def func_four(nums) -> int:
-            double_nums = []
-            for num in nums:
-                double_nums.append(num + num)
-            return sum(double_nums)
+        def func_four(nums) -> int:                 # T(n) where n = len(nums)
+            double_nums = []                        # 1
+            for num in nums:                        # n + 1
+                double_nums.append(num + num)       # 1
+            return sum(double_nums)                 # n
+                                                    # 2*n + 4
 
         a. Determine the function for nums = [1,1,1,1,1].
+            2 * 5 -> 10
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            (x + x) * 5 (associative) -> 15 * (2 * 5) -> 150
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            2*n + 4, evaluated at 2, 4, 8, 16, 32
+            -> 8 12 20 36 68
+            or n
+            -> 2 4 8 16 32
         d. What does this function do?
+            sums the double of each number in the array
         e. What is the runtime complexity? And why?
+            O(n); the input is an array of size n, where the algorithm performs constant time operations on each element
         f. What is the space complexity? And why?
+            O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) indicates the algorithm space
+            complexity (auxiliary space) scales proportional to the input size, n
 
     5.
-        def func_five(nums) -> int:
-            power_sum = 1
-            for i in range(len(nums)):
-                for j in range(nums[i]):
-                    power_sum *= 2
+        def func_five(nums) -> int:                 # T(n) where n = len(nums)
+            power_sum = 1                           # 1
+            for i in range(len(nums)):              # n + 1
+                for j in range(nums[i]):            # n * n + 1 todo worst case is [len, len, len, ...]
+                    power_sum *= 2                  # 1
 
-            total = 0
-            for i in range(power_sum)
-                total += 1
-            return total % 99
+            total = 0                               # 1
+            for i in range(power_sum)               # n + 1
+                total += 1                          # 1
+            return total % 99                       # 1
+                                                    # n^2 + 2*n + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
+            2^5 -> (0 + 1, 32 times) % 99 -> 32
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            2^n where n = [1, 2, 3, 4, 5] -> 2^15 -> (0 + 1, 32,768 times) % 99 -> 98
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            n^2 + 2*n + 8, evaluated at 2, 4, 8, 16, 32
+            -> 16 32 88 296 1096
+            or n
+            -> 4 16 64 256 1024
         d. What does this function do?
+            todo: power series?
         e. What is the runtime complexity? And why?
+            todo: computational expensive portion
+            O(n^2); the most computational expensive portion of the algorithm ...
         f. What is the space complexity? And why?
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
     6.
-        def func_six(nums) -> int:
-            count = 0
-            for i in range(1, len(nums)-1):
-                if nums[i] < nums[i-1] * 2 and nums[i] > nums[i+1] / 2:
-                    count += 1
-            return count
+        def func_six(nums) -> int:                                              # T(n) where n = len(nums)
+            count = 0                                                           # 1
+            for i in range(1, len(nums)-1):                                     # n - 1
+                if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # 1
+                count += 1                                                      # 1
+            return count                                                        # 1
+                                                                                # n + 3
 
         a. Determine the function for nums = [1,1,1,1,1].
+            0
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+            2
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
+            n + 3, evaluated at 2, 4, 8, 16, 32
+            -> 5 7 11 19 35
+            or n
+            -> 2 4 8 16 32
         d. What does this function do?
+            counts the number of elements that are less than twice the previous element, and greater than half of the
+            next element
         e. What is the runtime complexity? And why?
+            O(n); the input is an array of size n, where the algorithm performs constant time operations on all but 2
+            elements
         f. What is the space complexity? And why?
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
     7.
         def func_seven(nums: list[int]):
@@ -321,10 +390,11 @@ Explain and Analyze Code
               n = n // 2
           return total
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
@@ -340,10 +410,11 @@ Explain and Analyze Code
               i = i * 2
           return total
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
@@ -359,10 +430,11 @@ Explain and Analyze Code
               i = i * 2
           return total
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
@@ -380,10 +452,11 @@ Explain and Analyze Code
 
           return compliments
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
@@ -408,10 +481,11 @@ Explain and Analyze Code
                 helper_func(N)
             return
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
@@ -440,10 +514,11 @@ Explain and Analyze Code
               i = i * 2
           return count
 
+        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
-        c. Suppose nums = [i for i in range(0, n)] Approximate the number of computations required to compute func(nums)
-        for n = 2, 4, 8, 16, 32.
+        c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
+        func(nums) for n = 2, 4, 8, 16, 32.
         d. What does this function do?
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
