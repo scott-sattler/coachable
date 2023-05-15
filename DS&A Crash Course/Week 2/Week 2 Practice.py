@@ -385,11 +385,11 @@ Explain and Analyze Code
           total = 0                                 # 1
           n = N                                     # 1
           while n > 0:                              # log(n) + 1
-              for i in range(0, n):                 # n  * log(n) + 1  todo: 2n vs n?
+              for i in range(0, n):                 # (n + n/2 + n/4 + n/8 ...) 2n + 1;  n + (1/2)^log(n) (from n, +1)
                   total += nums[i]                  # 1
               n = n // 2                            # 1
           return total                              # 1
-                                                    # n * log(n) + log(n) + 8
+                                                    # 2n + log(n) + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
             5 + 2 + 1 -> 8
@@ -397,10 +397,10 @@ Explain and Analyze Code
             15 + 3 + 1 -> 19
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n * log(n) + log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            2n + log(n) + 8, evaluated at 2, 4, 8, 16, 32
             -> 11 18 35 76 173
-            or n * log(n)
-            -> 2 8 24 64 160
+            or n
+            -> 2 4 8 16 32
         d. What does this function do?
             it repeatedly sums the array from 0 to n, halving n until reaching zero
         e. What is the runtime complexity? And why?
@@ -417,11 +417,11 @@ Explain and Analyze Code
           total = 0                                 # 1
           i = 1                                     # 1
           while i < N:                              # log(n) + 1
-              for j in range(0, i):                 # n + 1  todo: 2n vs n?
+              for j in range(0, i):                 # 2^log(n) -> n + 1  (not 2n as i < N)
                   total += nums[j]                  # 1
               i = i * 2                             # 1
           return total                              # 1
-                                                    # n * log(n) + 8
+                                                    # n + log(n) + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
             1 + 2 + 4 -> 7
@@ -434,14 +434,12 @@ Explain and Analyze Code
             or n * log(n)
             -> 2 8 24 64 160
         d. What does this function do?
-            sums the elements of an array from 0 to n, starting at 1, doubling until exceeding len(array) exclusive.
+            sums subarrays of n, doubling in size from 0 to n (exclusive)
         e. What is the runtime complexity? And why?
-            todo
-            O(n * log(n)); 2n operations are being performed log(n) times
+            O(n); we're doubling the size of an iteration, log(n) times (n^log(n) -> n)
         f. What is the space complexity? And why?
-            todo: review
-            O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) auxiliary indicates the algorithm
-            space complexity scales by a factor of n (the iterator, 2n)
+            O(n) with O(n) auxiliary; O(2n) -> O(n); O(n) describes the input size, n, while O(n) auxiliary indicates
+            the algorithm space complexity scales by a factor of ~n
 
 
     9.
@@ -488,6 +486,7 @@ Explain and Analyze Code
 
     11.
     For this problem, just compute the runtime of func_11:
+        O(N^2 * log(N))
 
         # This function has log(N) runtime
         # Where N is the input integer
@@ -495,18 +494,18 @@ Explain and Analyze Code
               # does something that takes log(N) runtime.
               # Note that if N = 1, then the runtime is O(1)
 
-
         # input: an arbitrarily large integer N
-        def func_11(N):
-            helper_func()
-            for i in range(N):
-                helper_func(i)
-                for j in range(N):
-                      helper_func(j)
-                helper_func(N)
-            return
+        def func_11(N):                             #
+            helper_func()                           # log(N) or 1 if helper_func(1)
+            for i in range(N):                      # N + 1
+                helper_func(i)                      # log(N)
+                for j in range(N):                  # N * N + 1
+                    helper_func(j)                  # N * N * log(N)
+                helper_func(N)                      # log(N)
+            return                                  # 1
+                                                    # N^2 * log(N) + N^2 + 3*log(N) + C
 
-        TODO:
+        TODO: TODONE?
         a. Determine the function for nums = [1,1,1,1,1].
         b. Determine the function for nums = [1,2,3,4,5].
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
@@ -518,6 +517,8 @@ Explain and Analyze Code
     12.
     These 2 code blocks look similar but have different runtimes in big O notation.
     How are they different? Why?
+        A: has a runtime of O(N)
+        B: has a runtime of O(log N)^2)
 
 
         # Block (A)
