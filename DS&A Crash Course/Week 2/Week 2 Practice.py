@@ -322,7 +322,7 @@ Explain and Analyze Code
         def func_five(nums) -> int:                 # T(n) where n = len(nums)
             power_sum = 1                           # 1
             for i in range(len(nums)):              # n + 1
-                for j in range(nums[i]):            # n * n + 1 todo worst case is [len, len, len, ...]
+                for j in range(nums[i]):            # n * n + 1 todo: worst case is [len, len, len, ...]
                     power_sum *= 2                  # 1
 
             total = 0                               # 1
@@ -353,11 +353,11 @@ Explain and Analyze Code
     6.
         def func_six(nums) -> int:                                              # T(n) where n = len(nums)
             count = 0                                                           # 1
-            for i in range(1, len(nums)-1):                                     # n - 1
+            for i in range(1, len(nums)-1):                                     # n + 1 - 1
                 if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # 1
                 count += 1                                                      # 1
             return count                                                        # 1
-                                                                                # n + 3
+                                                                                # n + 4
 
         a. Determine the function for nums = [1,1,1,1,1].
             0
@@ -365,8 +365,8 @@ Explain and Analyze Code
             2
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n + 3, evaluated at 2, 4, 8, 16, 32
-            -> 5 7 11 19 35
+            n + 4, evaluated at 2, 4, 8, 16, 32
+            -> 6 8 12 20 36
             or n
             -> 2 4 8 16 32
         d. What does this function do?
@@ -408,8 +408,8 @@ Explain and Analyze Code
             O(n * log(n)); n operations are being performed on an input decreasing by log(n)
         f. What is the space complexity? And why?
             todo: review
-            O(n) with O(log(n)) auxiliary; O(n) describes the input size, n, while O(log(n)) indicates the algorithm
-            space complexity (auxiliary space) scales by a factor of log(n)
+            O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) auxiliary indicates the algorithm
+            space complexity scales by a factor of n (the iterator, 2n)
 
     8.
         def func_eight(nums: list[int]):            # T(n) where n = len(nums)
@@ -417,23 +417,31 @@ Explain and Analyze Code
           total = 0                                 # 1
           i = 1                                     # 1
           while i < N:                              # log(n) + 1
-              for j in range(0, i):                 # n
-                  total += nums[j]                  #
-              i = i * 2                             #
-          return total                              #
+              for j in range(0, i):                 # n + 1  todo: 2n vs n?
+                  total += nums[j]                  # 1
+              i = i * 2                             # 1
+          return total                              # 1
+                                                    # n * log(n) + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
-
+            1 + 2 + 4 -> 7
         b. Determine the function for nums = [1,2,3,4,5].
-
+            1 + 3 + 10 -> 14
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-
+            n * log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            -> 10 16 32 72 168
+            or n * log(n)
+            -> 2 8 24 64 160
         d. What does this function do?
-
+            sums the elements of an array from 0 to n, starting at 1, doubling until exceeding len(array) exclusive.
         e. What is the runtime complexity? And why?
-
+            todo
+            O(n * log(n)); 2n operations are being performed log(n) times
         f. What is the space complexity? And why?
+            todo: review
+            O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) auxiliary indicates the algorithm
+            space complexity scales by a factor of n (the iterator, 2n)
 
 
     9.
@@ -510,6 +518,7 @@ Explain and Analyze Code
     12.
     These 2 code blocks look similar but have different runtimes in big O notation.
     How are they different? Why?
+
 
         # Block (A)
         def fn_a(N):
