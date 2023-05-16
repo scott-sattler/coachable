@@ -211,12 +211,12 @@ Explain and Analyze Code
             all_nums = []                           # 1
             for i in range(n):                      # n + 1
                 for j in range(n):                  # n * n + 1
-                    all_nums.append(nums[j])        # 1
+                    all_nums.append(nums[j])        # n * n
             output = 0                              # 1
             for value in all_nums:                  # n * n + 1
                 output += value                     # n * n
             return output                           # 1
-                                                    # 3*n^2 + n + 8
+                                                    # 4*n^2 + n + 7
 
         a. Determine the function for nums = [1,1,1,1,1].
             sum([1] * 25) -> 25
@@ -224,8 +224,9 @@ Explain and Analyze Code
             sum([1,2,3,4,5] * 5) -> 75
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            3*n^2 + n + 8, evaluated at 2, 4, 8, 16, 32
-            -> 22 60 208 792 3112
+            todo
+             , evaluated at 2, 4, 8, 16, 32
+            ->
             or n^2
             -> 4 16 64 256 1024
         d. What does this function do?
@@ -241,9 +242,9 @@ Explain and Analyze Code
             value = 0                               # 1
             for i in range(n):                      # n + 1
                 for j in range(n):                  # n * n + 1
-                    value += nums[j]                # 1
+                    value += nums[j]                # n * n
             return value                            # 1
-                                                    # n^2 + n + 6
+                                                    # 2*n^2 + n + 5
 
         a. Determine the function for nums = [1,1,1,1,1].
             5 * 5 -> 25
@@ -251,8 +252,9 @@ Explain and Analyze Code
             15 * 5 -> 75
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n^2 + n + 6, evaluated at 2, 4, 8, 16, 32
-            -> 12 26 78 278 1062
+            todo
+             , evaluated at 2, 4, 8, 16, 32
+            ->
             or n^2
             -> 4 16 64 256 1024
         d. What does this function do?
@@ -268,10 +270,10 @@ Explain and Analyze Code
             n = len(nums)                           # 1
             value = 0                               # 1
             while n > 0:                            # log(n) + 1
-                value += nums[n - 1]                # 1
-                n //= 2                             # 1
+                value += nums[n - 1]                # log(n)
+                n //= 2                             # log(n)
             return value                            # 1
-                                                    # log(n) + 6
+                                                    # 3*log(n) + 4
 
         a. Determine the function for nums = [1,1,1,1,1].
             nums[4] + nums[1] + nums[0] -> 3
@@ -279,8 +281,9 @@ Explain and Analyze Code
             nums[4] + nums[1] + nums[0] -> 5 + 2 + 1 -> 8
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            log(n) + 6, evaluated at 2, 4, 8, 16, 32
-            -> 7 8 9 10 11
+            todo
+             , evaluated at 2, 4, 8, 16, 32
+            ->
             or log(n)
             -> 1 2 3 4 5
         d. What does this function do?
@@ -296,9 +299,9 @@ Explain and Analyze Code
         def func_four(nums) -> int:                 # T(n) where n = len(nums)
             double_nums = []                        # 1
             for num in nums:                        # n + 1
-                double_nums.append(num + num)       # 1
-            return sum(double_nums)                 # n
-                                                    # 2*n + 4
+                double_nums.append(num + num)       # n
+            return sum(double_nums)                 # n + 1  todo: n vs n+1
+                                                    # 3*n + 3
 
         a. Determine the function for nums = [1,1,1,1,1].
             2 * 5 -> 10
@@ -306,8 +309,9 @@ Explain and Analyze Code
             (x + x) * 5 (associative) -> 15 * (2 * 5) -> 150
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            2*n + 4, evaluated at 2, 4, 8, 16, 32
-            -> 8 12 20 36 68
+            todo
+             , evaluated at 2, 4, 8, 16, 32
+            ->
             or n
             -> 2 4 8 16 32
         d. What does this function do?
@@ -323,13 +327,13 @@ Explain and Analyze Code
             power_sum = 1                           # 1
             for i in range(len(nums)):              # n + 1
                 for j in range(nums[i]):            # n * n + 1 todo: worst case is [len, len, len, ...]
-                    power_sum *= 2                  # 1
+                    power_sum *= 2                  # n * n
 
             total = 0                               # 1
             for i in range(power_sum)               # n + 1
-                total += 1                          # 1
-            return total % 99                       # 1
-                                                    # n^2 + 2*n + 8
+                total += 1                          # n
+            return total % 99                       # 2  todo 1 vs 2
+                                                    # 2*n^2 + 3*n + 7
 
         a. Determine the function for nums = [1,1,1,1,1].
             2^5 -> (0 + 1, 32 times) % 99 -> 32
@@ -337,8 +341,9 @@ Explain and Analyze Code
             2^n where n = [1, 2, 3, 4, 5] -> 2^15 -> (0 + 1, 32,768 times) % 99 -> 98
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n^2 + 2*n + 8, evaluated at 2, 4, 8, 16, 32
-            -> 16 32 88 296 1096
+            todo
+             , evaluated at 2, 4, 8, 16, 32
+            ->
             or n
             -> 4 16 64 256 1024
         d. What does this function do?
@@ -354,10 +359,10 @@ Explain and Analyze Code
         def func_six(nums) -> int:                                              # T(n) where n = len(nums)
             count = 0                                                           # 1
             for i in range(1, len(nums)-1):                                     # n + 1 - 1
-                if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # 1
-                count += 1                                                      # 1
+                if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # n - 1 + 5  todo
+                    count += 1                                                  # n - 1
             return count                                                        # 1
-                                                                                # n + 4
+                                                                                # 3*n + 5
 
         a. Determine the function for nums = [1,1,1,1,1].
             0
@@ -365,7 +370,8 @@ Explain and Analyze Code
             2
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n + 4, evaluated at 2, 4, 8, 16, 32
+            todo
+             , evaluated at 2, 4, 8, 16, 32
             -> 6 8 12 20 36
             or n
             -> 2 4 8 16 32
@@ -385,11 +391,11 @@ Explain and Analyze Code
           total = 0                                 # 1
           n = N                                     # 1
           while n > 0:                              # log(n) + 1
-              for i in range(0, n):                 # (n + n/2 + n/4 + n/8 ...) 2n + 1;  n + ?  todo: fix ? = (n / (2^k))^log(n)
-                  total += nums[i]                  # 1
-              n = n // 2                            # 1
+              for i in range(0, n):                 # (n + n/2 + n/4 + n/8 ...) 2*n + 1;  n + ?  todo: fix ? = (n / (2^k))^log(n)
+                  total += nums[i]                  # 2*n  todo
+              n = n // 2                            # log(n)
           return total                              # 1
-                                                    # 2n + log(n) + 8
+                                                    # 4*n + 2*log(n) + 5
 
         a. Determine the function for nums = [1,1,1,1,1].
             5 + 2 + 1 -> 8
@@ -397,7 +403,8 @@ Explain and Analyze Code
             15 + 3 + 1 -> 19
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            2n + log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            todo
+             , evaluated at 2, 4, 8, 16, 32
             -> 13 18 27 44 77
             or n
             -> 2 4 8 16 32
@@ -416,10 +423,10 @@ Explain and Analyze Code
           i = 1                                     # 1
           while i < N:                              # log(n) + 1
               for j in range(0, i):                 # 2^log(n) -> n + 1  (not 2n as i < N)
-                  total += nums[j]                  # 1
-              i = i * 2                             # 1
+                  total += nums[j]                  # n
+              i = i * 2                             # log(n)
           return total                              # 1
-                                                    # n + log(n) + 8
+                                                    # n + 2*log(n) + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
             1 + 2 + 4 -> 7
@@ -427,10 +434,10 @@ Explain and Analyze Code
             1 + 3 + 10 -> 14
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n * log(n) + 8, evaluated at 2, 4, 8, 16, 32
-            -> 10 16 32 72 168
-            or n * log(n)
-            -> 2 8 24 64 160
+            n + 2*log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            -> 12 16 22 32 50
+            or n
+            -> 2 4 8 16 32
         d. What does this function do?
             sums subarrays of n, doubling in size from 0 to n (exclusive)
         e. What is the runtime complexity? And why?
@@ -447,10 +454,10 @@ Explain and Analyze Code
           i = 1                                     # 1
           while i < N:                              # log(n) + 1
               for j in range(0, N):                 # n * log(n) + 1
-                  total += nums[j]                  # 1
-              i = i * 2                             # 1
+                  total += nums[j]                  # n * log(n)
+              i = i * 2                             # log(n)
           return total                              # 1
-                                                    # n * log(n) + log(n) + 8
+                                                    # 2*n * log(n) + 2*log(n) + 6
 
         a. Determine the function for nums = [1,1,1,1,1].
             5 + 5 + 5 -> 15
@@ -458,8 +465,8 @@ Explain and Analyze Code
             15 + 15 + 15 -> 45
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            n * log(n) + log(n) + 8, evaluated at 2, 4, 8, 16, 32
-            -> 11 18 35 76 173
+            2*n * log(n) + 2*log(n) + 6, evaluated at 2, 4, 8, 16, 32
+            -> 12 26 60 142 336
             or n * log(n)
             -> 2 8 24 64 160
         d. What does this function do?
@@ -473,16 +480,17 @@ Explain and Analyze Code
 
     10.
         # input: an arbitrarily large array of integers of size N
-        def func_10(arr: list[int]):
-            arr.sort() # This line is O(n log n) runtime.
-            reverse_arr = [arr[i] for i in range(len(arr)-1, -1, -1)]
-            complements = []
+        def func_10(arr: list[int]):                                            # T(n) where n = len(arr)
+            arr.sort() # This line is O(n log n) runtime.                       # n * log(n)
+            reverse_arr = [arr[i] for i in range(len(arr)-1, -1, -1)]           # n
+            complements = []                                                    # 1
 
             # zip just iterates through both arrays at the same time
-            for num1, num2 in zip(arr, reverse_arr):
-                complements.append(num1 + num2)
+            for num1, num2 in zip(arr, reverse_arr):                            # 2n
+                complements.append(num1 + num2)                                 # n
 
-          return compliments
+          return compliments                                                    #
+                                                                                #
 
         TODO:
         a. Determine the function for nums = [1,1,1,1,1].
