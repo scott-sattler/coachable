@@ -406,8 +406,8 @@ Explain and Analyze Code
         e. What is the runtime complexity? And why?
             O(n); we're accessing every element of an array log(n) times, while halving its size each iteration,
         f. What is the space complexity? And why?
-            O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) auxiliary indicates the algorithm
-            space complexity scales by a factor of n (the iterator, maxi n)
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
     8.
         def func_eight(nums: list[int]):            # T(n) where n = len(nums)
@@ -436,8 +436,8 @@ Explain and Analyze Code
         e. What is the runtime complexity? And why?
             O(n); we're doubling the size of an iteration, log(n) times (n^log(n) -> n)
         f. What is the space complexity? And why?
-            O(n) with O(n) auxiliary; O(2n) -> O(n); O(n) describes the input size, n, while O(n) auxiliary indicates
-            the algorithm space complexity scales by a factor of ~n
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
 
 
     9.
@@ -446,25 +446,30 @@ Explain and Analyze Code
           total = 0                                 # 1
           i = 1                                     # 1
           while i < N:                              # log(n) + 1
-              for j in range(0, N):                 # log^2(n) + 1
+              for j in range(0, N):                 # n * log(n) + 1
                   total += nums[j]                  # 1
               i = i * 2                             # 1
           return total                              # 1
-                                                    # log^2(n) + log(n) + 8
+                                                    # n * log(n) + log(n) + 8
 
         a. Determine the function for nums = [1,1,1,1,1].
-
+            5 + 5 + 5 -> 15
         b. Determine the function for nums = [1,2,3,4,5].
+            15 + 15 + 15 -> 45
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            log^2(n) + log(n) + 8, evaluated at 2, 4, 8, 16, 32
-            -> 10 14 20 28 38
-            or log^2(n)
-            -> 1 4 9 16 25
+            n * log(n) + log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            -> 11 18 35 76 173
+            or n * log(n)
+            -> 2 8 24 64 160
         d. What does this function do?
-
+            adds the sum of the input to a running total, log(n) times
         e. What is the runtime complexity? And why?
+            O(n * log(n)); we're accessing every element the input array, log(n) times
         f. What is the space complexity? And why?
+            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
+            complexity (auxiliary space) does not scale with the input size
+
 
     10.
         # input: an arbitrarily large array of integers of size N
