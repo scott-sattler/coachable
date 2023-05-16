@@ -385,7 +385,7 @@ Explain and Analyze Code
           total = 0                                 # 1
           n = N                                     # 1
           while n > 0:                              # log(n) + 1
-              for i in range(0, n):                 # (n + n/2 + n/4 + n/8 ...) 2n + 1;  n + (1/2)^log(n) (from n, +1)
+              for i in range(0, n):                 # (n + n/2 + n/4 + n/8 ...) 2n + 1;  n + ?  todo: fix ? = (n / (2^k))^log(n)
                   total += nums[i]                  # 1
               n = n // 2                            # 1
           return total                              # 1
@@ -398,18 +398,16 @@ Explain and Analyze Code
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
             2n + log(n) + 8, evaluated at 2, 4, 8, 16, 32
-            -> 11 18 35 76 173
+            -> 13 18 27 44 77
             or n
             -> 2 4 8 16 32
         d. What does this function do?
             it repeatedly sums the array from 0 to n, halving n until reaching zero
         e. What is the runtime complexity? And why?
-            todo: review
-            O(n * log(n)); n operations are being performed on an input decreasing by log(n)
+            O(n); we're accessing every element of an array log(n) times, while halving its size each iteration,
         f. What is the space complexity? And why?
-            todo: review
             O(n) with O(n) auxiliary; O(n) describes the input size, n, while O(n) auxiliary indicates the algorithm
-            space complexity scales by a factor of n (the iterator, 2n)
+            space complexity scales by a factor of n (the iterator, maxi n)
 
     8.
         def func_eight(nums: list[int]):            # T(n) where n = len(nums)
@@ -443,22 +441,28 @@ Explain and Analyze Code
 
 
     9.
-        def func_nine(nums: list[int]):
-          N = len(nums)
-          total = 0
-          i = 1
-          while i < N:
-              for j in range(0, N):
-                  total += nums[j]
-              i = i * 2
-          return total
+        def func_nine(nums: list[int]):             # T(n) where n = len(nums)
+          N = len(nums)                             # 1
+          total = 0                                 # 1
+          i = 1                                     # 1
+          while i < N:                              # log(n) + 1
+              for j in range(0, N):                 # log^2(n) + 1
+                  total += nums[j]                  # 1
+              i = i * 2                             # 1
+          return total                              # 1
+                                                    # log^2(n) + log(n) + 8
 
-        TODO:
         a. Determine the function for nums = [1,1,1,1,1].
+
         b. Determine the function for nums = [1,2,3,4,5].
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
+            log^2(n) + log(n) + 8, evaluated at 2, 4, 8, 16, 32
+            -> 10 14 20 28 38
+            or log^2(n)
+            -> 1 4 9 16 25
         d. What does this function do?
+
         e. What is the runtime complexity? And why?
         f. What is the space complexity? And why?
 
