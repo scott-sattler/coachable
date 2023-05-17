@@ -712,7 +712,7 @@ Linked List
         insert is O(n) for all
 
     15. What are some challenges when iterating through a circular linked list?
-        finding relative location of cycle entry
+        finding the relative location of cycle entry node
 
     16. Why are queues better than stacks for ticket lines?
         maximizes fairness (i.e. "situational independence") by minimizing temporal mode deviation between customers
