@@ -509,6 +509,7 @@ Explain and Analyze Code
         def helper_func(N):
               # does something that takes log(N) runtime.
               # Note that if N = 1, then the runtime is O(1)
+              return
 
         # input: an arbitrarily large integer N
         def func_11(N):                             #
