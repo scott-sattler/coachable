@@ -316,7 +316,7 @@ Explain and Analyze Code
 
     5.
         def func_five(nums) -> int:                 # T(n, m) where n = len(nums)
-                                                    #           and m = max(nums)
+                                                    #           and m = sum(nums)
             power_sum = 1                           # 1
             for i in range(len(nums)):              # n + 1
                 for j in range(nums[i]):            # m * n + 1
