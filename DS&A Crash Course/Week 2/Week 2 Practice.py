@@ -1,8 +1,6 @@
 """
 Topics: Runtime Analysis, Linked List, Stack/Queue
 
-
-
 Note: For all questions, assume the logarithm base is 2 unless specified otherwise.
 
 Free Response Questions
