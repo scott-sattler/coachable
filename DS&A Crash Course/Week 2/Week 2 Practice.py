@@ -178,7 +178,6 @@ Runtime Analysis
         runtime is constant - unaffected by input
 
     4. How can you calculate the runtime when operations are nested?
-        TODO: verify
         multiply them
 
     5. Give an example of an algorithm or write a function with O(1) runtime.
@@ -187,7 +186,6 @@ Runtime Analysis
 
     6. Given a table of code runtime (input size/runtime), can you determine what order of growth these functions have?
     Hint: Applying the doubling principle.
-        TODO: verify
         N (input)           100     200     300     400     500     600
         Code A Runtime      52      110     160     198     256     308       +58   +50   +38   +58   +52  -> N*k
         Code B Runtime      1001    1012    1015    1023    1025    1026      +11   +3    +8    +3    +1   -> (log N)*k
@@ -319,17 +317,18 @@ Explain and Analyze Code
             complexity (auxiliary space) scales proportional to the input size, n
 
     5.
-        def func_five(nums) -> int:                 # T(n) where n = len(nums)
+        def func_five(nums) -> int:                 # T(n, m) where n = len(nums)
+                                                    #           and m = max(nums)
             power_sum = 1                           # 1
             for i in range(len(nums)):              # n + 1
-                for j in range(nums[i]):            # n * n + 1  todo: worst case is [n, n, n, ...]
-                    power_sum *= 2                  # n * n
+                for j in range(nums[i]):            # m * n + 1
+                    power_sum *= 2                  # m * n
 
             total = 0                               # 1
-            for i in range(power_sum)               # n + 1  todo (power_sum)
-                total += 1                          # n
+            for i in range(power_sum)               # m * n + 1
+                total += 1                          # m * n
             return total % 99                       # 1
-                                                    # 2*n^2 + 3*n + c
+                                                    # 4*(m * n) + n + c
 
         a. Determine the function for nums = [1,1,1,1,1].
             2^5 -> (0 + 1, 32 times) % 99 -> 32
@@ -337,25 +336,23 @@ Explain and Analyze Code
             2^n where n = [1, 2, 3, 4, 5] -> 2^15 -> (0 + 1, 32,768 times) % 99 -> 98
         c. Suppose nums = [i for i in range(0, n)]. Approximate the number of computations required to compute
         func(nums) for n = 2, 4, 8, 16, 32.
-            todo
-             , evaluated at 2, 4, 8, 16, 32
-            -> 14 44 152 560 2144
-            or n todo
+            4*(n * m) + n, evaluated at (2, 2), (4, 4), (8, 8), (16, 16), (32, 32)
+            -> 18 68 264 1040 4128
+            or n * m
             -> 4 16 64 256 1024
         d. What does this function do?
-            todo: power series?
+            doubles 1 for the length of the input array, by each value of each index
         e. What is the runtime complexity? And why?
-            todo: computational expensive portion
-            O(n^2); the most computational expensive portion of the algorithm ...
+            O(n * m) where n is the length of the input array, and m is the sum of every element within the array
         f. What is the space complexity? And why?
-            O(n) with O(1) auxiliary; O(n) describes the input size, n, while O(1) indicates the algorithm space
-            complexity (auxiliary space) does not scale with the input size
+            O(n) with O(max(m)) auxiliary; O(n) describes the input size, n, while O(max(m)) indicates the algorithm
+            space complexity (auxiliary space) scales with the sum of the array values
 
     6.
         def func_six(nums) -> int:                                              # T(n) where n = len(nums)
             count = 0                                                           # 1
             for i in range(1, len(nums)-1):                                     # n + 1 - 1
-                if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # n - 1 + 5  todo
+                if (nums[i] < nums[i-1] * 2) and (nums[i] > nums[i+1] / 2):     # n - 1 + 5
                     count += 1                                                  # n - 1
             return count                                                        # 1
                                                                                 # 3*n + c
@@ -712,10 +709,10 @@ Linked List
         stack: LIFO; add O(1); remove O(1); space O(n)
         queue: FIFO; add inverse of remove O(1) or O(n); remove inverse of add O(n) or O(1); space O(n)
         deque: FIFO or LIFO; add O(1); remove O(1); space O(n); note: runtime optimal implementation of a queue
+        insert is O(n) for all
 
     15. What are some challenges when iterating through a circular linked list?
         finding relative location of cycle entry
-        TODO: more?
 
     16. Why are queues better than stacks for ticket lines?
         maximizes fairness (i.e. "situational independence") by minimizing temporal mode deviation between customers
