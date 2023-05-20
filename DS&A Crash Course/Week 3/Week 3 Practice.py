@@ -6,30 +6,56 @@ Free Response Questions
 Hashmaps
 
     1. What does a hashmap do? What are the functions a hashmap class provides?
+        hashmaps map a key to the index of a large array.
+        in Python, hashmaps are called dictionaries, which retrieve, add, remove, and update keys, values, and key-value
+        pairs. Python dictionaries contain the following methods:
+            clear(), copy(), fromkeys(), get(), items(), keys(), pop(), popitem(), setdefault(), update(), values()
+            the more useful methods are: copy(), get(), items(), keys(), pop(), update(), and value()
 
     2. What is the benefit of using a hashmap over an array or linked list?
+        hashmaps have O(1) lookup time, versus O(n) array, and O(n) linked list
 
     3. What are the runtimes of the get/set functions in a hashmap? Best, average, and worst-case?
+        todo: verify notation
+        Ω(1) best, Θ(1) average, O(n) worst collision
 
     4. What type of input gives the worst case for hashmap? How can we prevent this from happening?
+        input that collides. use a robust hashing function.
 
     5. Here are some hash functions: Which one(s) of them are good and why? How would you improve the bad ones? When
     identifying one is bad, point out which quality of a good hashing function is not met.
 
         a. Hashing a phone number - use the area code.
 
+
         b. Hashing a social security number - use the last four digits.
+
 
         c. Hashing a string - use the sum of each of the character's ASCII codes
 
+
         d. Hashing a Person object - using the Person's age
+
 
     6. How are collisions handled in linear probing? How are collisions handled in separate chaining? Describe the
     differences in detail.
+        linear probing handles collisions by finding the nearest unoccupied cell
+        separate chaining appends collisions to a linked list
+        todo: detail
 
     7. Suppose I implement a hashmap with the hash function h(x) = x mod 10, a list of length 10, and with linear
     probing. I insert the elements 32, 47, 42, 43, 15, 19, 16, 27 in that order. Write out what the list of the hashmap
     looks like after each insert.
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        [32]
+        [32, 47]
+        [32, 42, 47]
+        [32, 42, 43, 47]
+        [32, 42, 43, 15, 47]
+        [32, 42, 43, 15, 47, 19]
+        [32, 42, 43, 15, 16, 47, 19]
+        [32, 42, 43, 15, 16, 47, 27, 19]
+
 
 Recursion
 
