@@ -24,22 +24,31 @@ Hashmaps
 
     5. Here are some hash functions: Which one(s) of them are good and why? How would you improve the bad ones? When
     identifying one is bad, point out which quality of a good hashing function is not met.
+        good hash functions are: (1) fast to compute; (2) minimize collisions (duplication).
 
         a. Hashing a phone number - use the area code.
-
+            (1) is fast to compute; (2) massive number of collisions (up to 10,000,000)
+            quality: poor
+            improvement: increase input space by using higher base symbols, e.g., letters, or more digits
 
         b. Hashing a social security number - use the last four digits.
-
+            (1) is fast to compute; (2) massive number of collisions (up to 100,000)
+            quality: poor
+            improvement: increase input space by using higher base symbols, e.g., letters, or more digits
 
         c. Hashing a string - use the sum of each of the character's ASCII codes
-
+            (1) is fast to compute; (2) low collision number on longer strings
+            quality: good
 
         d. Hashing a Person object - using the Person's age
+            (1) is fast to compute; (2) massive number of collisions (millions to 100 millions)
+            quality: extremely poor
+            improvement: increase input space by using, e.g., day (of 365) born, initials, and place of birth
 
 
     6. How are collisions handled in linear probing? How are collisions handled in separate chaining? Describe the
     differences in detail.
-        linear probing handles collisions by finding the nearest unoccupied cell
+        linear probing handles collisions by finding the nearest unoccupied cell, increasing
         separate chaining appends collisions to a linked list
         todo: detail
 
