@@ -69,13 +69,19 @@ Hashmaps
 Recursion
 
     1. What is recursion? How do you make sure recursion does not run infinitely?
+        recursion is a method of self reference that requires its input get closer to a terminating base case (which is
+        often a reduced size input)
 
     2. How do you convert a function with iteration (e.g., a for loop) to a recursive function? For example, how can I
     loop through numbers in a list using recursion?
+        modify input
+        todo:
 
     3. What is binary search? What is the requirement for the thing (e.g., list) that you are doing a binary search on?
+        O(log n) search that requires a sorted list to utilize the properties of bisecting a sorted array
 
     4. What is the runtime and space complexity for binary search?
+        O(log n); O(1)
 
 Runtime Analysis
 
