@@ -16,7 +16,6 @@ Hashmaps
         hashmaps have O(1) lookup time, versus O(n) array, and O(n) linked list
 
     3. What are the runtimes of the get/set functions in a hashmap? Best, average, and worst-case?
-        todo: verify notation
         Ω(1) best, Θ(1) average, O(n) worst collision
 
     4. What type of input gives the worst case for hashmap? How can we prevent this from happening?
@@ -48,8 +47,8 @@ Hashmaps
 
     6. How are collisions handled in linear probing? How are collisions handled in separate chaining? Describe the
     differences in detail.
-        linear probing handles collisions by finding the nearest unoccupied cell, increasing
-        separate chaining appends collisions to a linked list
+        linear probing: finds the nearest unoccupied cell, increasing index
+        separate chaining: appends collisions to a linked list, with the initially occupied index as the head
         todo: detail
 
     7. Suppose I implement a hashmap with the hash function h(x) = x mod 10, a list of length 10, and with linear
@@ -69,13 +68,12 @@ Hashmaps
 Recursion
 
     1. What is recursion? How do you make sure recursion does not run infinitely?
-        recursion is a method of self reference that requires its input get closer to a terminating base case (which is
-        often a reduced size input)
+        recursion is a method of self reference that requires its input approach a terminating base case (which is often
+        a reduction in input size)
 
     2. How do you convert a function with iteration (e.g., a for loop) to a recursive function? For example, how can I
     loop through numbers in a list using recursion?
-        modify input
-        todo:
+        modify (approach base case) input; e.g. sum_fn = lambda x, y: y if len(x) == 0 else sum_fn(x[:-1], y + x[-1])
 
     3. What is binary search? What is the requirement for the thing (e.g., list) that you are doing a binary search on?
         O(log n) search that requires a sorted list to utilize the properties of bisecting a sorted array
@@ -87,15 +85,15 @@ Runtime Analysis
 
     For each of the following code blocks, please answer the following and explain your answer choices.
 
-        1. For n=2,4,8,16 compute f(n).  For large values with exponents or factorials, you can leave them in the form a^b
-        or c! you do not need to compute them. In code block G, please compute for m=n i.e. (m,n) = (2,2),(4,4),...(16,16)
+        1. For n=2,4,8,16 compute f(n).  For large values with exponents or factorials, you can leave them in the form
+        a^b or c! you do not need to compute them. In code block G, please compute for m=n i.e. (m,n) = (2,2), (4,4),
+        ...(16,16).
 
-        2. What does the code block return? (In terms of n) You may use asymptotics (big O), but we encourage you to find an
-        exact answer when you can. Explain your answer.
+        2. What does the code block return? (In terms of n) You may use asymptotics (big O), but we encourage you to
+        find an exact answer when you can. Explain your answer.
 
-        3. What is the runtime of the code? Explain your answer.
-
-        Select from the following options
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
         -           -           -           -           -           -           -           -           -
         0           1           ~n ~2n      ~log n      ~n log n    ~n^2        ~2^n        ~n!         ∞ / inf
 
