@@ -85,17 +85,17 @@ Runtime Analysis
 
     For each of the following code blocks, please answer the following and explain your answer choices.
 
-        1. For n=2,4,8,16 compute f(n).  For large values with exponents or factorials, you can leave them in the form
-        a^b or c! you do not need to compute them. In code block G, please compute for m=n i.e. (m,n) = (2,2), (4,4),
-        ...(16,16).
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
 
-        2. What does the code block return? (In terms of n) You may use asymptotics (big O), but we encourage you to
-        find an exact answer when you can. Explain your answer.
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
 
         3. What is the runtime of the code (possibilities below)? Explain your answer.
         Select from the following:
-        -           -           -           -           -           -           -           -           -
-        0           1           ~n ~2n      ~log n      ~n log n    ~n^2        ~2^n        ~n!         ∞ / inf
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
 
     Note: When describing the runtime, please describe qualitatively why the code would give that runtime. Do not use
     empirical data to justify a runtime. For example:
@@ -118,18 +118,85 @@ Runtime Analysis
         return n
       return fn_a(n - 1) + 1
 
+    # Code Block A
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = n, where n = 2, 4, 8, 16 -> 2, 4, 8, 16
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            returns n in O(n) time using O(n) auxiliary (callstack) space
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+
+        O(n)
+        returns the input n by reducing input by 1 until terminating on the base case of n == 1, returning n (1), while
+        adding 1 to each each recursive call. ((fn(1) + 1) + 1) + 1
+
 
     # Code Block B
     def fn_b(n: int) -> int:
       if n == 1:
         return n
-      return fn_b(n - 1) + fn_b(n-1)
+      return fn_b(n - 1) + fn_b(n - 1)
+
+    # Code Block B
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = 2^(n - 1), where n = 2, 4, 8, 16 -> 2, 8, 128, 32_768
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            returns 2^(n - 1) in O(2^n) time using O(n) auxiliary (callstack) space (height of tree, n)
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+
+        O(2^n)
+        returns 2 doubled (n - 1) times by reducing input by 1 and adding the left call to the call stack until
+        terminating on the base case of n == 1, then consumes the call stack as if it were traversing a tree structure
+        post-order. the (n - 1) is the result of terminating (returning) at n == 1.
 
     # Code Block C
     def fn_c(n: int) -> int:
       if n == 1:
         return n
       return fn_c(n - 1) * n
+
+    # Code Block C
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = n!, where n = 2, 4, 8, 16 -> 2, 24, 40_320, 20_922_789_888_000
+
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            n * (n - 1) * (n - 2) * (n - 3)...
+            5 * 4 * 3 * 2 * 1
+            n! in O(n) time using O(n) auxiliary (callstack) space
+
+            todo returns 2^(n - 1) in O(2^n) time using O(n) auxiliary (callstack) space (height of tree, n)
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+
+        todo O(2^n)
+        todo returns 2 doubled (n - 1) times by reducing input by 1 and adding the left call to the call stack until
+        terminating on the base case of n == 1, then consumes the call stack as if it were traversing a tree structure
+        post-order. the (n - 1) is the result of terminating (returning) at n == 1.
 
     # Code Block D
     def fn_d(n: int) -> int:
@@ -138,7 +205,7 @@ Runtime Analysis
       count = 0
       for x in range(n):
         count += x
-      return fn_d(n//2) + fn_d(n // 2) + count
+      return fn_d(n // 2) + fn_d(n // 2) + count
 
 
     # Code Block E
@@ -157,7 +224,7 @@ Runtime Analysis
     def fn_g(n: int, m: int) -> int:
         if n <= 0 or m <= 0:
             return 1
-        return fn_g(n//2, m) + fn_g(n, m//2)
+        return fn_g(n // 2, m) + fn_g(n, m // 2)
 
 
     Hint: If you're having trouble identifying the runtime, try the following.
