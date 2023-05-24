@@ -160,11 +160,11 @@ Runtime Analysis
         Select from the following:
         -        -        -         -          -             -               -           -           -          -
         0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            O(2^n)
+            returns 2 doubled (n - 1) times by reducing input by 1 and adding the left call to the call stack until
+            terminating on the base case of n == 1, then consumes the call stack as if it were traversing a tree
+            structure post-order. the (n - 1) is the result of terminating (returning) at n == 1.
 
-        O(2^n)
-        returns 2 doubled (n - 1) times by reducing input by 1 and adding the left call to the call stack until
-        terminating on the base case of n == 1, then consumes the call stack as if it were traversing a tree structure
-        post-order. the (n - 1) is the result of terminating (returning) at n == 1.
 
     # Code Block C
     def fn_c(n: int) -> int:
@@ -186,17 +186,14 @@ Runtime Analysis
             5 * 4 * 3 * 2 * 1
             n! in O(n) time using O(n) auxiliary (callstack) space
 
-            todo returns 2^(n - 1) in O(2^n) time using O(n) auxiliary (callstack) space (height of tree, n)
-
         3. What is the runtime of the code (possibilities below)? Explain your answer.
         Select from the following:
         -        -        -         -          -             -               -           -           -          -
         0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            O(n)
+            returns n * f(n - 1) * f(n - 2) * f(n - 3)..., terminating at (n == 1).
+            1 * (n - (n - 2)) * (n - (n - 3))...
 
-        todo O(2^n)
-        todo returns 2 doubled (n - 1) times by reducing input by 1 and adding the left call to the call stack until
-        terminating on the base case of n == 1, then consumes the call stack as if it were traversing a tree structure
-        post-order. the (n - 1) is the result of terminating (returning) at n == 1.
 
     # Code Block D
     def fn_d(n: int) -> int:
@@ -207,6 +204,30 @@ Runtime Analysis
         count += x
       return fn_d(n // 2) + fn_d(n // 2) + count
 
+
+    # Code Block D
+        recurses 2*log(n) times, with (n - height) operations at depth
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = , where n = 2, 4, 8, 16 ->
+
+
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            todo n * (n - 1) * (n - 2) * (n - 3)...
+            todo 5 * 4 * 3 * 2 * 1
+            todo n! in O(n) time using O(n) auxiliary (callstack) space
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            todo O(n)
+            todo returns n * f(n - 1) * f(n - 2) * f(n - 3)..., terminating at (n == 1).
+            todo 1 * (n - (n - 2)) * (n - (n - 3))...
 
     # Code Block E
     def fn_e(n: int) -> int:
