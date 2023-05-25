@@ -204,15 +204,13 @@ Runtime Analysis
         count += x
       return fn_d(n // 2) + fn_d(n // 2) + count
 
-
     # Code Block D
         recurses 2*log(n) times, with (n - height) operations at depth
 
         1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
         them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
         ... (16,16).
-            f(n) = , where n = 2, 4, 8, 16 ->
-
+            f(n) = , where n = 2, 4, 8, 16 -> 3, 12, 52, 224
 
 
         2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
@@ -235,17 +233,23 @@ Runtime Analysis
         return 1
       return fn_e(n // 2) + fn_e(n // 2)
 
+        2^(log2(n) + 1)
+
     # Code Block F
     def fn_f(n: int) -> int:
       if n + 1 < 0:
         return n
       return fn_f(n // 2) + fn_f(n // 2)
 
+        inf (never negative)
+
     # Code Block G
     def fn_g(n: int, m: int) -> int:
         if n <= 0 or m <= 0:
             return 1
         return fn_g(n // 2, m) + fn_g(n, m // 2)
+
+        todo
 
 
     Hint: If you're having trouble identifying the runtime, try the following.
