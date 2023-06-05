@@ -8,7 +8,6 @@ Return the list of numbers as a string separated by space using recursion
 # more performant (perf + clarity ~?= 0); records data within itself via implicit data structure
 # O(2n) + O(n^2) -> O(n^2) time (n calls; n .join); O(2n) -> O(n) aux space (n call stack; n implicit structure)
 # First Attempt
-# not able to easily resolve pop() vs pop(0)
 def recurse_1(lst: list[int | str]) -> str:
     if isinstance(lst[0], str):
         return ' '.join(lst)
@@ -27,7 +26,7 @@ def recurse_2(lst: list[int]) -> str:
     return recurse(lst[0:1]) + ' ' + recurse(lst[1:])
 
 
-# Third Attempt
+# Third Attempt: implicit data structure
 # O(n) time; O(1) aux space
 def recurse(lst: list[int | str]) -> str:
     # base case
@@ -47,13 +46,10 @@ def recurse(lst: list[int | str]) -> str:
 
 
 # Fourth Attempt
-def recurse(lst: list[int | str]) -> str:
+def recurse_4(lst: list[int | str]) -> str:
     # keep return data in outermost fn call
     pass
 
-
-x = recurse([1, 2, 3, 4, 5])
-print(repr(x))
 
 '''
 2. Calculate the factorial of N iteratively and recursively
@@ -61,11 +57,16 @@ print(repr(x))
 
 
 def fact_iter(n: int) -> int:
-    pass
+    out = 1
+    for i in range(1, n + 1):
+        out *= i
+    return out
 
 
 def fact_recursive(n: int) -> int:
-    pass
+    if n < 2:
+        return 1
+    return n * fact_recursive(n - 1)
 
 
 '''
@@ -75,7 +76,25 @@ Return -1 if number does not exist. Assume that the list is sorted.
 
 
 def find_index(lst: list[int], val: int) -> int:
-    pass
+    lo = 0
+    hi = len(lst)
+
+    while hi - lo > 1:
+        indx = lo + (hi - lo) // 2
+
+        if lst[indx] == val:
+            return indx
+
+        if lst[indx] > val:
+            hi = indx
+        else:  # go right
+            lo = indx
+
+    # todo: refactor/debug for inputs of size 1, 2
+
+    return -1
+
+
 
 
 '''
@@ -86,3 +105,46 @@ Return -1 if such a number does not exist. Assume that the list is sorted.
 
 def find_closest(lst: list[int], val: int) -> int:
     pass
+
+
+# from stencil import *
+
+def test_recurse_1():
+    # assert recurse([1, 2, 3]) == "1 2 3 "
+    assert recurse([1, 2, 3]) == "1 2 3"
+
+
+def test_fact_iter_1():
+    assert fact_iter(5) == 120
+
+
+def test_fact_iter_2():
+    assert fact_iter(10) == 3628800
+
+
+def test_fact_recursive_1():
+    assert fact_recursive(5) == 120
+
+
+def test_fact_recursive_2():
+    assert fact_recursive(10) == 3628800
+
+
+def test_find_index_1():
+    assert find_index([1, 5, 10, 20, 100], 5) == 1
+
+
+def test_find_index_2():
+    assert find_index([1, 5, 10, 20, 100], 15) == -1
+
+
+def test_find_closest_1():
+    assert find_closest([1, 5, 10, 20, 100], 9) == 1
+
+
+def test_find_closest_2():
+    assert find_closest([1, 5, 10, 20, 100], 21) == 3
+
+
+def test_find_closest_3():
+    assert find_closest([1, 5, 10, 20, 100], 0) == -1
