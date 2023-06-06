@@ -5,6 +5,23 @@ Return the list of numbers as a string separated by space using recursion
 '''
 
 
+# Fourth Attempt: helper fn
+# O(n) time; O(n) aux space
+def recurse(lst: list[int]) -> str:
+    index = 0
+    return _recurse(index, lst)
+
+
+# recursively traverses list, converting each integer to a string
+def _recurse(index: int, lst: list[int | str]) -> str:
+    if index > len(lst) - 1:
+        return ' '.join(lst)
+
+    lst[index] = str(lst[index])
+
+    return _recurse(index + 1, lst)
+
+
 # more performant (perf + clarity ~?= 0); records data within itself via implicit data structure
 # O(2n) + O(n^2) -> O(n^2) time (n calls; n .join); O(2n) -> O(n) aux space (n call stack; n implicit structure)
 # First Attempt
@@ -12,23 +29,26 @@ def recurse_1(lst: list[int | str]) -> str:
     if isinstance(lst[0], str):
         return ' '.join(lst)
 
+    # takes element from front of list, casts to string, appends to list
     lst.append(str(lst.pop(0)))  # issue: pop() vs (pop(0) O(.5n(n+1)) -> O(n^2))
 
-    return recurse(lst)
+    return recurse_1(lst)
 
 
 # Second Attempt
 # clean; poor performance
+# reduces input size of list until len == 1, then converts to a string
+# fn(str) + fn(fn(str) + fn(...))
 def recurse_2(lst: list[int]) -> str:
     if len(lst) == 1:
         return str(lst[0])
 
-    return recurse(lst[0:1]) + ' ' + recurse(lst[1:])
+    return recurse_2(lst[0:1]) + ' ' + recurse_2(lst[1:])
 
 
 # Third Attempt: implicit data structure
-# O(n) time; O(1) aux space
-def recurse(lst: list[int | str]) -> str:
+# O(n) time; O(n) aux space
+def recurse_3(lst: list[int | str]) -> str:
     # base case
     if isinstance(lst[0], str):
         lst.pop()
@@ -42,13 +62,7 @@ def recurse(lst: list[int | str]) -> str:
     lst[lst[-1]] = str(lst[lst[-1]])
     lst[-1] -= 1
 
-    return recurse(lst)
-
-
-# Fourth Attempt
-def recurse_4(lst: list[int | str]) -> str:
-    # keep return data in outermost fn call
-    pass
+    return recurse_3(lst)
 
 
 '''
