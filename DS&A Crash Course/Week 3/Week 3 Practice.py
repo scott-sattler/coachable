@@ -205,27 +205,29 @@ Runtime Analysis
       return fn_d(n // 2) + fn_d(n // 2) + count
 
     # Code Block D
-        recurses 2*log(n) times, with (n - height) operations at depth
-
         1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
         them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
         ... (16,16).
-            f(n) = , where n = 2, 4, 8, 16 -> 3, 12, 52, 224
-
+            f(n) = (n^2 - lg(n) * n/2), where n = 2, 4, 8, 16 -> 3, 12, 52, 224
 
         2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
         an exact answer when you can. Explain your answer.
-            todo n * (n - 1) * (n - 2) * (n - 3)...
-            todo 5 * 4 * 3 * 2 * 1
-            todo n! in O(n) time using O(n) auxiliary (callstack) space
+            recurses r = 2^(log(n)+1)-1 times, with n decreasing by half each doubling of calls (level)
+            f(n) = (n^2 - lg(n) * n/2)
+            O(n^2) time using O(n^2) + O(lg n) -> O(n^2) auxiliary space (list space; call stack)
 
         3. What is the runtime of the code (possibilities below)? Explain your answer.
         Select from the following:
         -        -        -         -          -             -               -           -           -          -
         0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
-            todo O(n)
-            todo returns n * f(n - 1) * f(n - 2) * f(n - 3)..., terminating at (n == 1).
-            todo 1 * (n - (n - 2)) * (n - (n - 3))...
+            O(n^2)
+            returns:    (n - 1) +
+                        2 * (f(n // 2) + (n//2 - 1)) +
+                        4 * (f(n // 4) + (n//4 - 1)) +
+                        ... terminating at (n == 1).
+            as n decreases by half, the number of calls doubles, resulting in (n * n)
+            the recursive calls are 2^((lg n) + 1) -> (2n - 1), with the (+ count) in the order of n^2
+
 
     # Code Block E
     def fn_e(n: int) -> int:
@@ -233,7 +235,27 @@ Runtime Analysis
         return 1
       return fn_e(n // 2) + fn_e(n // 2)
 
-        2^(log2(n) + 1)
+    # Code Block E
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = 2^(log2(n) + 1), where n = 2, 4, 8, 16 -> 4, 8, 16, 32, 64
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            the next power of 2 after n. this is due to the base case terminating at 0, rather than 1, resulting in
+            (n + 1) doublings.
+            2^(log2(n) + 1) in O(2^n) time using O(2^n) auxiliary (callstack) space
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            O(2^n)
+            returns f(n // 2) + f(n // 2)..., terminating at (n == 0).
+            a doubling recursive tree of height (log(n) + 1)
+
 
     # Code Block F
     def fn_f(n: int) -> int:
@@ -241,7 +263,28 @@ Runtime Analysis
         return n
       return fn_f(n // 2) + fn_f(n // 2)
 
-        inf (never negative)
+    # Code Block F
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n) = 2*n, where n = 2, 4, 8, 16 -> 4, 8, 16, 32
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            the code block never hits the base case of (n + 1 < 0) because n bottoms out at 0, and (0 + 1) will never be
+            less than 1. n bottoms out at zero because we're performing a floor division operation, which, with positive
+            numbers, can never produce a negative result. were the base case implemented correclty, the result would be
+            a doubling of n, hence, 2n.
+            2n in O(inf) time using O(inf) auxiliary (callstack) space
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            O(inf)
+            returns f(n // 2) + f(n // 2)..., infinitely returning (f(0 // 2) + f(0 // 2)), never terminating
+
 
     # Code Block G
     def fn_g(n: int, m: int) -> int:
@@ -249,7 +292,35 @@ Runtime Analysis
             return 1
         return fn_g(n // 2, m) + fn_g(n, m // 2)
 
-        todo
+    # Code Block G
+
+        1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
+        them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
+        ... (16,16).
+            f(n, m) = n^2 + n, where f(n, m) = f(m, n), and (n, m) = (2, 2), (4, 4), (8, 8), (16, 16) -> 6, 20, 70, 252
+
+        2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
+        an exact answer when you can. Explain your answer.
+            returns (n or m) squared, plus an additional (n or m). they are interchangeable when the terms are equal,
+            due to the symetry of the algorithm
+
+            doubles input
+            todo the next power of 2 after n. this is due to the base case terminating at 0, rather than 1, resulting in
+            todo (n + 1) doublings.
+            todo 2^(log2(n) + 1) in O(2^n) time using O(2^n) auxiliary (callstack) space
+
+        n  n  n/2  n/4
+
+        3. What is the runtime of the code (possibilities below)? Explain your answer.
+        Select from the following:
+        -        -        -         -          -             -               -           -           -          -
+        0        1        ~n        ~2n        ~log n        ~n log n        ~n^2        ~2^n        ~n!        ∞ / inf
+            todo O(2^n)
+            todo returns f(n // 2) + f(n // 2)..., terminating at (n == 0).
+            todo a doubling recursive tree of height (log(n) + 1)
+            O(n^2)
+
+
 
 
     Hint: If you're having trouble identifying the runtime, try the following.
