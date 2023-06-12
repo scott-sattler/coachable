@@ -212,9 +212,9 @@ Runtime Analysis
 
         2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
         an exact answer when you can. Explain your answer.
-            recurses r = 2^(log(n)+1)-1 times, with n decreasing by half each doubling of calls (level)
+            recurses r = 2^(lg(n)+1)-1 times, with n decreasing by half each doubling of calls (level)
             f(n) = (n^2 - lg(n) * n/2)
-            O(n^2) time using O(n^2) + O(lg n) -> O(n^2) auxiliary space (list space; call stack)
+            O(n^2) time using O(n^2) + O(lg(n)) -> O(n^2) auxiliary space (list space; call stack)
 
         3. What is the runtime of the code (possibilities below)? Explain your answer.
         Select from the following:
@@ -226,7 +226,7 @@ Runtime Analysis
                         4 * (f(n // 4) + (n//4 - 1)) +
                         ... terminating at (n == 1).
             as n decreases by half, the number of calls doubles, resulting in (n * n)
-            the recursive calls are 2^((lg n) + 1) -> (2n - 1), with the (+ count) in the order of n^2
+            the recursive calls are 2^(lg(n) + 1) -> (2n - 1), with the (+ count) in the order of n^2
 
 
     # Code Block E
