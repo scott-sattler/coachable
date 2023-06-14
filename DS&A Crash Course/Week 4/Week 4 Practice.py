@@ -22,6 +22,7 @@ Strings
         compare first/last elements, move inwards (0, -1; 1, -2; ...)
 
     What is the runtime to concatenate a string with a character?
+        todo
         depends on whether an optimization exists for the specific case
         worst case is O(n + m) where n and m are the sizes of the strings
 
