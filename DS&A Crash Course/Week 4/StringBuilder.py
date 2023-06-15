@@ -35,12 +35,13 @@ class StringBuilder:
         if (self.capacity is not None) and (len(s) + self.char_len > self.capacity):
             raise Exception(f'Resulting string would exceed string capacity of {self.capacity}.')
 
-        # fixed size lists: always modifies null ('') values
+        # fixed size lists: modifies null ('') values
         if self.capacity is not None:
             k = max(self.char_len - 1, 0)
             for i, char in enumerate(s):
                 self.str_list[i + k] = s[i]
-        # indefinite capacity lists: always uses list.append() method
+
+        # indefinite capacity lists: uses list.append() method
         else:  # self.capacity is None:
             for char in s:
                 self.str_list.append(char)
@@ -68,29 +69,27 @@ class StringBuilder:
         if self._boundary_check(start, end):
             self.str_list = self.str_list[:start] + self.str_list[end:]
 
+            # fixed size lists: ensure filled with null ('')
             if self.capacity is not None:
                 while len(self.str_list) < self.capacity:
                     self.str_list.append('')
 
             self.char_len -= (end - start)
-        else:
-            raise Exception("Boundary error.")
 
     # Returns a substring from indices start (inclusive) to end (exclusive).
     # Should raise an exception if start or end are out of bounds.
     def substring(self, start: int, end=None) -> str:
         if end is None:
             end = self.char_len
+
         if self._boundary_check(start, end):
             return ''.join(self.str_list[start:end])
-        else:
-            raise Exception("Boundary error.")
 
     # Reverses the current string
     def reverse(self) -> str:
         start = -(len(self.str_list) - self.char_len) - 1
         stop = -len(self.str_list) - 1
-        self.str_list[:self.char_len] = self.str_list[start:stop:-1]
+        self.str_list[:self.char_len] = self.str_list[start:stop:-1]  # in-place reversal
         return self.__str__()
 
     # Replaces all occurrences of “old” with “new”
@@ -109,7 +108,9 @@ class StringBuilder:
     def _boundary_check(self, start: int, end: int) -> bool:
         lower = -1 < start < end
         upper = start < end <= self.char_len
-        return lower and upper
+        if not lower or not upper:
+            raise Exception("Boundary error.")
+        return True
 
 
 
