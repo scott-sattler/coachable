@@ -40,7 +40,6 @@ class StringBuilder:
             k = max(self.char_len - 1, 0)
             for i, char in enumerate(s):
                 self.str_list[i + k] = s[i]
-
         # indefinite capacity lists: uses list.append() method
         else:  # self.capacity is None:
             for char in s:
