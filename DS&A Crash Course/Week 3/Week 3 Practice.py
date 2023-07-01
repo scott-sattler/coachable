@@ -297,17 +297,22 @@ Runtime Analysis
         1. Compute f(n) for n = 2, 4, 8, 16. For large values with exponents or factorials, you do not need to compute
         them and can leave them in the form a^b, c!, etc. In code block G, compute for m = n, i.e. (m,n) = (2,2), (4,4),
         ... (16,16).
-            f(n, m) = n^2 + n, where f(n, m) = f(m, n), and (n, m) = (2, 2), (4, 4), (8, 8), (16, 16) -> 6, 20, 70, 252
+            f(n, m) = n^2 + c, where f(n, m) = f(m, n), and (n, m) = (2, 2), (4, 4), (8, 8), (16, 16) -> 6, 20, 70, 252
+            where c is some factor that ... todo
+
+            is the binomial coefficient ... ?
 
         2. In terms of n, what does the code block return? You may use asymptotics (big O), but we encourage you to find
         an exact answer when you can. Explain your answer.
-            returns (n or m) squared, plus an additional (n or m). they are interchangeable when the terms are equal,
+            todo returns (n or m) squared, plus an additional (n or m). they are interchangeable when the terms are equal,
             due to the symetry of the algorithm
 
             doubles input
             todo the next power of 2 after n. this is due to the base case terminating at 0, rather than 1, resulting in
             todo (n + 1) doublings.
             todo 2^(log2(n) + 1) in O(2^n) time using O(2^n) auxiliary (callstack) space
+
+
 
         n  n  n/2  n/4
 
