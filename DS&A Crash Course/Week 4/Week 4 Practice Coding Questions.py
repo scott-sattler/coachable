@@ -69,8 +69,6 @@ Output: [0, 1, 2, 4, 5, 8, 8, 9, 10]
 
 
 def merge_n_lists(n_lists: list[list[int]]) -> list[int]:
-    # min heap of tuple(value, list_index) tuples
-
     # naive
     # while at least one list has elements:
     # find smallest element
@@ -86,7 +84,8 @@ def merge_n_lists(n_lists: list[list[int]]) -> list[int]:
                 min_index = i
 
         # all sorts of bad
-        n_lists[min_index].pop(0)
+        # resolved using deque
+        n_lists[min_index].pop(0)  # can solve decending
         if len(n_lists[min_index]) < 1:
             del n_lists[min_index]
 
@@ -126,38 +125,32 @@ def test_most_freq_substring_2():
     assert most_freq_substring("eabcdeab", 3) == "eab"
 
 
-# def test_smallest_subsequence_1():
-#     assert smallest_subsequence("agbf", 2) == "ab"
+def test_smallest_subsequence_1():
+    assert smallest_subsequence("agbf", 2) == "ab"
 
 
 def test_smallest_subsequence_2():
     assert smallest_subsequence("batman", 3) == "aan"
 
 
-def test_smallest_subsequence_3():
-    assert smallest_subsequence("zzzab", 3) == "zab"
+def test_merge_n_lists_1():
+    assert merge_n_lists([[1, 5, 8], [0, 2, 10], [4, 8, 9]]) == [0, 1, 2, 4, 5, 8, 8, 9, 10]
 
 
-#
-#
-# def test_merge_n_lists_1():
-#     assert merge_n_lists([[1, 5, 8], [0, 2, 10], [4, 8, 9]]) == [0, 1, 2, 4, 5, 8, 8, 9, 10]
-#
-#
-# def test_merge_n_lists_2():
-#     assert merge_n_lists([[1, 3], [2, 4]]) == [1, 2, 3, 4]
-#
-#
-# def test_merge_n_lists_3():
-#     assert merge_n_lists([[1, 3], [4, 6]]) == [1, 3, 4, 6]
-#
-#
-# def test_merge_n_lists_4():
-#     assert merge_n_lists([[4, 6], [1, 3]]) == [1, 3, 4, 6]
-#
-#
-# def test_merge_n_lists_5():
-#     assert merge_n_lists([[1, 3, 5]]) == [1, 3, 5]
+def test_merge_n_lists_2():
+    assert merge_n_lists([[1, 3], [2, 4]]) == [1, 2, 3, 4]
+
+
+def test_merge_n_lists_3():
+    assert merge_n_lists([[1, 3], [4, 6]]) == [1, 3, 4, 6]
+
+
+def test_merge_n_lists_4():
+    assert merge_n_lists([[4, 6], [1, 3]]) == [1, 3, 4, 6]
+
+
+def test_merge_n_lists_5():
+    assert merge_n_lists([[1, 3, 5]]) == [1, 3, 5]
 
 
 def test_sort_tuples_1():
@@ -172,5 +165,61 @@ def test_sort_tuples_3():
     assert sort_tuples([(10, 2), (10, 1), (10, 3)]) == [(10, 3), (10, 2), (10, 1)]
 
 
+# from stencil import *
+
+def test_______SECONDARY______():
+    assert True
+
+
+def test_most_freq_substring_3():
+    assert most_freq_substring("ab", 1) == "a"
+
+
+def test_most_freq_substring_4():
+    assert most_freq_substring("abb", 1) == "b"
+
+
+def test_most_freq_substring_5():
+    assert most_freq_substring("abba", 1) == "a"
+
+
+def test_most_freq_substring_6():
+    assert most_freq_substring("c", 1) == "c"
+
+
+def test_most_freq_substring_7():
+    assert most_freq_substring("ccc", 1) == "c"
+
+
+def test_most_freq_substring_8():
+    assert most_freq_substring("ababccc", 1) == "c"
+
+
+def test_most_freq_substring_9():
+    assert most_freq_substring("abbbabbbcccccc", 3) == "ccc"
+
+
+def test_most_freq_substring_10():
+    assert most_freq_substring("abbbabbbcccaacccbbb", 3) == "bbb"
+
+
+def test_most_freq_substring_11():
+    assert most_freq_substring("abbbabbbcccaacccbb", 3) == "abb"
+
+
+def test_most_freq_substring_12():
+    assert most_freq_substring("", 0) == ""
+
+
+###
+
 def test_smallest_subsequence_3():
-    assert smallest_subsequence("zzzaab", 3) == "aab"
+    assert smallest_subsequence("zzzab", 3) == "zab"
+
+###
+
+# def test_merge_n_lists_6():
+#   assert merge_n_lists([[]]) == []
+
+# def test_merge_n_lists_7():
+#   assert merge_n_lists([[], [], []]) == []
