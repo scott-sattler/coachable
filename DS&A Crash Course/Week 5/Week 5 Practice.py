@@ -6,22 +6,34 @@ Free Response Questions
 Trees
 
     1. Explain what a binary tree is using a recursive definition.
+        quote:
+        The formal recursive definition is: a binary tree is either empty (represented by a null pointer), or is made of
+        a single node, where the left and right pointers each point to a binary tree.
 
     2. What are the different traversals that we can do on a binary tree?
+        preorder
+        inorder
+        postorder
 
     3. Your friend claims that “the time complexity of traversing a tree recursively is O(n), where n is the number of
     nodes in the tree.” Are they correct? Why/why not?
+        yes; each node is visited only once
 
     4. Your friend claims that “the worst-case space complexity of traversing a tree recursively is O(1), because we are
     not using extra space to hold a queue like a BFS would.” Are they correct? Why/why not? What if the tree is
     balanced?
+        no; they're failing to account for the recursive call stack, which would result in O(height) space complexity
+        a balanced tree would reduce the worst case O(height) space complexity from O(n) to O(log(n))
 
     5. What is the difference between a binary tree and a binary search tree (BST)?
+        todo
 
     6. What is the runtime of searching for an element in a BST? What about the space complexity?
+        O(n) Θ(log n) Ω(1) time complexity; O(n) input, O(1) auxiliary space complexity
 
     7. What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited to search for
     the existence of 6?
+
 
     8. What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited, to search
     for the existence of 0?
