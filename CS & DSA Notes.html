@@ -7,4 +7,29 @@ O(n) space trade-off
 https://en.wikipedia.org/wiki/Perfect_hash_function
 
 
+Brute Force - See attached brute.py for a brute force implementation. Runtime is O(n*m)
+
+Rabin-Karp. This approach uses the sliding window technique to efficiently calculate text substrings hashes that are compared to the pattern hash.
+https://en.wikipedia.org/wiki/Rolling_hash
+The implementation can be found in the attached rabin_karp.py file. The runtime of many implementations is O(n*m), and O(n+m) when using a perfect hash function.
+
+Knuth-Morris-Pratt. This approach uses preprocessing to help identify when there is a partial match. The implementation can be found in the attached in the attached kmp.py file. The runtime is O(n+m).
+
+Boyer-Moore. This approach uses a sliding window approach and implements a "bad-character" rule to find the target substring. The implementation can be found in the attached boyer_moore.py file.
+
+
+
+
+
+
+
+BST root node is height 0
+the following is height 2
+                    4
+               3         5
+             1   2     6   7
+
+
+
+
 -->
