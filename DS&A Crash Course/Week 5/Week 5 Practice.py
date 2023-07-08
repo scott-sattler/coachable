@@ -11,13 +11,14 @@ Trees
         a single node, where the left and right pointers each point to a binary tree.
 
     2. What are the different traversals that we can do on a binary tree?
-        preorder
-        inorder
-        postorder
+        pre-order
+        in-order
+        post-order
+        level-order
 
     3. Your friend claims that “the time complexity of traversing a tree recursively is O(n), where n is the number of
     nodes in the tree.” Are they correct? Why/why not?
-        yes; each node is visited only once
+        yes; each node is only visited on the order of n times
 
     4. Your friend claims that “the worst-case space complexity of traversing a tree recursively is O(1), because we are
     not using extra space to hold a queue like a BFS would.” Are they correct? Why/why not? What if the tree is
@@ -26,39 +27,165 @@ Trees
         a balanced tree would reduce the worst case O(height) space complexity from O(n) to O(log(n))
 
     5. What is the difference between a binary tree and a binary search tree (BST)?
-        todo
+        a binary tree is an undirected acyclic graph that contains a root null value or node, where each node contains
+        two children as left and right pointers, with each being either null value or a node.
 
     6. What is the runtime of searching for an element in a BST? What about the space complexity?
-        O(n) Θ(log n) Ω(1) time complexity; O(n) input, O(1) auxiliary space complexity
+        unbalanced: O(n) Θ(log n) Ω(1) time complexity; (O(n) input + O(1) auxiliary) space complexity
+        balanced: O(log n) Θ(log n) Ω(1) time complexity; (O(n) input + O(1) auxiliary) space complexity
 
     7. What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited to search for
     the existence of 6?
+        balanced:
+                    2
+                 1     3
+                     4   5
 
+        unbalanced:
+                    1
+                      2
+                        3
+                          4
+                            5
+
+        balanced: 3
+        unbalanced: 5
 
     8. What’s the “worst” BST structure given the numbers [1,2,3,4,5], in terms of number of nodes visited, to search
     for the existence of 0?
+        balanced:
+                    4
+                 3     5
+              1   2
+
+        unbalanced:
+                    5
+                  4
+                3
+              2
+            1
+
+        balanced: 3
+        unbalanced: 5
 
     9. What’s the “best” BST structure, given the numbers [1,2,3,4,5,6,7], in terms of the expected number of nodes
     visited to search for the existence of an arbitrary positive or negative number?
+        balanced:
+                4
+           3         5
+         1   2     6   7
+
+        always floor(log n) height (where root is height 0)
 
     10. If I want to compute the size of each subtree in a tree, which traversal(s) could I use? If some do not work,
     explain why not. Show how your approach works in Binary Tree A from the below section.
+        post-order traversal
+
+        left
+        right
+        sum
+
+            1
+           / \
+          2   3
+         /     \
+        4       5
+               / \
+              6   7
+                   \
+                    8
+
+        although postorder is best suited for this problem, you could inartfully use any traversal
+
+        def subtree_sum(node) -> int:
+            if node is None:
+                return 0
+            count += subtree_sum(node.left)
+            count += subtree_sum(node.right)
+            return count + 1
 
     11. If I wanted to print out the tree node values level by level, which traversal(s) could I use?   If some do not
     work, explain why not. Show how your approach works in Binary Tree A from the below section.
+        level-order traversal
+
+        from collections import deque
+
+        def level_values(node) -> None:
+            deq = deque([node])
+            while deq:
+                node = deq.popleft()
+                if node.left:
+                    deq.append(node.left)
+                if node.right:
+                    deq.append(node.right)
+                print(node.val)
+
+            1
+           / \
+          2   3
+         /     \
+        4       5
+               / \
+              6   7
+                   \
+                    8
+
+        [1]
+        [2, 3]
+        print(1)
+        [3, 4]
+        print(2)
+        [4, 5]
+        print(3)
+        [5]
+        print(4)
+        [6, 7]
+        print(5)
+        [7]
+        print(6)
+        [8]
+        print(7)
+        []
+        print(8)
 
     12. If I wanted to sum all the node values in the tree, which traversal(s) could I use?  If some do not work,
     explain why not. Show how your approach works in Binary Tree A from the below section.
+        any traversal that visits each node works equally well, given the stated constraints
 
     13. If I wanted to sum all the node values in each subtree in a tree, which traversal(s) could I use?  If some do
     not work, explain why not. Show how your approach works in Binary Tree A from the below section.
+        post-order traversal
+
+        left
+        right
+        sum
+
+            1
+           / \
+          2   3
+         /     \
+        4       5
+               / \
+              6   7
+                   \
+                    8
+
+        although postorder is best suited for this problem, you could inartfully use any traversal
+
+        def subtree_sum(node) -> int:
+            if node is None:
+                return 0
+            count += subtree_sum(node.left)
+            count += subtree_sum(node.right)
+            return count + node.val
+
 
     Tree Traversals Orderings
 
     Give the preorder, postorder, inorder, and level order traversals for each of the following trees. Assume that
     children are processed left to right.
 
-    1. Binary Tree
+    1. Binary Tree A
 
         1
        / \
@@ -69,6 +196,11 @@ Trees
           6   7
                \
                 8
+
+    pre-order: 1 2 4 3 5 6 7 8
+    in-order: 4 2 1 3 6 5 7 8
+    post-order: 4 2 6 8 7 5 3 1
+    level-order: 1 2 3 4 5 6 7 8
 
     2. N-Ary Tree (Nodes can have more than 2 children)
 
@@ -81,6 +213,11 @@ Trees
        9    10   11
             | \   \
            12  13  14
+
+    pre-order: 1 2 5 3 6 9 7 4 8 10 12 13 11 14
+    in-order: UNDEFINED
+    post-order: 5 2 9 6 7 3 12 13 10 14 11 8 4 1
+    level-order: 1 2 3 4 5 6 7 8 9 10 11 12 13 14
 
 Identifying Recursive Relationships
 
@@ -120,7 +257,6 @@ Identifying Recursive Relationships
     1   6    14
        / \   /
       4   7 12
-
 
     Binary Tree B
         1
@@ -170,7 +306,7 @@ Identifying Recursive Relationships
 
     You may use previous solutions or introduce additional recursive functions to help you solve the problems.
 
-    Here is an example of size(root)  computing the size of a binary tree. Please complete the rest following this
+    Here is an example of size(root) computing the size of a binary tree. Please complete the rest following this
     format.
 
         1. Example. size(root) finds the number of nodes in a binary tree. For case A, size(A) = 9 since there are 9
