@@ -299,9 +299,8 @@ Identifying Recursive Relationships
                  \
                   9
 
-
     Note: The height of a binary tree is equal to the maximum number of edges from the root to the most distant leaf
-    node. The height of an empty tree or tree with one node is 0. The height of an individual node us the number of
+    node. The height of an empty tree or tree with one node is 0. The height of an individual node is the number of
     edges from it to the root node.
 
     You may use previous solutions or introduce additional recursive functions to help you solve the problems.
@@ -321,6 +320,28 @@ Identifying Recursive Relationships
             e. A similar solution works but instead. size(root) = 1 + sum(root.child) for each child node.
 
         2. sum(root) finds the sum of all the nodes in the binary tree. sum(A) = 1+3+8+6+4+&+10+14+12= 65
+            1. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                sum(A) => 65
+                sum(B) => 15
+                sum(C) => 66
+                sum(D) => 23
+                sum(E) => 48
+
+            2. Base Case - When does the recursion stop?
+                if node is None
+
+            3. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+
+
+            4. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+
+            5. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+
 
         3. max_val(root) finds the maximum value among all nodes in a binary tree. max_val(A) = 14 since it is the
         largest element in the tree.
@@ -375,22 +396,47 @@ Tries
     General
 
     1. What is a trie?
+        a prefix (n-ary) tree that contains a boolean (or equivalent) at each node indicating whether the preceding
+        nodes are a valid prefix (e.g. a word in a dictionary)
 
     2. When do we use a trie?
 
+
     3. How do we know that “dog” is an actual word in our trie and is not just a prefix of the word “doghouse”?
+        the 'g' node would contain a prefix indicator
 
     4. Suppose our dictionary has n words and the longest of them is m characters long. What is the time and space
     complexity of building our trie?
+
+
 
 Building a Trie
 
     1. Start with an empty trie and insert the words "hello", "help", "held", "helden", "helderman", "helping" into this
     trie. Draw the resulting trie in tree structure.
+                h
+                e
+                l
+             d- l  p-
+          e     o-    i
+       r  n-          n
+    m                 g-
+    a
+    n-
 
     2. Trace through how you would search for "helping" in this trie.
+        h -> e -> (d- l p-) -> p- -> i -> n -> g-
 
     3. Trace how you would find all words starting with the prefix "he" in this Trie.
+        visit all the prefix indicators ( - )
+        h -> e -> l -> (d- l p-)
+        h -> e -> l -> d-
+        h -> e -> l -> d -> e -> (r n-)
+        h -> e -> l -> d -> e -> r -> m -> a -> n-
+        h -> e -> l -> d -> e -> n-
+        h -> e -> l -> l -> o-
+        h -> e -> l -> p-
+        h -> e -> l -> p -> i -> n -> g-
 
 
 '''
