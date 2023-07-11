@@ -333,15 +333,16 @@ Identifying Recursive Relationships
 
             3. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-
+                sum(root) = sum(left) + sum(right) + root
 
             4. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
 
+
             5. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-
+                sum(root) = sum(leftmost) + sum(leftmost + 1) ... + sum(rightmost) + root
 
         3. max_val(root) finds the maximum value among all nodes in a binary tree. max_val(A) = 14 since it is the
         largest element in the tree.
