@@ -7,8 +7,8 @@ Strings
 
     1. What is a string? How is a string created in memory?
         a data type that consists of a sequence of characters
-        in Python, strings are immutable
-        todo: How is a string created in memory?
+        in CPython, strings are immutable
+        generally, strings are a contiguous memory mapping of characters
 
     2. How can we calculate the frequencies of each character in a string?
         performantly: iterate over the string, {'char': int(frequency)}
@@ -22,7 +22,6 @@ Strings
         compare first/last elements, move inwards (0, -1; 1, -2; ...)
 
     5. What is the runtime to concatenate a string with a character?
-        todo
         depends on whether an optimization exists for the specific case
         worst case is O(n + m) where n and m are the sizes of the strings
 
@@ -36,12 +35,10 @@ Strings
         substring that is not a subsequence: ''
 
     8. How many possible substrings are there of a string of length N?
-        todo: ... '' + 1 * n + 2 * (n - 1) ...
-        n * (n + 1) / 2 + 1 ?
+        n + (n - 1) + (n - 2) ... + 1 => (1/2 * n * (n + 1)) + 1
 
     9. How many possible subsequences are there of a string of length N?
-        each element may be present or absent
-        2 ^ n
+        2^n as each element may be present or absent for n elements
 
 
 Sorting
@@ -50,49 +47,96 @@ Sorting
         impose order
 
     2. How does sorting work for strings? How is different than sorting arrays?
-        todo
+        a < b < c ... z, where ord(a) = 97, ord(b) = 98...
+        in Python, sorting a string should be done using a char list, ultimately joined back into a string
 
-    2. What do you need to do if you are sorting objects? How is it different from strings, integers, etc?
+    3. What do you need to do if you are sorting objects? How is it different from strings, integers, etc?
         assign an orderable attribute to each object
+        integers are themselves an attribute with a defined orderable
+        strings have, by convention, been assigned orderable attributes (and independently have order a < b < c...)
+        whereas some objects require orderable assignment, e.g.: picture(cat) < picture(dog)
 
-    3. Describe how selection sort works and its runtime and space complexity.
+    4. Describe how selection sort works and its runtime and space complexity.
         searches for the next item in a sequence, swaps with out-of-order element
         O(n^2) time complexity; O(n) input, O(1) auxiliary space
 
-    4. Is this a stable sorting algorithm? Explain why or why not.
-        a. no. sawp operation breaks stability in this context
+        a. Is this a stable sorting algorithm? Explain why or why not.
+            yes when selecting leftmost and inserting. this implementation preserves stability
+            no when swapping. this sawp operation is inherently unstable
 
     5. Describe how insertion sort works and its runtime and space complexity.
+        starting leftmost, with each next element, look left until element is less than or equal, then insert after
+        O(n^2) time complexity
+        O(n) input, O(1) auxiliary space complexity
 
         a. Is this a stable sorting algorithm? Explain why or why not.
+            yes. the leftmost unsorted elements will remain leftmost when sorted (looking left, if arr[i] <= insert)
 
     6. Describe how merge sort works and its runtime and space complexity.
+        bisect array until subarrays of size 1, merge increasingly larger subarrays by moving the lesser of the two to
+        smaller, sorted subarrays, to a larger sorted subarray
+        O(n * log n) time complexity
+        O(n) input, O(log n) call stack, O(n) (arrays), O(1) (linked list), auxiliary space complexity
 
         a. Is this a stable sorting algorithm? Explain why or why not.
+            yes. stability is preserved as long as equal left elements are moved before equal right elements
 
     7. Describe how quick sort works and its runtime and space complexity.
+        pick pivot, move all lesser than to left of pivot, greater than to right of pivot
+        O(n^2) (worst), Θ(n * log n) (average) time complexity
+        O(n) input, O(log n) call stack, auxiliary space complexity
 
         a. Is this a stable sorting algorithm? Explain why or why not.
+            no. swapping can result in instability
 
-    8. Suppose we have applied quicksort to a list, and we have [1,0,2,3,5,4] as an intermediate stage. Which elements could have been the pivot element in a previous iteration?
+    8. Suppose we have applied quicksort to a list, and we have [1,0,2,3,5,4] as an intermediate stage. Which elements
+    could have been the pivot element in a previous iteration?
+        2 or 3
 
     9. What's different between quicksort and mergesort? What are the tradeoffs between the two?
+        quicksort: O(n^2) (worst), Θ(n * log n) (average) time complexity
+                   O(n) input, O(log n) call stack, auxiliary space complexity
+                   unstable
+        mergesort: O(n * log n) time complexity
+                   O(n) input, O(log n) call stack, O(n) (arrays), O(1) (linked list), auxiliary space complexity
+                   stable
+                   parallelizable
+                   can be tuned to better handle specific input types
+
+        note: an in-place mergesort implementation exists
+              numerous variations of both algorithms exist
 
     10. What does divide and conquer mean? Which sorting algorithms use this approach?
+        divide and conquer is applicable to problems with optimal substructure
+        what this means is that an optimal solution to a sub-problem, can be utilized on increasingly larger
+        sub-problems until the whole problem (in the context of sorting, the whole array) is solved
 
     11. What is the difference between 3-way quicksort and standard quicksort?
+        3-way, specifically Djikstra's variant, not a multi-partition variant, adds an equal-to partition
 
-    12. Describe one specific input where you'd prefer to use 3-way quicksort over standard quicksort. Why is it faster here?
+    12. Describe one specific input where you'd prefer to use 3-way quicksort over standard quicksort. Why is it faster
+    here?
+        any input where where many elements are the same
+        the equivalent elements are more quickly shifted into their correct positions
 
-    13. Suppose you have an array with only 5 distinct elements (only the numbers 1-5). Note the array is still of arbitrarily large size N so it could be [1,2,3,4,1,2,3,4,4,4,4,3,2,3,2,....] with many duplicates. For an array like this.
+    13. Suppose you have an array with only 5 distinct elements (only the numbers 1-5). Note the array is still of
+    arbitrarily large size N so it could be [1,2,3,4,1,2,3,4,4,4,4,3,2,3,2,....] with many duplicates. For an array like
+    this.
 
         a. What is the worst-case runtime of quicksort? Why?
+            O(n^2) occurs when the collection is maximally unbalanced
+            example: already sorted list with pivot on far left
+            (n - 1) elements compared, (n - 2) elements compared, (n - 3) elements compared... occurring n times
 
         b. What is the worst-case runtime of 3-way quicksort? Why?
+            Djikstra's 3-way Quicksort, not a 2 pivot quicksort, retains a worst case time complexity of O(n^2)
+            examining a completely sorted array of unique elements demonstrates that adding an equal-to partition fails
+            to improve the worst case
 
 Trace Sorting Algorithms
 
-Trace out all the intermediate steps on the string "COACHABLEROCKS" for each of the following sorting algorithms. You don't need to include every swap, but you should include the most important intermediate steps.
+Trace out all the intermediate steps on the string "COACHABLEROCKS" for each of the following sorting algorithms. You
+don't need to include every swap, but you should include the most important intermediate steps.
 
     1. Insertion Sort
 
