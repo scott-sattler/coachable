@@ -8,9 +8,28 @@ Given a DAG that is represented as a collection of edges, i.e. ["n1", "n2"] mean
 Create an adjacency list for it.
 '''
 
+'''
+["n1", "n2"]
+n1 -> n2
+n1 is a precondition of n2
+
+n2 is dependent on n1
+n2 has n1 dependency
+'''
+
 
 def to_adjacency_list(edges: list[list[str]]) -> dict[str, list[str]]:
-    pass
+    adjacency_list = dict()
+    for edge in edges:
+        if edge[0] in adjacency_list:
+            adjacency_list[edge[0]].append(edge[1])
+        else:
+            adjacency_list[edge[0]] = [edge[1]]
+
+        if edge[1] not in adjacency_list:
+            adjacency_list[edge[1]] = []
+
+    return adjacency_list  # unordered!
 
 
 '''
@@ -21,7 +40,32 @@ Index 0 represents "v1" and so on.
 
 
 def to_adjacency_matrix(edges: list[list[str]]) -> list[list[int]]:
-    pass
+    # rewrite w/o reference for practice
+    adjacency_list = dict()
+    for edge in edges:
+        if edge[0] in adjacency_list:
+            adjacency_list[edge[0]].append(edge[1])
+        else:
+            adjacency_list[edge[0]] = [edge[1]]
+
+        if edge[1] not in adjacency_list:
+            adjacency_list[edge[1]] = []
+
+    # addresses unordered edge input
+    adjacency_list = dict(sorted(adjacency_list.items(), key=lambda xy: xy[0]))
+
+    adjacency_matrix = list()
+    # get structure from adjacency_list
+    for k, v in adjacency_list.items():
+        row = list()
+        for ordered_k in adjacency_list:
+            if ordered_k in v:
+                row.append(1)
+            else:
+                row.append(0)
+        adjacency_matrix.append(row)
+
+    return adjacency_matrix
 
 
 '''
@@ -38,7 +82,16 @@ where each connection costs 1 to traverse. Return -1 if there is no path.
 
 
 def find_shortest_path_distance(s: str, d: str, edges: list[list[str]]) -> int:
-    pass
+    visited = dict()
+
+    for vertex in edges:
+        if vertex[1] in visited:
+            visited[vertex[1]].append([1, vertex[0]])
+        else:
+            visited[vertex[1]] = [[1, vertex[0]]]
+
+    print(visited)
+    print('x' * 111)
 
 
 '''
