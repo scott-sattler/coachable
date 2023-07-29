@@ -1,102 +1,36 @@
 from __future__ import annotations
 
-# nearly impossible to not be labeled a "cheater"... bro...
-
-''' TODO
-
-(Bonus) Stretch Goal (10%):
-
-Now that we have an inventory system. Libararies typically don't have multiple books in store unless a book is high in 
-demand.
-
-Your goal is to create a sub system such that if a book is high in demand say: ~50% of checkout attempts for the last 10 
-checkouts, we should increase the inventory for that book by 1.
-
-E.g. If the last 5 of the 10 attempts from the call `check_out_book()` was for George Orwell's 1984, then we should 
-increase the inventory for 1984's copies/inventory by 1.
-
-
-While we have tests for this, we do not and will not have starter code for this. It's meant to be more vague, and how 
-easy this is task will be is dependent on how well the structure of the code was constructed for the previous 
-requirements, i.e. if OOD principles were utilized. Show us what you got!
-'''
-
-'''
-notes:
--Borrowers should not be able to return books if the library doesn't own them.
--Borrowers cannot have more than 3 books that have been checkout by them, 
- and we should also know what books they have checked out.
-
--(UPDATE 1 BELOW) Books that are added to the library can be assumed to be unique.
--When books are already checked out, they cannot be taken and/or checkout again.
-
-
--(UPDATE 1) The library should now support multiple copies of the same book.
-'''
-
-'''
-NOTE:
-this system will not track individual borrower damage to books that is not caught at the time of return.
-
-proposals:
-Book.unique_id: books should be stamped with a (ms accurate) timestamp upon manual entry into database
-Borrower.unique_id should be assigned a upon account creation
-'''
-
-'''
-Your goal is to create a sub system such that if a book is high in demand say: ~50% of checkout attempts for the last 10 
-checkouts, we should increase the inventory for that book by 1.
-
-E.g. If the last 5 of the 10 attempts from the call `check_out_book()` was for George Orwell's 1984, then we should 
-increase the inventory for 1984's copies/inventory by 1.
-'''
-
-
-# individual book objects
-# vs book object representing... unique ISBN number
 
 class Book:
+
     def __init__(self, title: str, author: str, isbn: int):
         self.title = title
         self.author = author
         self.isbn = isbn
-        self.checked_out_by: Borrower = None
+        self.checked_out_by: None | Borrower = None
 
-    def check_out(self, borrower: Borrower) -> bool:
-        ''' returns bool indicating successful operation '''
-        if self.checked_out_by:
-            return False
-        self.checked_out_by = borrower
-        return True
+    def check_out(self, borrower: Borrower) -> None | Borrower:
+        if not self.checked_out_by:
+            self.checked_out_by = borrower
+            return self.checked_out_by
 
-    def check_in(self, borrower: Borrower) -> bool:
-        ''' returns bool indicating successful operation '''
+    def check_in(self, borrower: Borrower) -> None:
         if self.checked_out_by:
             self.checked_out_by = None
-            return True
-        return False
-
-    # def checked_out_by(self) -> list[str]:
-    #     self._borrowers.sort()
-    #     return self._borrowers
-
-
-class Inventory:
-    def __init__(self, foo):
-        self.foo = foo
 
 
 class Author:
+
     def __init__(self, name: str):
         self.name = name
         self.books = set()
 
     def get_books(self) -> list[str]:
-        self.books.sort()
-        return self.books
+        return sorted(list(self.books))
 
 
 class Borrower:
+
     def __init__(self, name, email):
         # todo implement better unique ID (eg DL number, phone number)
         self.name = name
@@ -104,100 +38,159 @@ class Borrower:
         self.books_checked_out = []
 
 
-class Library:
+class Log:
+
     def __init__(self):
-        self.books = {}  # book_name: Book
-        self.borrowers = {}  # borrower_email: Borrower
-        self.authors = {}  # author_name: Author
+        self.demand_threshold: float = .5  # exclusive
+        self.book_count: dict[str, int] = dict()
+        self.book_list: list[str] = list()
+
+    def update_log(self, book_title: str) -> None:
+        if book_title in self.book_count:
+            self.book_count[book_title] += 1
+        else:
+            self.book_count[book_title] = 1
+
+        self.book_list.append(book_title)
+        removed_book = self.book_list.pop(0)
+
+        self.book_count[removed_book] -= 1
+
+    def check_high_demand(self) -> bool | str:
+        if len(self.book_list) < 1:
+            return False
+
+        for k, v in self.book_count.items():
+            if (v / len(self.book_list)) > self.demand_threshold:
+                return k
+
+        return False
+
+
+class Library:
+
+    def __init__(self):
+        self.checkout_limit = 2
+
+        self.books: dict[str, list[Book]] = dict()  # book_title: Book
+        self.borrowers: dict[str, Borrower] = dict()  # borrower_email: Borrower
+        self.authors: dict[str, Author] = dict()  # author_name: Author
+
+        self.log: Log = Log()
         # todo search by author
 
-        # self.borrowers = {}  # borrower_name: checked_out books_name(s)
-
     def add_book(self, title, author_name, isbn):
-        ''' TODO returns bool indicating successful operation '''
-        # Find or register the author
-        # Register the book to the library
+        # find/register the author
+        # register book to library
         author = self.find_or_create_author(author_name)
         author.books.add(title)
-        added_book = Book(title, author, isbn)
+        added_book = Book(title, author_name, isbn)
 
-        self.books[title] = added_book  # todo update
+        if title in self.books:
+            self.books[title].append(added_book)
+        else:
+            self.books[title] = [added_book]
 
+    # warning: assumes an absence of shenanigans (bad assumption)
     def add_borrower(self, name, email) -> bool:
-        ''' returns bool indicating successful operation '''
-        # Register the borrower to the library
-        # assumes no shenanigans (bad assumption)
-
-        # pseudo_unique_id = name + email
-        # if pseudo_unique_id in self.borrowers:
-        #     return False
-
         if email in self.borrowers:
             return False  # id already in use
 
+        # register the borrower to the library
         self.borrowers[email] = Borrower(name, email)
         return True
 
     def find_or_create_author(self, author_name) -> Author:
-        # If the author is registered with the library, return the author info
-        # Else, register the author with the library, then return the author.
+        # if author is registered with the library, return author info
+        # else, register the author with the library, then return the author
         if author_name not in self.authors:
             self.authors[author_name] = Author(author_name)
 
         return self.authors[author_name]
 
     def find_book(self, book_title) -> None | Book:
-        # If the book belongs to the library, return the book object
-        # Else, return nothing.
+        Warning('self.books data structure deprecated this method')
+        # # erroneous specifications
+        # # implementation exceeds specifications
+
+        # # if book belongs to library
+        # # return book object; else return nothing
         if book_title in self.books:
-            return self.books[book_title]
-        return None
+            if len(self.books[book_title]) > 0:  # consider removal
+                return self.books[book_title].pop()
+
+        raise NotImplementedError
+
+    def get_book_copy(self, book_title) -> tuple[str, str, int]:
+        if len(self.books[book_title]) > 1:
+            book = self.books[book_title][0]
+            return book.title, book.author, book.isbn
+
+        for borrower in self.borrowers.values():
+            for book in borrower.books_checked_out:
+                if book.name == book_title:
+                    return book.title, book.author, book.isbn
 
     def find_borrower(self, borrower_email) -> None | Borrower:
-        # If the borrower is registered with the library, return the borrower info
-        # Else, return nothing.
+        # if borrower is registered with the library
+        # return borrower info; else, return nothing
         if borrower_email in self.borrowers:
             return self.borrowers[borrower_email]
-        return None
 
     def in_stock(self, book_title) -> bool:
-        # todo update multiple copies
+        # if book is not checked out
         if book_title in self.books:
-            return True
+            # if book is in library
+            if len(self.books[book_title]) > 0:
+                return True
         return False
 
     def check_out_book(self, book_title, borrower_email) -> None | Book:
-        borrower = self.borrowers[borrower_email]
-        if len(borrower.books_checked_out) > 2:
+        # unregistered borrower
+        if borrower_email not in self.borrowers:
             return None
 
-        # todo review this todo     todo update multiple copies
-        if self.in_stock(book_title):
-            # todo review this todo decrement available books
-            book = self.books[book_title]
-            borrower.books_checked_out.append(book)
+        # # cannot instantly order new books (OOO compensation)
+        # self.log.update_log(book_title)
+        # check = self.log.check_high_demand()
+        # if check:
+        #     book_info = self.find_book(book_title)
+        #     self.add_book(book_info)
+        #     if len(self.books[book_title]) == 1:  # OOO
+        #         return None
 
-            if book.check_out(borrower):
-                return book
-            else:
-                return None
+        # borrower exceeded checkout_limit
+        borrower = self.borrowers[borrower_email]
+        if len(borrower.books_checked_out) > self.checkout_limit:
+            return None
+
+        # stock check
+        if self.in_stock(book_title):
+            book = self.books[book_title].pop()
+            # update book.checked_out_by
+            book.check_out(borrower)
+            # update borrower books_checked_out
+            borrower.books_checked_out.append(book)
+            return book
         else:
             return None
 
-    def check_in_book(self, book):
-        ''' returns bool indicating successful operation '''
-        # If the book belongs to the library,
-        # and the borrower of the book is registered to the library,
-        # add it back in, and return True
-        # Else, return False
-        # need unique id
-        if book in self.books:
-            return self.books[book].check_in(book.email)
+    def check_in_book(self, book) -> bool:
+        borrower_email = book.checked_out_by.email
+
+        # if book belongs to library
+        if book.title in self.books:
+            # if borrower is registered
+            if borrower_email in self.borrowers:
+                # check-in book to library
+                book.check_in(borrower_email)
+                self.books[book.title].append(book)
+                return True
         return False
 
 
 
-import unittest
+import unittest  # noqa
 # from library import Book, Library
 
 
