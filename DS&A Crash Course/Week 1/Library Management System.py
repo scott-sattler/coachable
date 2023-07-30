@@ -59,7 +59,7 @@ class Log:
 
             self.book_count[removed_book] -= 1
 
-    def find_high_demand(self) -> None | tuple[str, str, str]:
+    def find_high_demand(self) -> None | str:
         if len(self.book_list) < self.lookback_size - 1:
             return None
 
@@ -109,7 +109,6 @@ class Library:
         return self.authors[author_name]
 
     def find_book(self, book_title) -> None | Book:
-        # Warning('self.books data structure deprecated this method')
         # # erroneous specifications
         # # implementation exceeds specifications
 
@@ -182,7 +181,6 @@ class Library:
                 self.books[book.title].append(book)
                 return True
         return False
-
 
 
 
