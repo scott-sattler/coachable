@@ -71,7 +71,7 @@ class Log:
 class Library:
 
     def __init__(self):
-        self.checkout_limit = 2
+        self.checkout_limit = 3
 
         self.books: dict[str, list[Book]] = dict()  # book_title: [Book,]
         self.borrowers: dict[str, Borrower] = dict()  # borrower_email: Borrower
@@ -101,19 +101,19 @@ class Library:
         return True
 
     def find_or_create_author(self, author_name) -> Author:
-        # if author is registered with the library, return author info
-        # else, register the author with the library, then return the author
+        # if author is registered with the library, return the author
+        # else, register the author with the library, return the author
         if author_name not in self.authors:
             self.authors[author_name] = Author(author_name)
 
         return self.authors[author_name]
 
     def find_book(self, book_title) -> None | Book:
-        # # erroneous specifications
-        # # implementation exceeds specifications
+        # erroneous specifications
+        # implementation exceeds specifications
 
-        # # if book belongs to library
-        # # return book object; else return nothing
+        # if book belongs to library
+        # return book object; else return nothing
         if book_title in self.books:
             if len(self.books[book_title]) > 0:  # consider removal
                 return self.books[book_title].pop()
@@ -149,7 +149,7 @@ class Library:
 
         # borrower exceeded checkout_limit
         borrower = self.borrowers[borrower_email]
-        if len(borrower.books_checked_out) > self.checkout_limit:
+        if len(borrower.books_checked_out) >= self.checkout_limit:
             return None
 
         # stretch goal
@@ -166,10 +166,7 @@ class Library:
             book.check_out(borrower)
             # update borrower books_checked_out
             borrower.books_checked_out.append(book)
-
             return book
-        else:
-            return None
 
     def check_in_book(self, book) -> bool:
         # if (book belongs to library) and (was checked out)
