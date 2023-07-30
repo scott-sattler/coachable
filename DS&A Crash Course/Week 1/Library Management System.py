@@ -3,7 +3,7 @@ from __future__ import annotations
 
 class Book:
 
-    def __init__(self, title: str, author: str, isbn: int):
+    def __init__(self, title: str, author: str, isbn: str):
         self.title = title
         self.author = author
         self.isbn = isbn
@@ -42,8 +42,10 @@ class Log:
 
     def __init__(self):
         self.demand_threshold: float = .5  # exclusive
-        self.book_count: dict[str, int] = dict()
-        self.book_list: list[str] = list()
+        self.lookback_size = 10  # inclusive
+
+        self.book_count: dict[str, int] = dict()  # {title: count}
+        self.book_list: list[str] = list()  # [title, title, title..]
 
     def update_log(self, book_title: str) -> None:
         if book_title in self.book_count:
@@ -52,19 +54,18 @@ class Log:
             self.book_count[book_title] = 1
 
         self.book_list.append(book_title)
-        removed_book = self.book_list.pop(0)
+        if len(self.book_list) > 10:
+            removed_book = self.book_list.pop(0)
 
-        self.book_count[removed_book] -= 1
+            self.book_count[removed_book] -= 1
 
-    def check_high_demand(self) -> bool | str:
-        if len(self.book_list) < 1:
-            return False
+    def find_high_demand(self) -> None | tuple[str, str, str]:
+        if len(self.book_list) < self.lookback_size - 1:
+            return None
 
         for k, v in self.book_count.items():
             if (v / len(self.book_list)) > self.demand_threshold:
                 return k
-
-        return False
 
 
 class Library:
@@ -72,12 +73,11 @@ class Library:
     def __init__(self):
         self.checkout_limit = 2
 
-        self.books: dict[str, list[Book]] = dict()  # book_title: Book
+        self.books: dict[str, list[Book]] = dict()  # book_title: [Book,]
         self.borrowers: dict[str, Borrower] = dict()  # borrower_email: Borrower
         self.authors: dict[str, Author] = dict()  # author_name: Author
 
         self.log: Log = Log()
-        # todo search by author
 
     def add_book(self, title, author_name, isbn):
         # find/register the author
@@ -109,7 +109,7 @@ class Library:
         return self.authors[author_name]
 
     def find_book(self, book_title) -> None | Book:
-        Warning('self.books data structure deprecated this method')
+        # Warning('self.books data structure deprecated this method')
         # # erroneous specifications
         # # implementation exceeds specifications
 
@@ -119,16 +119,15 @@ class Library:
             if len(self.books[book_title]) > 0:  # consider removal
                 return self.books[book_title].pop()
 
-        raise NotImplementedError
-
-    def get_book_copy(self, book_title) -> tuple[str, str, int]:
-        if len(self.books[book_title]) > 1:
+    def get_book_copy(self, book_title) -> tuple[str, str, str]:
+        # search library
+        if len(self.books[book_title]) > 0:
             book = self.books[book_title][0]
             return book.title, book.author, book.isbn
-
+        # search borrowers
         for borrower in self.borrowers.values():
             for book in borrower.books_checked_out:
-                if book.name == book_title:
+                if book.title == book_title:
                     return book.title, book.author, book.isbn
 
     def find_borrower(self, borrower_email) -> None | Borrower:
@@ -137,62 +136,60 @@ class Library:
         if borrower_email in self.borrowers:
             return self.borrowers[borrower_email]
 
-    def in_stock(self, book_title) -> bool:
-        # if book is not checked out
+    def in_stock(self, book_title) -> int:
+        # if book is in library
         if book_title in self.books:
-            # if book is in library
-            if len(self.books[book_title]) > 0:
-                return True
-        return False
+            # return count
+            return len(self.books[book_title])
+        return 0
 
     def check_out_book(self, book_title, borrower_email) -> None | Book:
         # unregistered borrower
         if borrower_email not in self.borrowers:
             return None
 
-        # # cannot instantly order new books (OOO compensation)
-        # self.log.update_log(book_title)
-        # check = self.log.check_high_demand()
-        # if check:
-        #     book_info = self.find_book(book_title)
-        #     self.add_book(book_info)
-        #     if len(self.books[book_title]) == 1:  # OOO
-        #         return None
-
         # borrower exceeded checkout_limit
         borrower = self.borrowers[borrower_email]
         if len(borrower.books_checked_out) > self.checkout_limit:
             return None
 
+        # stretch goal
+        self.log.update_log(book_title)
+        check = self.log.find_high_demand()
+        if check:
+            book_info = self.get_book_copy(check)
+            self.add_book(book_info[0], book_info[1], book_info[2])
+
         # stock check
-        if self.in_stock(book_title):
+        if self.in_stock(book_title) > 0:
             book = self.books[book_title].pop()
             # update book.checked_out_by
             book.check_out(borrower)
             # update borrower books_checked_out
             borrower.books_checked_out.append(book)
+
             return book
         else:
             return None
 
     def check_in_book(self, book) -> bool:
-        borrower_email = book.checked_out_by.email
-
-        # if book belongs to library
-        if book.title in self.books:
+        # if (book belongs to library) and (was checked out)
+        if book.title in self.books and book.checked_out_by:
             # if borrower is registered
-            if borrower_email in self.borrowers:
+            if book.checked_out_by.email in self.borrowers:
                 # check-in book to library
-                book.check_in(borrower_email)
+                book.check_in(book.checked_out_by.email)
                 self.books[book.title].append(book)
                 return True
         return False
 
 
 
-import unittest  # noqa
-# from library import Book, Library
 
+import unittest  # noqa
+
+
+# from library import Book, Library
 
 class TestLibrary(unittest.TestCase):
     def setUp(self):
@@ -291,7 +288,6 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(book2.checked_out_by.name, "Alice")
         self.assertEqual(book3.checked_out_by.name, "Alice")
         self.assertIsNone(book4)
-        # self.assertIsFalse(book4)
 
     def test_comprehensive(self):
         # Comprehensive
@@ -327,7 +323,7 @@ class TestLibrary(unittest.TestCase):
         book1 = self.library.check_out_book("1984", "alice@example.com")
         self.assertEqual(book1.checked_out_by.name, "Alice")
         book2 = self.library.check_out_book("1984", "bob@example.com")
-        self.assertEqual(book2.checked_out_by.name, "Bob")
+        self.assertIsNone(book2)
         book3 = self.library.check_out_book("1984", "bob@example.com")
         self.assertIsNone(book3)
         book4 = self.library.check_out_book("Animal Farm", "bob@example.com")
