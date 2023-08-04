@@ -18,7 +18,18 @@ Explanation: There are three ways to climb to the top.
 
 
 def question9(n: int) -> int:
-    pass
+    k = 0
+    return _question9(k, n)
+
+
+def _question9(k, n):
+    if k == n:
+        return 1
+
+    if k > n:
+        return 0
+
+    return _question9(k + 1, n) + _question9(k + 2, n)
 
 
 '''
@@ -45,7 +56,19 @@ Explanation: From the top-left corner, there are a total of 3 ways to reach the 
 
 
 def question10(m: int, n: int) -> int:
-    pass
+    i, j = 0, 0
+    return _question10(i, j, -(m - 1), -(n - 1))
+
+
+def _question10(i, j, m, n) -> int:
+    # here, (m, n) are indices
+    if (i, j) == (m, n):
+        return 1
+
+    if i < m or j < n:
+        return 0
+
+    return _question10(i - 1, j, m, n) + _question10(i, j - 1, m, n)
 
 
 # from stencil import *
