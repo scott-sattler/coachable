@@ -13,7 +13,7 @@ Hashmaps
             the more useful methods are: copy(), get(), items(), keys(), pop(), update(), and value()
 
     2. What is the benefit of using a hashmap over an array or linked list?
-        hashmaps have O(1) lookup time, versus O(n) array, and O(n) linked list
+        hashmaps have O(1) lookup time, versus O(n) array (Python list), and O(n) linked list
 
     3. What are the runtimes of the get/set functions in a hashmap? Best, average, and worst-case?
         Ω(1) best, Θ(1) average, O(n) worst collision
