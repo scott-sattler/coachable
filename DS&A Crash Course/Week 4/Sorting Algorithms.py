@@ -47,8 +47,6 @@ def _quicksort(arr, lo, hi, three_way, debug):
 
     pivot = partition(arr, lo, hi, three_way)
 
-    # if debug:  print(''.join(arr))  # noqa
-
     _quicksort(arr, lo, pivot - 1, debug, three_way)
     _quicksort(arr, pivot + 1, hi, debug, three_way)
 
@@ -74,20 +72,56 @@ def partition(arr, lo, hi, three_way) -> int:
     return swap
 
 
+def mergesort_td(collection: list, debug=False) -> str:
+    ''' uses ascii minval of 0 '''  # noqa
+    cr = collection
+    if debug: print(''.join(cr))  # noqa
+    return ''.join(_mergesort_td(cr, debug))
+
+
+def _mergesort_td(arr, debug):
+    if len(arr) < 2:
+        return arr
+
+    mid_p = len(arr) // 2
+
+    left = _mergesort_td(arr[:mid_p], debug)
+    right = _mergesort_td(arr[mid_p:], debug)
+
+    merged = list()
+    while left or right:
+        left_el = chr(0)
+        if len(left) > 0:
+            left_el = left[-1]
+
+        right_el = chr(0)
+        if len(right) > 0:
+            right_el = right[-1]
+
+        if left_el > right_el:
+            merged.append(left_el)
+            left.pop()
+        else:
+            merged.append(right_el)
+            right.pop()
+
+    if debug:  print(''.join(merged[::-1]))  # noqa
+
+    return merged[::-1]
+
+
 def mergesort_bu():
-    pass
-
-
-def mergesort_td():
     pass
 
 
 # assert insertion_sort(cr_list[:]) == 'AABCCCEHKLOORS'
 # assert selection_sort(cr_list[:]) == 'AABCCCEHKLOORS'
 # assert quicksort(cr_list[:]) == 'AABCCCEHKLOORS'
-assert quicksort(cr_list[:], True) == 'AABCCCEHKLOORS'
+# assert quicksort(cr_list[:], True) == 'AABCCCEHKLOORS'
+# assert mergesort_td(cr_list[:], True) == 'AABCCCEHKLOORS'
 
 # insertion_sort(cr_list[:], True)
 # selection_sort(cr_list[:], True)
 # quicksort(cr_list[:], three_way=False, debug=True)
-quicksort(cr_list[:], three_way=True, debug=True)
+# quicksort(cr_list[:], three_way=True, debug=True)
+mergesort_td(cr_list[:], True)
