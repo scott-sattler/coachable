@@ -73,7 +73,7 @@ def partition(arr, lo, hi, three_way) -> int:
 
 
 def mergesort_td(collection: list, debug=False) -> str:
-    ''' uses ascii minval of 0 '''  # noqa
+    ''' uses sys.maxunicode of 0x10FFFF '''  # noqa
     cr = collection
     if debug: print(''.join(cr))  # noqa
     return ''.join(_mergesort_td(cr, debug))
@@ -88,26 +88,27 @@ def _mergesort_td(arr, debug):
     left = _mergesort_td(arr[:mid_p], debug)
     right = _mergesort_td(arr[mid_p:], debug)
 
+    i, j = 0, 0
     merged = list()
-    while left or right:
-        left_el = chr(0)
-        if len(left) > 0:
-            left_el = left[-1]
+    while i < len(left) or j < len(right):
+        left_el = chr(0x10FFFF)
+        if i < len(left):
+            left_el = left[i]
 
-        right_el = chr(0)
-        if len(right) > 0:
-            right_el = right[-1]
+        right_el = chr(0x10FFFF)
+        if j < len(right):
+            right_el = right[j]
 
-        if left_el > right_el:
+        if left_el < right_el:
             merged.append(left_el)
-            left.pop()
+            i += 1
         else:
             merged.append(right_el)
-            right.pop()
+            j += 1
 
-    if debug:  print(''.join(merged[::-1]))  # noqa
+    if debug:  print(''.join(merged))  # noqa
 
-    return merged[::-1]
+    return merged
 
 
 def mergesort_bu():
