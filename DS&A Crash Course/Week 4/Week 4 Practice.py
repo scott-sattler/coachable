@@ -57,7 +57,8 @@ Sorting
         whereas some objects require orderable assignment, e.g.: picture(cat) < picture(dog)
 
     4. Describe how selection sort works and its runtime and space complexity.
-        searches for the next item in a sequence, swaps with out-of-order element
+        subarrays: sorted : unsorted
+        looking at next leftmost, find next (smallest), swap with next leftmost
         O(n^2) time complexity; O(n) input, O(1) auxiliary space
 
         a. Is this a stable sorting algorithm? Explain why or why not.
@@ -65,7 +66,8 @@ Sorting
             no when swapping. this sawp operation is inherently unstable
 
     5. Describe how insertion sort works and its runtime and space complexity.
-        starting leftmost, with each next element, look left until element is less than or equal, then insert after
+        subarrays: sorted : unsorted
+        looking at next leftmost, bubble down sorted subarray until inserted into correct position
         O(n^2) time complexity
         O(n) input, O(1) auxiliary space complexity
 
@@ -138,17 +140,106 @@ Trace Sorting Algorithms
 Trace out all the intermediate steps on the string "COACHABLEROCKS" for each of the following sorting algorithms. You
 don't need to include every swap, but you should include the most important intermediate steps.
 
-    1. Insertion Sort
+    1. Insertion Sort (swap)
+        COACHABLEROCKS
+        CAOCHABLEROCKS
+        ACOCHABLEROCKS
+        ACCOHABLEROCKS
+        ACCHOABLEROCKS
+        ACCHAOBLEROCKS
+        ACCAHOBLEROCKS
+        ACACHOBLEROCKS
+        AACCHOBLEROCKS
+        AACCHBOLEROCKS
+        AACCBHOLEROCKS
+        AACBCHOLEROCKS
+        AABCCHOLEROCKS
+        AABCCHLOEROCKS
+        AABCCHLEOROCKS
+        AABCCHELOROCKS
+        AABCCEHLOROCKS
+        AABCCEHLOORCKS
+        AABCCEHLOOCRKS
+        AABCCEHLOCORKS
+        AABCCEHLCOORKS
+        AABCCEHCLOORKS
+        AABCCECHLOORKS
+        AABCCCEHLOORKS
+        AABCCCEHLOOKRS
+        AABCCCEHLOKORS
+        AABCCCEHLKOORS
+        AABCCCEHKLOORS
 
     2. Selection Sort
+        COACHABLEROCKS
+        AOCCHABLEROCKS
+        AACCHOBLEROCKS
+        AABCHOCLEROCKS
+        AABCCOHLEROCKS
+        AABCCCHLEROOKS
+        AABCCCELHROOKS
+        AABCCCEHLROOKS
+        AABCCCEHKROOLS
+        AABCCCEHKLOORS
 
     3. Quicksort (No Shuffle)
+        leftmost pivot
+        COACHABLEROCKS
+        AABCHOCLEROCKS
+        AABCHOCLEROCKS
+        AABCCCEHOROLKS
+        AABCCCEHOROLKS
+        AABCCCEHKLOROS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
 
     4. Quicksort 3-way (No Shuffle)
+        todo: verify
+        COACHABLEROCKS
+        AABCCCHLEROOKS
+        AABCCCHLEROOKS
+        AABCCCHLEROOKS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
+        AABCCCEHKLOORS
 
     5. Mergesort Bottom Up
+        COACHABLEROCKS
+        CO
+        AC
+        AH
+        BL
+        ER
+        CO
+        KS
+        ACCO
+        ABHL
+        CEOR
+        KS
+        AABCCHLO
+        CEKORS
+        AABCCCEHKLOORS
 
     6. Mergesort Top Down
+        COACHABLEROCKS
+        AO
+        ACO
+        CH
+        AB
+        ABCH
+        AABCCHO
+        ER
+        ELR
+        CO
+        KS
+        CKOS
+        CEKLORS
+        AABCCCEHKLOORS
+
 
 Match Sorting Algorithms
 
@@ -168,9 +259,24 @@ Match Sorting Algorithms
     Intermediate Stages To Identify
 
     a) [0, 2, 3, 4, 5, 21, 17, 10, 16, 7, 24, 8, 27, 6, 18, 15]
+        selection sort: having selected 5 last, elements < 5 are properly sorted while elements > 5 are unsorted. this
+                        is not insertion sort as elements in the sorted subarray have been swapped with elements outside
+                        the sorted subarray
+
     b) [2, 0, 4, 6, 5, 3, 7, 15, 27, 21, 17, 10, 16, 8, 24, 18]
+        quick sort: with pivot 7, all left elements < pivot < all right elements
+        quick sort 3-way: depending on the implementation 3-way exhibits identical behavior when no elements are equal
+
     c) [0, 2, 3, 7, 8, 10, 15, 16, 17, 21, 24, 27, 4, 6, 18, 5]
+        merge sort (top down): having just finished merging [4] [6] (or a larger subarray), top down merge sort would
+                               show left subarrays properly sorted, while the right subarrays would be some degree of
+                               sorted, close to their initial positions
+        insertion sort: having finished inserting (bubbling down) the 0 element, elements to the left are properly
+                        sorted while elements to the right are in their initial positions.
+
     d) [2, 3, 8, 15, 10, 17, 21, 27, 0, 7, 16, 24, 4, 5, 6, 18]
+        quicksort
+
 
     Example Answer
 
