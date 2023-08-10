@@ -1,9 +1,8 @@
-# import quicksort
 cr_str = "COACHABLEROCKS"
 cr_list = list(cr_str)
 
 
-def insertion_sort(collection: list, debug=False):
+def insertion_sort(collection: list, debug=False) -> str:
     ''' swap implementation '''  # noqa
     cr = collection
     if debug: print(''.join(cr))  # noqa
@@ -17,7 +16,7 @@ def insertion_sort(collection: list, debug=False):
     return ''.join(cr)
 
 
-def selection_sort(collection: list, debug=False):
+def selection_sort(collection: list, debug=False) -> str:
     ''' swap implementation '''  # noqa
     cr = collection
     if debug: print(''.join(cr))  # noqa
@@ -33,7 +32,7 @@ def selection_sort(collection: list, debug=False):
     return ''.join(cr)
 
 
-def quicksort(collection: list, debug=False):
+def quicksort(collection: list, debug=False) -> str:
     ''' leftmost pivot '''  # noqa
     cr = collection
     if debug: print(''.join(cr))  # noqa
@@ -66,6 +65,14 @@ def partition(arr, lo, hi) -> int:
     arr[lo], arr[swap] = arr[swap], arr[lo]
 
     return swap
+
+
+def mergesort_bu():
+    pass
+
+
+def mergesort_td():
+    pass
 
 
 # assert insertion_sort(cr_list[:]) == 'AABCCCEHKLOORS'
