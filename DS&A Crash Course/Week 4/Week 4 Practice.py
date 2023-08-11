@@ -294,6 +294,7 @@ Substring Matching Algorithms
     Knuth-Morris-Pratt algorithm to find all occurrences of P in S. Show the intermediate values of the failure function
     and the table used to match the characters in P against S. Indicate the starting index of each occurrence of P in S,
     and explain how the algorithm identifies each occurrence.
+        todo
 
     Rabin Karp
 
@@ -302,6 +303,7 @@ Substring Matching Algorithms
     Assume a prime base number of 101. Show the intermediate hash values for each P window in S, and explain how the
     algorithm identifies each occurrence. Note any false positives the algorithm might produce, and explain why they
     occur.
+        todo
 
     Boyer-Moore
 
@@ -310,6 +312,7 @@ Substring Matching Algorithms
     rules, and indicate the starting index of each occurrence of P in S. Explain how the algorithm identifies each
     occurrence and how it uses the 'bad character' and 'good suffix' rules to skip unnecessary comparisons. Note any
     edge or corner cases the algorithm needs to handle, and explain how it handles them.
+        todo
 
 
 '''
