@@ -1,7 +1,3 @@
-cr_str = 'COACHABLEROCKS'
-cr_list = list(cr_str)
-cr_sorted = 'AABCCCEHKLOORS'
-
 
 def insertion_sort(collection: list, debug=False) -> str:
     ''' swap implementation '''  # noqa
@@ -149,10 +145,12 @@ def mergesort_bu(collection: list, debug=False) -> str:
         cr.append(merged)
         if debug: print(''.join(merged))  # noqa
 
-    return ''.join(cr[0])
+    return ''.join(cr[0]) if len(collection) > 0 else ''
 
 
 if __name__ == "__main__":
+    cr_str = 'COACHABLEROCKS'
+    cr_sorted = 'AABCCCEHKLOORS'
 
     functions = [
         insertion_sort,
@@ -163,13 +161,46 @@ if __name__ == "__main__":
         mergesort_bu,
     ]
 
-    pad = 4 + max([len(str(fn).split()[1]) for fn in functions])
+    test_cases = {
+        cr_str: cr_sorted,
+
+        'COACHABLEROCKSS': 'AABCCCEHKLOORSS',
+        'COACHABLEROCKSSS': 'AABCCCEHKLOORSSS',
+
+        '': '',
+        'a': 'a',
+        'b': 'b',
+        'z': 'z',
+        'ab': 'ab',
+        'yz': 'yz',
+        'za': 'az',
+        'az': 'az',
+
+        'abc': 'abc',
+        'bac': 'abc',
+        'cab': 'abc',
+        'bca': 'abc',
+        'cba': 'abc',
+
+
+
+    }
+
+    # pad = max([len(str(fn).split()[1]) for fn in functions])  # fn len pad
+    pad = max([len(fn) for fn in test_cases])
+    failed = 0
     for function in functions:
-        try:
-            assert function(cr_list[:]) == cr_sorted
-            print(f'{str(function).split()[1]:{pad}s} PASSED')
-        except AssertionError:
-            print(f'{str(function).split()[1]:{pad}s} FAILED')
+        print(f'\nTESTING: {str(function).split()[1].upper()}')
+        for inp, out in test_cases.items():
+            try:
+                assert function(list(inp)) == out
+                print(f'{inp:>{pad}}   PASSED   {function(list(inp))}')
+            except AssertionError:
+                print(f'{inp:>{pad}}   FAILED   {function(list(inp))}')
+                failed += 1
+
+    tc, p = len(test_cases), (len(test_cases) - failed)
+    print(f'\nPASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}')
 
     # insertion_sort(cr_list[:], True)
     # selection_sort(cr_list[:], True)
