@@ -1,6 +1,6 @@
 cr_str = 'COACHABLEROCKS'
 cr_list = list(cr_str)
-sorted = 'AABCCCEHKLOORS'
+cr_sorted = 'AABCCCEHKLOORS'
 
 
 def insertion_sort(collection: list, debug=False) -> str:
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     pad = 4 + max([len(str(fn).split()[1]) for fn in functions])
     for function in functions:
         try:
-            assert function(cr_list[:]) == sorted
+            assert function(cr_list[:]) == cr_sorted
             print(f'{str(function).split()[1]:{pad}s} PASSED')
         except AssertionError:
             print(f'{str(function).split()[1]:{pad}s} FAILED')
