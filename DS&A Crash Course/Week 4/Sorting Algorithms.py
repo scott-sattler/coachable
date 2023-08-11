@@ -168,8 +168,11 @@ if __name__ == "__main__":
 
     pad = 4 + max([len(str(fn).split()[1]) for fn in functions])
     for function in functions:
-        assert function(cr_list[:]) == sorted
-        print(f'{str(function).split()[1]:{pad}s} PASSED')
+        try:
+            assert function(cr_list[:]) == sorted
+            print(f'{str(function).split()[1]:{pad}s} PASSED')
+        except AssertionError:
+            print(f'{str(function).split()[1]:{pad}s} FAILED')
 
     # insertion_sort(cr_list[:], True)
     # selection_sort(cr_list[:], True)
