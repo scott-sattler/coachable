@@ -1,5 +1,6 @@
-cr_str = "COACHABLEROCKS"
+cr_str = 'COACHABLEROCKS'
 cr_list = list(cr_str)
+sorted = 'AABCCCEHKLOORS'
 
 
 def insertion_sort(collection: list, debug=False) -> str:
@@ -70,6 +71,10 @@ def partition(arr, lo, hi, three_way) -> int:
     arr[lo], arr[swap] = arr[swap], arr[lo]
 
     return swap
+
+
+def quicksort_3w(collection: list, debug=False) -> str:
+    return quicksort(collection, three_way=True, debug=debug)
 
 
 def mergesort_td(collection: list, debug=False) -> str:
@@ -150,16 +155,21 @@ def mergesort_bu(collection: list, debug=False) -> str:
     return ''.join(cr[0])
 
 
-assert insertion_sort(cr_list[:]) == 'AABCCCEHKLOORS'
-assert selection_sort(cr_list[:]) == 'AABCCCEHKLOORS'
-assert quicksort(cr_list[:], three_way=False) == 'AABCCCEHKLOORS'
-assert quicksort(cr_list[:], three_way=True) == 'AABCCCEHKLOORS'
-assert mergesort_td(cr_list[:]) == 'AABCCCEHKLOORS'
-assert mergesort_bu(cr_list[:]) == 'AABCCCEHKLOORS'
+functions = [
+    insertion_sort,
+    selection_sort,
+    quicksort,
+    quicksort_3w,
+    mergesort_td,
+    mergesort_bu,
+]
+for function in functions:
+    assert function(cr_list[:]) == sorted
+
 
 # insertion_sort(cr_list[:], True)
 # selection_sort(cr_list[:], True)
-# quicksort(cr_list[:], three_way=False, debug=True)
-# quicksort(cr_list[:], three_way=True, debug=True)
+# quicksort(cr_list[:], debug=True)
+# quicksort_3w(cr_list[:], True)
 # mergesort_td(cr_list[:], True)
 # mergesort_bu(cr_list[:], True)
