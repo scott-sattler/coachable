@@ -155,21 +155,25 @@ def mergesort_bu(collection: list, debug=False) -> str:
     return ''.join(cr[0])
 
 
-functions = [
-    insertion_sort,
-    selection_sort,
-    quicksort,
-    quicksort_3w,
-    mergesort_td,
-    mergesort_bu,
-]
-for function in functions:
-    assert function(cr_list[:]) == sorted
+if __name__ == "__main__":
 
+    functions = [
+        insertion_sort,
+        selection_sort,
+        quicksort,
+        quicksort_3w,
+        mergesort_td,
+        mergesort_bu,
+    ]
 
-# insertion_sort(cr_list[:], True)
-# selection_sort(cr_list[:], True)
-# quicksort(cr_list[:], debug=True)
-# quicksort_3w(cr_list[:], True)
-# mergesort_td(cr_list[:], True)
-# mergesort_bu(cr_list[:], True)
+    pad = 4 + max([len(str(fn).split()[1]) for fn in functions])
+    for function in functions:
+        assert function(cr_list[:]) == sorted
+        print(f'{str(function).split()[1]:{pad}s} PASSED')
+
+    # insertion_sort(cr_list[:], True)
+    # selection_sort(cr_list[:], True)
+    # quicksort(cr_list[:], debug=True)
+    # quicksort_3w(cr_list[:], True)
+    # mergesort_td(cr_list[:], True)
+    # mergesort_bu(cr_list[:], True)
