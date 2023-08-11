@@ -141,13 +141,16 @@ def mergesort_bu(collection: list, debug=False) -> str:
             else:
                 merged.append(right.popleft())
 
-        if not left:
-            while right:
-                merged.append(right.popleft())
+        while right:
+            merged.append(right.popleft())
+        while left:
+            merged.append(left.popleft())
 
-        if not right:
-            while left:
-                merged.append(left.popleft())
+        remain = left
+        if right:
+            remain = right
+        while remain:
+            merged.append(remain.popleft())
 
         cr.append(merged)
         if debug: print(''.join(merged))  # noqa
