@@ -111,8 +111,43 @@ def _mergesort_td(arr, debug):
     return merged
 
 
-def mergesort_bu():
-    pass
+def mergesort_bu(collection: list, debug=False) -> str:
+    from collections import deque
+    cr = deque(collection)
+    if debug: print(''.join(cr))  # noqa
+
+    # convert input to deque of deques
+    # i.e. an array of unmerged subarrays
+    for i in range(len(cr)):
+        cr[i] = deque(cr[i])
+
+    # while subarrays are not fully merged
+    while len(cr) > 1:
+        # get left and right, merge, append merged
+        left: deque = cr.popleft()
+        right: deque = deque()
+        if not len(left) < len(cr[0]):  # can remove (causes instability; changes algo)
+            right = cr.popleft()        # replace previous binding with this binding
+
+        merged = deque()
+        while left and right:
+            if left[0] < right[0]:
+                merged.append(left.popleft())
+            else:
+                merged.append(right.popleft())
+
+        if not left:
+            while right:
+                merged.append(right.popleft())
+
+        if not right:
+            while left:
+                merged.append(left.popleft())
+
+        cr.append(merged)
+        if debug: print(''.join(merged))  # noqa
+
+    return ''.join(cr[0])
 
 
 # assert insertion_sort(cr_list[:]) == 'AABCCCEHKLOORS'
@@ -120,9 +155,11 @@ def mergesort_bu():
 # assert quicksort(cr_list[:]) == 'AABCCCEHKLOORS'
 # assert quicksort(cr_list[:], True) == 'AABCCCEHKLOORS'
 # assert mergesort_td(cr_list[:], True) == 'AABCCCEHKLOORS'
+assert mergesort_bu(cr_list[:], True) == 'AABCCCEHKLOORS'
 
 # insertion_sort(cr_list[:], True)
 # selection_sort(cr_list[:], True)
 # quicksort(cr_list[:], three_way=False, debug=True)
 # quicksort(cr_list[:], three_way=True, debug=True)
-mergesort_td(cr_list[:], True)
+# mergesort_td(cr_list[:], True)
+mergesort_bu(cr_list[:], True)
