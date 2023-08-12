@@ -161,39 +161,38 @@ if __name__ == "__main__":
         mergesort_bu,
     ]
 
-    test_cases = {
-        cr_str: cr_sorted,
+    test_cases = [
+        cr_str,
 
-        'COACHABLEROCKSS': 'AABCCCEHKLOORSS',
-        'COACHABLEROCKSSS': 'AABCCCEHKLOORSSS',
+        'COACHABLEROCKSS',
+        'COACHABLEROCKSSS',
 
-        '': '',
-        'a': 'a',
-        'b': 'b',
-        'z': 'z',
-        'ab': 'ab',
-        'yz': 'yz',
-        'za': 'az',
-        'az': 'az',
+        '',
+        'a',
+        'b',
+        'z',
+        'ab',
+        'yz',
+        'za',
+        'az',
 
-        'abc': 'abc',
-        'bac': 'abc',
-        'cab': 'abc',
-        'bca': 'abc',
-        'cba': 'abc',
+        'abc',
+        'bac',
+        'cab',
+        'bca',
+        'cba',
 
 
-
-    }
+    ]
 
     # pad = max([len(str(fn).split()[1]) for fn in functions])  # fn len pad
     pad = max([len(fn) for fn in test_cases])
     failed = 0
     for function in functions:
         print(f'\nTESTING: {str(function).split()[1].upper()}')
-        for inp, out in test_cases.items():
+        for inp in test_cases:
             try:
-                assert function(list(inp)) == out
+                assert function(list(inp)) == ''.join(sorted(inp))
                 print(f'{inp:>{pad}}   PASSED   {function(list(inp))}')
             except AssertionError:
                 print(f'{inp:>{pad}}   FAILED   {function(list(inp))}')
