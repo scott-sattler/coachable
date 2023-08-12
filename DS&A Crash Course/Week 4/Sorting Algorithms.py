@@ -198,8 +198,8 @@ if __name__ == "__main__":
                 print(f'{inp:>{pad}}   FAILED   {function(list(inp))}')
                 failed += 1
 
-    tc, p = len(test_cases), (len(test_cases) - failed)
-    print(f'\nPASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}')
+        tc, p = len(test_cases), (len(test_cases) - failed)
+        print(f'\nPASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}')
 
     # insertion_sort(cr_list[:], True)
     # selection_sort(cr_list[:], True)
