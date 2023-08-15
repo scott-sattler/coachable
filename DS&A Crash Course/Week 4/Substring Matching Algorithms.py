@@ -1,14 +1,65 @@
 
 
-def knuth_morris_pratt(pattern: str, text: str) -> list[int]:
+def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     return [0]
 
 
-def rabin_karp(pattern: str, text: str) -> list[int]:
-    return [0]
+# naive implementation O(n*m)
+# perfect hash fn required for O(n)
+def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+    if len(pattern) > len(text):
+        return []
+
+    matches = list()
+
+    # hash pattern
+    pattern_hash = 0
+    for char in pattern:
+        pattern_hash += ord(char)
+
+    # hash text
+    text_hash = 0
+    n = len(pattern)
+    for i in range(n):
+        text_hash += ord(text[i])
+
+    # compare first occurrence
+    if pattern == text[:len(pattern)]:
+        matches.append(0)
+
+    # iterate over text
+    i = len(pattern)
+    while i < len(text):
+        text_hash += ord(text[i])
+        text_hash -= ord(text[i - len(pattern)])
+
+        if pattern_hash == text_hash:
+            start = i - (len(pattern) - 1)
+            xstop = i + 1  # noqa naming
+            if pattern == text[start:xstop]:  # O(n*m)
+                matches.append(start)
+
+        i += 1
+
+    return matches
 
 
-def boyer_moore(pattern: str, text: str) -> list[int]:
+def _hash(inp: str, perfect=False) -> int:
+    ''' perfect hash '''  # noqa
+    ''' 2 digits per char (base 52) '''
+
+    if not perfect:
+        return sum([ord(i) for i in inp])
+
+    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa ascii_letters
+    lookup = {k: i for i, k in enumerate(letters)}  # noqa naming
+
+    for i in range(len(inp)):
+        print(10 * (10 ** i))
+
+    return 0
+
+def boyer_moore(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     return [0]
 
 
@@ -23,10 +74,16 @@ if __name__ == "__main__":
 
     ]
 
-
     test_cases = [
         # pattern, text, leftmost match index
         # basic naive tests
+        # todo: assumes lower a-z
+        ('abc', 'ab', []),
+        ('abc', 'a', []),
+        ('abc', '', []),
+        ('a', '', []),
+        ('z', '', []),
+
         ('abc', 'abc', [0]),
         ('abc', 'abcd', [0]),
         ('dabc', 'abc', []),
@@ -42,10 +99,15 @@ if __name__ == "__main__":
         # kmp specific tests
         ('abcabcg', 'aaabcabcabcxabcabcg', [12]),
 
+
     ]
 
-    test_fns = {name: obj for name, obj in globals().copy().items() if callable(obj)}
+    test_fns = {name: obj for name, obj in globals().copy().items() if callable(obj) and name[0] != '_'}
     summary = dict()
+
+    selector = functions[1].__name__  # specify fn here
+    test_fns = {selector: test_fns[selector]}
+
     for fn_name, each_fn in list(test_fns.items())[:]:  # specify fn here
         failed = 0
         print(f'\nTESTING: {fn_name.upper()}')
