@@ -4,9 +4,55 @@ def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows n
     return [0]
 
 
-# naive implementation O(n*m)
-# perfect hash fn required for O(n)
 def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+    if len(pattern) > len(text):
+        return []
+
+    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa ascii_letters
+    lookup = {k: i + 1 for i, k in enumerate(letters)}  # noqa naming
+
+    # hash pattern
+    pattern_hash = _hash(pattern, lookup)
+    # hash text
+    text_hash = _hash(text[:len(pattern)], lookup)
+
+    # compare first occurrence
+    matches = list()
+    if pattern_hash == text_hash:
+        matches.append(0)
+
+    # sliding window hash
+    i = len(pattern)
+    while i < len(text):
+        offset = 100 ** (len(pattern) - 1)
+        previous = i - len(pattern)
+        text_hash -= _hash(text[previous], lookup) * offset
+        text_hash = _hash(text[i], lookup) + (text_hash * 100)  # shift left 2 digits
+
+        if pattern_hash == text_hash:
+            matches.append(i - (len(pattern) - 1))
+
+        i += 1
+
+    return matches
+
+
+def _hash(inp: str, lookup: dict) -> int:
+    ''' perfect hash '''  # noqa
+    ''' 2 digits per char (base 52) '''
+    hash_value = 0
+    for i in range(len(inp)):
+        # inv_i preserves order: abc -> 102030
+        inv_i = (len(inp) - 1) - i
+        base = 10 * (100 ** inv_i)
+        hash_value += (lookup[inp[i]] * base)
+
+    return hash_value
+
+
+# naive implementation O(n*m)
+# perfect hash fn required for O(n + m)
+def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     if len(pattern) > len(text):
         return []
 
@@ -27,7 +73,7 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     if pattern == text[:len(pattern)]:
         matches.append(0)
 
-    # iterate over text
+    # sliding window hash
     i = len(pattern)
     while i < len(text):
         text_hash += ord(text[i])
@@ -43,21 +89,6 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
 
     return matches
 
-
-def _hash(inp: str, perfect=False) -> int:
-    ''' perfect hash '''  # noqa
-    ''' 2 digits per char (base 52) '''
-
-    if not perfect:
-        return sum([ord(i) for i in inp])
-
-    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa ascii_letters
-    lookup = {k: i for i, k in enumerate(letters)}  # noqa naming
-
-    for i in range(len(inp)):
-        print(10 * (10 ** i))
-
-    return 0
 
 def boyer_moore(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     return [0]
@@ -77,7 +108,6 @@ if __name__ == "__main__":
     test_cases = [
         # pattern, text, leftmost match index
         # basic naive tests
-        # todo: assumes lower a-z
         ('abc', 'ab', []),
         ('abc', 'a', []),
         ('abc', '', []),
