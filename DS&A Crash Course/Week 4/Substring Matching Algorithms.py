@@ -1,7 +1,53 @@
 
+def brute_force(pattern: str, text: str) -> list[int]:
+    matches = list()
+    p_i, s_i = 0, 0
+    while s_i < len(text):
+        # individual char match
+        if pattern[p_i] != text[s_i]:
+            s_i = (s_i - p_i) + 1  # backtrack (reset), increment
+            p_i = 0
+        # full pattern match
+        elif p_i == len(pattern) - 1:
+            matches.append((s_i - p_i))
+            s_i = (s_i - p_i) + 1  # backtrack (reset), increment
+            p_i = 0
+        # increment
+        else:
+            s_i += 1
+            p_i += 1
+
+    return matches
+
 
 def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    return [0]
+    if len(pattern) > len(text):
+        return []
+
+    matches = list()
+    fail_fun = _failure_function(pattern)
+
+    last = len(text) - len(pattern)
+    i, j = 0, 0  # text index; pattern index
+    # print('pattern text', pattern, text)
+    while i < len(text):
+        # print(f'{pattern} == {text}')
+        # print(f'{len(pattern[:j]) * " "}^{len(pattern[j + 1:]) * " "}    {len(text[:i]) * " "}^{len(text[i + 1:]) * " "}')  # noqa
+        # compare text to pattern
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+            # test match
+            if j == len(pattern):
+                matches.append(i - len(pattern))
+                j = max(fail_fun[max(0, j - 1)][1], 0)
+        # pattern mismatch -> failure function lookup
+        elif j == 0:
+            i += 1
+        else:
+            j = max(fail_fun[max(0, j - 1)][1], 0)
+
+    return matches
 
 
 def _failure_function(pat: str) -> list[list[str, int]]:
@@ -44,7 +90,7 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
         offset = 100 ** (len(pattern) - 1)
         previous = i - len(pattern)
         text_hash -= _hash(text[previous], lookup) * offset
-        text_hash = _hash(text[i], lookup) + (text_hash * 100)  # shift left 2 digits
+        text_hash = _hash(text[i], lookup) + (text_hash * 100)  # + shift left 2 digits
 
         if pattern_hash == text_hash:
             matches.append(i - (len(pattern) - 1))
@@ -116,15 +162,19 @@ if __name__ == "__main__":
         cr_str = 'COACHABLEROCKS'
         cr_sorted = 'AABCCCEHKLOORS'
 
-        functions = [
-            knuth_morris_pratt,
-            rabin_karp,
-            boyer_moore,
+        failure_function_tests = [
+            ('', []),
+            ('abc', [0, 0, 0]),
+            ('aba', [0, 0, 1]),
+            ('ab', [0, 0]),
+            ('ababab', [0, 0, 1, 2, 3, 4]),
+            ('abcabc', [0, 0, 0, 1, 2, 3]),
+            ('aabaababb', [0, 1, 0, 1, 2, 3, 4, 0, 0]),
 
-            _failure_function,
         ]
 
         test_cases = [
+            # todo: also test for correct time complexity
             # pattern, text, leftmost match index
             # basic naive tests
             ('abc', 'ab', []),
@@ -134,6 +184,7 @@ if __name__ == "__main__":
             ('z', '', []),
 
             ('abc', 'abc', [0]),
+            ('abc', 'zabc', [1]),
             ('abc', 'abcd', [0]),
             ('dabc', 'abc', []),
             ('abc', 'aabcc', [1]),
@@ -146,19 +197,29 @@ if __name__ == "__main__":
             ('aaa', 'baaaaaac', [1, 2, 3, 4]),
 
             # kmp specific tests
+            ('aabcaa', 'aabcabaabcaa', [6]),
+            ('aaabc', 'aaaaabcaaabc', [2, 7]),
+            ('aaabc', 'aaaaabcaaaabc', [2, 8]),
             ('abcabcg', 'aaabcabcabcxabcabcg', [12]),
+            ('a', 'a', [0]),
+            ('a', 'aaaaa', [0, 1, 2, 3, 4]),
+            ('aaaa', 'aaaaaaa', [0, 1, 2, 3]),
+
+            ('onions', 'onionionspl', [3]),
+
+            ('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
+
+
 
         ]
 
-        failure_function_tests = [
-            ('', []),
-            ('abc', [0, 0, 0]),
-            ('aba', [0, 0, 1]),
-            ('ab', [0, 0]),
-            ('ababab', [0, 0, 1, 2, 3, 4]),
-            ('abcabc', [0, 0, 0, 1, 2, 3]),
-            ('aabaababb', [0, 1, 0, 1, 2, 3, 4, 0, 0]),
+        functions = [
+            knuth_morris_pratt,
+            rabin_karp,
+            boyer_moore,
 
+            _failure_function,
+            brute_force,
         ]
 
         def __init__(self):
@@ -189,10 +250,10 @@ if __name__ == "__main__":
             test_fns = {name: obj for name, obj in globals().copy().items() if callable(obj) and name[0] != '_'}
             summary = dict()
 
-            selector = functions[1].__name__  # specify fn here
+            selector = functions[-1].__name__  # specify single fn here
             test_fns = {selector: test_fns[selector]}
 
-            for fn_name, each_fn in list(test_fns.items())[:]:  # specify fn here
+            for fn_name, each_fn in list(test_fns.items())[:]:  # specify fn slice here
                 failed = 0
                 print(f'\nTESTING: {fn_name.upper()}')
                 for each_test in test_cases[:]:  # specify test cases here
@@ -204,7 +265,6 @@ if __name__ == "__main__":
                     except AssertionError:
                         print(each_test, 'FAIL')
                         print(each_fn(pattern, text))
-                        # assert brute_force(each_test[0], each_test[1]) == each_test[2]  # for easy debugging
                         failed += 1
 
                 tc, p = len(test_cases), (len(test_cases) - failed)
@@ -218,5 +278,5 @@ if __name__ == "__main__":
 
 
     testing = Testing()
-    testing.run_failure_function_tests()
-    # testing.run_substring_matching_tests()
+    # testing.run_failure_function_tests()
+    testing.run_substring_matching_tests()
