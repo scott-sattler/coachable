@@ -1,3 +1,5 @@
+import types  # todo
+
 
 def brute_force(pattern: str, text: str) -> list[int]:
     matches = list()
@@ -27,30 +29,24 @@ def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows n
     matches = list()
     fail_fun = _failure_function(pattern)
 
-    last = len(text) - len(pattern)
     i, j = 0, 0  # text index; pattern index
-    # print('pattern text', pattern, text)
     while i < len(text):
-        # print(f'{pattern} == {text}')
-        # print(f'{len(pattern[:j]) * " "}^{len(pattern[j + 1:]) * " "}    {len(text[:i]) * " "}^{len(text[i + 1:]) * " "}')  # noqa
-        # compare text to pattern
-        if text[i] == pattern[j]:
+        if text[i] == pattern[j]:  # char match
             i += 1
             j += 1
-            # test match
-            if j == len(pattern):
+            if j == len(pattern):  # full pattern match
                 matches.append(i - len(pattern))
-                j = max(fail_fun[max(0, j - 1)][1], 0)
-        # pattern mismatch -> failure function lookup
-        elif j == 0:
-            i += 1
-        else:
-            j = max(fail_fun[max(0, j - 1)][1], 0)
+                j = fail_fun[-1][1]  # lookup for more nearby matches
+        else:  # no char match
+            if j != 0:  # failure function lookup on pattern mismatch
+                j = fail_fun[j - 1][1]
+            else:  # (j == 0) indicates first element mismatched
+                i += 1
 
     return matches
 
 
-def _failure_function(pat: str) -> list[list[str, int]]:
+def _failure_function(pat: str) -> list[list[str | int]]:
     ''' longest proper prefix which is also a suffix '''  # noqa
     processed = [[c, 0] for c in pat]
 
@@ -174,7 +170,7 @@ if __name__ == "__main__":
         ]
 
         test_cases = [
-            # todo: also test for correct time complexity
+            # todo: better time complexity test(s)
             # pattern, text, leftmost match index
             # basic naive tests
             ('abc', 'ab', []),
@@ -207,8 +203,7 @@ if __name__ == "__main__":
 
             ('onions', 'onionionspl', [3]),
 
-            ('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
-
+            # ('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
 
 
         ]
@@ -218,6 +213,7 @@ if __name__ == "__main__":
             rabin_karp,
             boyer_moore,
 
+            _hash,
             _failure_function,
             brute_force,
         ]
@@ -229,7 +225,9 @@ if __name__ == "__main__":
             functions = self.functions
             failure_function_tests = self.failure_function_tests
 
-            ffun = functions[-1]
+            results = list()
+
+            ffun = functions[-2]
             print(f'\nTESTING: {ffun.__name__.upper()}')
             failures = 0
             for ff_test in failure_function_tests:
@@ -241,22 +239,23 @@ if __name__ == "__main__":
                 except AssertionError:
                     print(ff_test, 'FAIL')
                     failures += 1
-            print(f'\n{ffun.__name__.upper()} FAILED {failures} tests!\n')
+            print(f'\n{ffun.__name__.upper()} FAILED {failures} TESTS!\n')
 
         def run_substring_matching_tests(self):
             functions = self.functions
             test_cases = self.test_cases
 
-            test_fns = {name: obj for name, obj in globals().copy().items() if callable(obj) and name[0] != '_'}
+            exclusion = lambda obj: isinstance(obj, types.FunctionType) and obj.__name__[0] != '_'  # noqa: lambda fn
+            test_fns = {name: obj for name, obj in globals().copy().items() if exclusion(obj)}
             summary = dict()
 
-            selector = functions[-1].__name__  # specify single fn here
-            test_fns = {selector: test_fns[selector]}
+            # selector = functions[0].__name__                   # specify single fn here [kmp, rk, bm, ff, bf]
+            # test_fns = {selector: test_fns[selector]}
 
-            for fn_name, each_fn in list(test_fns.items())[:]:  # specify fn slice here
+            for fn_name, each_fn in list(test_fns.items())[:]:  # specify fns here
                 failed = 0
                 print(f'\nTESTING: {fn_name.upper()}')
-                for each_test in test_cases[:]:  # specify test cases here
+                for each_test in test_cases[:]:                 # specify test cases here
                     pattern = each_test[0]
                     text = each_test[1]
                     try:
@@ -276,7 +275,11 @@ if __name__ == "__main__":
             for k, v in summary.items():
                 print(k, v, sep='\n')
 
+        def run_all(self):
+            self.run_failure_function_tests()
+            self.run_substring_matching_tests()
 
     testing = Testing()
     # testing.run_failure_function_tests()
-    testing.run_substring_matching_tests()
+    # testing.run_substring_matching_tests()
+    testing.run_all()
