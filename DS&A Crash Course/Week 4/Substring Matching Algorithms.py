@@ -1,4 +1,5 @@
-import types  # todo
+from dataclasses import dataclass
+import types as t
 
 
 def brute_force(pattern: str, text: str) -> list[int]:
@@ -67,8 +68,9 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     if len(pattern) > len(text):
         return []
 
-    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa ascii_letters
-    lookup = {k: i + 1 for i, k in enumerate(letters)}  # noqa naming
+    # remap a-Z to base 52
+    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa string.ascii_letters
+    lookup = {k: i + 1 for i, k in enumerate(letters)}  # noqa shadows name
 
     # hash pattern
     pattern_hash = _hash(pattern, lookup)
@@ -95,10 +97,8 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
 
     return matches
 
-
 def _hash(inp: str, lookup: dict) -> int:  # noqa: shadows name
-    ''' perfect hash '''  # noqa
-    ''' 2 digits per char (base 52) '''
+    ''' perfect hash: 2 digits per char (base 52) '''  # noqa
     hash_value = 0
     for i in range(len(inp)):
         # inv_i preserves order: abc -> 102030
@@ -112,6 +112,9 @@ def _hash(inp: str, lookup: dict) -> int:  # noqa: shadows name
 # naive implementation O(n*m)
 # perfect hash fn required for O(n + m)
 def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+    if len(pattern) == 0:
+        return []
+
     if len(pattern) > len(text):
         return []
 
@@ -153,12 +156,65 @@ def boyer_moore(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     return [0]
 
 
+all_fns = (
+    brute_force,
+    knuth_morris_pratt,
+    _failure_function,
+    rabin_karp,
+    _hash,
+    rabin_karp_naive,
+    boyer_moore,
+)
+
+all_matching_fns = (
+    brute_force,
+    knuth_morris_pratt,
+    rabin_karp,
+    rabin_karp_naive,
+    boyer_moore,
+)
+
+primary_matching_fns = (
+    brute_force,
+    knuth_morris_pratt,
+    rabin_karp,
+    boyer_moore,
+)
+
 if __name__ == "__main__":
+    @dataclass
+    class TestCase:
+        pattern: str
+        text: str
+        match_index: list[int]
+        test_passed: bool | None = None
+
+        def __repr__(self):
+            return f"({self.pattern}, {self.text}, {self.match_index})"
+
+        def __hash__(self):
+            return hash(self.__repr__())
+
+
     class Testing:
         cr_str = 'COACHABLEROCKS'
         cr_sorted = 'AABCCCEHKLOORS'
 
-        failure_function_tests = [
+        perfect_hash_tests: list[tuple[str | int]] = [
+            ('a', 1),
+            ('b', 2),
+
+            ('z', 26),
+            ('A', 27),
+
+            ('Y', 51),
+            ('Z', 52),
+
+            ('abc', 10203),
+            ('cba', 30201),
+        ]
+
+        failure_function_tests: list[tuple[str | list[int]]] = [
             ('', []),
             ('abc', [0, 0, 0]),
             ('aba', [0, 0, 1]),
@@ -169,63 +225,75 @@ if __name__ == "__main__":
 
         ]
 
-        test_cases = [
-            # todo: better time complexity test(s)
-            # pattern, text, leftmost match index
-            # basic naive tests
-            ('abc', 'ab', []),
-            ('abc', 'a', []),
-            ('abc', '', []),
-            ('a', '', []),
-            ('z', '', []),
+        correctness_test_cases: list[TestCase] = [
+            # basic/naive tests
+            TestCase('a', 'a', [0]),
+            TestCase('a', 'aaaaa', [0, 1, 2, 3, 4]),
+            TestCase('aaaa', 'aaaaaaa', [0, 1, 2, 3]),
 
-            ('abc', 'abc', [0]),
-            ('abc', 'zabc', [1]),
-            ('abc', 'abcd', [0]),
-            ('dabc', 'abc', []),
-            ('abc', 'aabcc', [1]),
-            ('aaabc', 'abc', []),
+            # bad input tests
+            # TestCase('', 'a', []),
+            # TestCase('', 'z', []),
+            # TestCase('', 'baz', []),
+            # TestCase('', 'bacdefz', []),
+            TestCase('a', '', []),
+            TestCase('z', '', []),
+            TestCase('abc', '', []),
+            TestCase('abc', 'a', []),
+            TestCase('abc', 'ab', []),
+            TestCase('dabc', 'abc', []),
+            TestCase('aaabc', 'abc', []),
+            TestCase('abcz', 'abc', []),
 
-            ('abc', 'abcbc', [0]),
-            ('abc', 'abcabc', [0, 3]),
-            ('aaa', 'aaaaaa', [0, 1, 2, 3]),
-            ('baaac', 'aaaaaa', []),
-            ('aaa', 'baaaaaac', [1, 2, 3, 4]),
+            # no match tests
+            TestCase('baaac', 'aaaaaa', []),
+            TestCase('baaac', 'baaaaa', []),
+            TestCase('baaac', 'baaaac', []),
+
+            TestCase('abc', 'abc', [0]),
+            TestCase('abc', 'zabc', [1]),
+            TestCase('abc', 'abcd', [0]),
+            TestCase('abc', 'aabcc', [1]),
+
+            TestCase('abc', 'abcbc', [0]),
+            TestCase('abc', 'abcabc', [0, 3]),
+            TestCase('aaa', 'aaaaaa', [0, 1, 2, 3]),
+            TestCase('a', 'baaaaaac', [1, 2, 3, 4, 5, 6]),
+            TestCase('aa', 'abaaaaaaca', [1, 2, 3, 4, 5]),
+            TestCase('aaa', 'aabaaaaaacaa', [1, 2, 3, 4]),
+            TestCase('aaaa', 'aaabaaaaaacaaa', [1, 2, 3]),
+            TestCase('aaaaa', 'aaaabaaaaaacaaaa', [1, 2]),
+            TestCase('aaaaaa', 'aaaaabaaaaaacaaaaa', [1]),
 
             # kmp specific tests
-            ('aabcaa', 'aabcabaabcaa', [6]),
-            ('aaabc', 'aaaaabcaaabc', [2, 7]),
-            ('aaabc', 'aaaaabcaaaabc', [2, 8]),
-            ('abcabcg', 'aaabcabcabcxabcabcg', [12]),
-            ('a', 'a', [0]),
-            ('a', 'aaaaa', [0, 1, 2, 3, 4]),
-            ('aaaa', 'aaaaaaa', [0, 1, 2, 3]),
+            TestCase('aabcaa', 'aabcabaabcaa', [6]),
+            TestCase('aaabc', 'aaaaabcaaabc', [2, 7]),
+            TestCase('aaabc', 'aaaaabcaaaabc', [2, 8]),
+            TestCase('abcabcg', 'aaabcabcabcxabcabcg', [12]),
 
-            ('onions', 'onionionspl', [3]),
-
-            # ('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
+            TestCase('onions', 'onionionspl', [3]),
 
 
         ]
 
-        functions = [
-            knuth_morris_pratt,
-            rabin_karp,
-            boyer_moore,
+        time_complexity_test_cases: list[TestCase] = [
+            # todo: better time complexity test(s)
+            TestCase('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
 
-            _hash,
-            _failure_function,
-            brute_force,
+
         ]
 
-        def __init__(self):
-            pass
+        def __init__(self, all_functions: tuple[t.FunctionType]):
+            super().__init__()
+            self.all_functions = all_functions
+            self.primary_fns = (i for i in self.all_functions if i.__name__ != '_' and 'naive' not in i.__name__)
+            print(self.primary_fns)
 
         def run_failure_function_tests(self):
             functions = self.functions
             failure_function_tests = self.failure_function_tests
 
-            results = list()
+            results = dict()
 
             ffun = functions[-2]
             print(f'\nTESTING: {ffun.__name__.upper()}')
@@ -242,12 +310,12 @@ if __name__ == "__main__":
             print(f'\n{ffun.__name__.upper()} FAILED {failures} TESTS!\n')
 
         def run_substring_matching_tests(self):
+            raise DeprecationWarning
             functions = self.functions
             test_cases = self.test_cases
 
             exclusion = lambda obj: isinstance(obj, types.FunctionType) and obj.__name__[0] != '_'  # noqa: lambda fn
             test_fns = {name: obj for name, obj in globals().copy().items() if exclusion(obj)}
-            summary = dict()
 
             # selector = functions[0].__name__                   # specify single fn here [kmp, rk, bm, ff, bf]
             # test_fns = {selector: test_fns[selector]}
@@ -275,11 +343,58 @@ if __name__ == "__main__":
             for k, v in summary.items():
                 print(k, v, sep='\n')
 
-        def run_all(self):
-            self.run_failure_function_tests()
-            self.run_substring_matching_tests()
+        @staticmethod
+        def run_all_class_testcases_on_fn(function: t.FunctionType, tests: list[TestCase]) -> dict:
+            data = dict()
+            fail_count = 0
 
-    testing = Testing()
+            for test in tests:
+                try:
+                    assert function(test.pattern, test.text) == test.match_index
+                    test.test_passed = True
+                except AssertionError:
+                    fail_count += 1
+                    test.test_passed = False
+                finally:
+                    data[test] = test.test_passed
+
+            return data
+
+        def run_tests_of_class_testcase(self):
+            pass
+
+        def time_complexity_tests(self):
+            pass
+
+        def run_all(self):
+            pass
+
+
+    testing = Testing(all_fns)
     # testing.run_failure_function_tests()
     # testing.run_substring_matching_tests()
     testing.run_all()
+
+    # test_fns = all_matching_fns
+    test_fns = primary_matching_fns
+
+
+    test_cases = testing.correctness_test_cases
+
+    for test_fn in test_fns:
+        print(f'\nTESTING: {test_fn.__name__.upper()}')
+        results = testing.run_all_class_testcases_on_fn(test_fn, test_cases)
+        # print(results)
+        for k, v in results.items():
+            print(k, v)
+            if not v:
+                break
+
+    # tc, p = len(test_cases), (len(test_cases) - failed)
+    # algo, info = f'{fn_name.upper()}', f'PASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}'
+    # print('\n', algo, '\n', info, sep='')
+    # summary[algo] = info
+    #
+    # print('\n\nSUMMARY')
+    # for k, v in summary.items():
+    #     print(k, v, sep='\n')
