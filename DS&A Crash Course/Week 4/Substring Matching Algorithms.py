@@ -1,8 +1,12 @@
 from dataclasses import dataclass
 import types as t
+from collections.abc import Callable
 
 
 def brute_force(pattern: str, text: str) -> list[int]:
+    if not pattern or len(pattern) > len(text):
+        return []
+
     matches = list()
     p_i, s_i = 0, 0
     while s_i < len(text):
@@ -24,7 +28,7 @@ def brute_force(pattern: str, text: str) -> list[int]:
 
 
 def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    if len(pattern) > len(text):
+    if not pattern or len(pattern) > len(text):
         return []
 
     matches = list()
@@ -65,7 +69,7 @@ def _failure_function(pat: str) -> list[list[str | int]]:
 
 
 def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    if len(pattern) > len(text):
+    if not pattern or len(pattern) > len(text):
         return []
 
     # remap a-Z to base 52
@@ -112,10 +116,7 @@ def _hash(inp: str, lookup: dict) -> int:  # noqa: shadows name
 # naive implementation O(n*m)
 # perfect hash fn required for O(n + m)
 def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    if len(pattern) == 0:
-        return []
-
-    if len(pattern) > len(text):
+    if not pattern or len(pattern) > len(text):
         return []
 
     matches = list()
@@ -153,41 +154,25 @@ def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows nam
 
 
 def boyer_moore(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    return [0]
+    return []
 
-
-all_fns = (
-    brute_force,
-    knuth_morris_pratt,
-    _failure_function,
-    rabin_karp,
-    _hash,
-    rabin_karp_naive,
-    boyer_moore,
-)
-
-all_matching_fns = (
-    brute_force,
-    knuth_morris_pratt,
-    rabin_karp,
-    rabin_karp_naive,
-    boyer_moore,
-)
-
-primary_matching_fns = (
-    brute_force,
-    knuth_morris_pratt,
-    rabin_karp,
-    boyer_moore,
-)
 
 if __name__ == "__main__":
+    all_fns = (
+        brute_force,
+        knuth_morris_pratt,
+        _failure_function,
+        rabin_karp,
+        _hash,
+        rabin_karp_naive,
+        boyer_moore,
+    )
+
     @dataclass
     class TestCase:
         pattern: str
         text: str
         match_index: list[int]
-        test_passed: bool | None = None
 
         def __repr__(self):
             return f"({self.pattern}, {self.text}, {self.match_index})"
@@ -232,10 +217,10 @@ if __name__ == "__main__":
             TestCase('aaaa', 'aaaaaaa', [0, 1, 2, 3]),
 
             # bad input tests
-            # TestCase('', 'a', []),
-            # TestCase('', 'z', []),
-            # TestCase('', 'baz', []),
-            # TestCase('', 'bacdefz', []),
+            TestCase('', 'a', []),
+            TestCase('', 'z', []),
+            TestCase('', 'baz', []),
+            TestCase('', 'bacdefz', []),
             TestCase('a', '', []),
             TestCase('z', '', []),
             TestCase('abc', '', []),
@@ -259,11 +244,11 @@ if __name__ == "__main__":
             TestCase('abc', 'abcabc', [0, 3]),
             TestCase('aaa', 'aaaaaa', [0, 1, 2, 3]),
             TestCase('a', 'baaaaaac', [1, 2, 3, 4, 5, 6]),
-            TestCase('aa', 'abaaaaaaca', [1, 2, 3, 4, 5]),
-            TestCase('aaa', 'aabaaaaaacaa', [1, 2, 3, 4]),
-            TestCase('aaaa', 'aaabaaaaaacaaa', [1, 2, 3]),
-            TestCase('aaaaa', 'aaaabaaaaaacaaaa', [1, 2]),
-            TestCase('aaaaaa', 'aaaaabaaaaaacaaaaa', [1]),
+            TestCase('aa', 'abaaaaaaca', [2, 3, 4, 5, 6]),
+            TestCase('aaa', 'aabaaaaaacaa', [3, 4, 5, 6]),
+            TestCase('aaaa', 'aaabaaaaaacaaa', [4, 5, 6]),
+            TestCase('aaaaa', 'aaaabaaaaaacaaaa', [5, 6]),
+            TestCase('aaaaaa', 'aaaaabaaaaaacaaaaa', [6]),
 
             # kmp specific tests
             TestCase('aabcaa', 'aabcabaabcaa', [6]),
@@ -283,84 +268,50 @@ if __name__ == "__main__":
 
         ]
 
-        def __init__(self, all_functions: tuple[t.FunctionType]):
-            super().__init__()
-            self.all_functions = all_functions
-            self.primary_fns = (i for i in self.all_functions if i.__name__ != '_' and 'naive' not in i.__name__)
-            print(self.primary_fns)
+        # def __init__(self, all_functions: tuple[t.FunctionType]):
+        #     super().__init__()
+        #     self.all_functions = all_functions
+        #     self.primary_fns = (i for i in self.all_functions if i.__name__ != '_' and 'naive' not in i.__name__)
+        #     print(self.primary_fns)
 
         def run_failure_function_tests(self):
-            functions = self.functions
+            # todo: fix after refactor
+            function = tuple(x for x in all_fns if 'failure' in x.__name__)[0]
             failure_function_tests = self.failure_function_tests
 
-            results = dict()
+            # results = dict()
 
-            ffun = functions[-2]
-            print(f'\nTESTING: {ffun.__name__.upper()}')
+            print(f'\nTESTING: {function.__name__.upper()}')
             failures = 0
             for ff_test in failure_function_tests:
                 inp = ff_test[0]
                 out = ff_test[1]
                 try:
-                    assert [i[1] for i in ffun(inp)] == out
+                    assert [i[1] for i in function(inp)] == out
                     print(ff_test, 'PASS')
                 except AssertionError:
                     print(ff_test, 'FAIL')
                     failures += 1
-            print(f'\n{ffun.__name__.upper()} FAILED {failures} TESTS!\n')
-
-        def run_substring_matching_tests(self):
-            raise DeprecationWarning
-            functions = self.functions
-            test_cases = self.test_cases
-
-            exclusion = lambda obj: isinstance(obj, types.FunctionType) and obj.__name__[0] != '_'  # noqa: lambda fn
-            test_fns = {name: obj for name, obj in globals().copy().items() if exclusion(obj)}
-
-            # selector = functions[0].__name__                   # specify single fn here [kmp, rk, bm, ff, bf]
-            # test_fns = {selector: test_fns[selector]}
-
-            for fn_name, each_fn in list(test_fns.items())[:]:  # specify fns here
-                failed = 0
-                print(f'\nTESTING: {fn_name.upper()}')
-                for each_test in test_cases[:]:                 # specify test cases here
-                    pattern = each_test[0]
-                    text = each_test[1]
-                    try:
-                        assert each_fn(pattern, text) == each_test[2]
-                        print(each_test, 'PASS')
-                    except AssertionError:
-                        print(each_test, 'FAIL')
-                        print(each_fn(pattern, text))
-                        failed += 1
-
-                tc, p = len(test_cases), (len(test_cases) - failed)
-                algo, info = f'{fn_name.upper()}', f'PASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}'
-                print('\n', algo, '\n', info, sep='')
-                summary[algo] = info
-
-            print('\n\nSUMMARY')
-            for k, v in summary.items():
-                print(k, v, sep='\n')
+            print(f'\n{function.__name__.upper()} FAILED {failures} TESTS!\n')
 
         @staticmethod
-        def run_all_class_testcases_on_fn(function: t.FunctionType, tests: list[TestCase]) -> dict:
-            data = dict()
-            fail_count = 0
+        def run_all_testcases_on_fn(function, tests: list[TestCase]):  # todo: function and return typing
+            data = dict()                                              # todo: Callable[str, str] causes error
+            fail_counter = 0
 
             for test in tests:
+                out = function(test.pattern, test.text)
                 try:
-                    assert function(test.pattern, test.text) == test.match_index
-                    test.test_passed = True
+                    assert out == test.match_index
+                    data[test] = (True, out)
                 except AssertionError:
-                    fail_count += 1
-                    test.test_passed = False
-                finally:
-                    data[test] = test.test_passed
+                    fail_counter += 1
+                    data[test] = (False, out)
 
-            return data
+            return fail_counter, data
 
-        def run_tests_of_class_testcase(self):
+        @staticmethod
+        def display_results():
             pass
 
         def time_complexity_tests(self):
@@ -370,31 +321,40 @@ if __name__ == "__main__":
             pass
 
 
-    testing = Testing(all_fns)
+    testing = Testing()
     # testing.run_failure_function_tests()
     # testing.run_substring_matching_tests()
-    testing.run_all()
+    # testing.run_all()
 
-    # test_fns = all_matching_fns
-    test_fns = primary_matching_fns
-
-
+    test_fns = tuple(f for f in all_fns if f.__name__[0] != '_' and 'NAIVE' not in f.__name__)
     test_cases = testing.correctness_test_cases
 
-    for test_fn in test_fns:
-        print(f'\nTESTING: {test_fn.__name__.upper()}')
-        results = testing.run_all_class_testcases_on_fn(test_fn, test_cases)
-        # print(results)
-        for k, v in results.items():
-            print(k, v)
-            if not v:
-                break
+    red, green = 91, 92
+    color = lambda color, obj: str(f'\x1b[{str(color)}m' + str(obj) + '\x1b[0m')  # noqa
 
-    # tc, p = len(test_cases), (len(test_cases) - failed)
-    # algo, info = f'{fn_name.upper()}', f'PASSED {p:{3}} of {tc}\nFAILED {failed:{3}} of {tc}'
-    # print('\n', algo, '\n', info, sep='')
-    # summary[algo] = info
-    #
-    # print('\n\nSUMMARY')
-    # for k, v in summary.items():
-    #     print(k, v, sep='\n')
+    print('fffffffffffffffffff', test_fns)
+    for test_fn in test_fns:
+        test_fn = test_fn
+        fn_name = test_fn.__name__.upper()
+
+        results = testing.run_all_testcases_on_fn(test_fn, test_cases)
+        fail_count = results[0]
+        results = results[1]
+        max_len = 4 + max([len(str(x)) for x in results])
+
+        print(f'\nTESTING: {fn_name}')
+        for test_case, output in tuple(results.items()):
+            result = 'PASS' + str(output[1]) if output[0] else 'FAIL'
+            output = color(red, output) if not output[0] else str(output)
+            result += output
+            print(f"{str(test_case):{max_len}}{output}")
+        fail_txt = f"{color(red, 'FAIL ' + str(fail_count))}"
+        pass_txt = f"{color(green, f'PASS ' + str(len(results) - fail_count))}"
+        print(f"{fn_name:{max_len}}{pass_txt} | {fail_txt}")
+
+    # for i in range(101):
+    #     print(i, str(f'\x1b[{str(i)}m' + 'ABCDEF' + '\x1b[0m'))
+
+    # todo: include easily viewable summary
+
+    # testing.run_failure_function_tests()
