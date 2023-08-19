@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 import types as t
 from collections.abc import Callable
+from hf_data_classes import GenericTC, TestCase, Results
+from test_cases import perfect_hash_tests
+from test_cases import failure_function_tests
+from test_cases import correctness_test_cases
 
 
 def brute_force(pattern: str, text: str) -> list[int]:
@@ -72,9 +76,7 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
     if not pattern or len(pattern) > len(text):
         return []
 
-    # remap a-Z to base 52
-    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa string.ascii_letters
-    lookup = {k: i + 1 for i, k in enumerate(letters)}  # noqa shadows name
+    lookup = _get_alphabet()
 
     # hash pattern
     pattern_hash = _hash(pattern, lookup)
@@ -101,14 +103,22 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
 
     return matches
 
-def _hash(inp: str, lookup: dict) -> int:  # noqa: shadows name
-    ''' perfect hash: 2 digits per char (base 52) '''  # noqa
+
+def _get_alphabet():
+    # remap a-Z to base 52
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa string.ascii_letters
+    return {k: i + 1 for i, k in enumerate(alphabet)}
+
+
+def _hash(inp: str, lookup: dict) -> int:
+    ''' perfect hash: 2 digits per char (base 52 in base 10) '''  # noqa
     hash_value = 0
     for i in range(len(inp)):
-        # inv_i preserves order: abc -> 102030
-        inv_i = (len(inp) - 1) - i
-        base = 10 * (100 ** inv_i)
-        hash_value += (lookup[inp[i]] * base)
+        # hash_value += lookup[inp[i]] * (100 ** i)
+        # inverse preserves order: abc -> 10203
+        max_index = len(inp) - 1
+        inv_offset = 100 ** (max_index - i)
+        hash_value += lookup[inp[i]] * inv_offset
 
     return hash_value
 
@@ -168,124 +178,24 @@ if __name__ == "__main__":
         boyer_moore,
     )
 
-    @dataclass
-    class TestCase:
-        pattern: str
-        text: str
-        match_index: list[int]
-
-        def __repr__(self):
-            return f"({self.pattern}, {self.text}, {self.match_index})"
-
-        def __hash__(self):
-            return hash(self.__repr__())
-
-
     class Testing:
         cr_str = 'COACHABLEROCKS'
         cr_sorted = 'AABCCCEHKLOORS'
 
-        perfect_hash_tests: list[tuple[str | int]] = [
-            ('a', 1),
-            ('b', 2),
+        def __init__(self):
+            pass
 
-            ('z', 26),
-            ('A', 27),
-
-            ('Y', 51),
-            ('Z', 52),
-
-            ('abc', 10203),
-            ('cba', 30201),
-        ]
-
-        failure_function_tests: list[tuple[str | list[int]]] = [
-            ('', []),
-            ('abc', [0, 0, 0]),
-            ('aba', [0, 0, 1]),
-            ('ab', [0, 0]),
-            ('ababab', [0, 0, 1, 2, 3, 4]),
-            ('abcabc', [0, 0, 0, 1, 2, 3]),
-            ('aabaababb', [0, 1, 0, 1, 2, 3, 4, 0, 0]),
-
-        ]
-
-        correctness_test_cases: list[TestCase] = [
-            # basic/naive tests
-            TestCase('a', 'a', [0]),
-            TestCase('a', 'aaaaa', [0, 1, 2, 3, 4]),
-            TestCase('aaaa', 'aaaaaaa', [0, 1, 2, 3]),
-
-            # bad input tests
-            TestCase('', 'a', []),
-            TestCase('', 'z', []),
-            TestCase('', 'baz', []),
-            TestCase('', 'bacdefz', []),
-            TestCase('a', '', []),
-            TestCase('z', '', []),
-            TestCase('abc', '', []),
-            TestCase('abc', 'a', []),
-            TestCase('abc', 'ab', []),
-            TestCase('dabc', 'abc', []),
-            TestCase('aaabc', 'abc', []),
-            TestCase('abcz', 'abc', []),
-
-            # no match tests
-            TestCase('baaac', 'aaaaaa', []),
-            TestCase('baaac', 'baaaaa', []),
-            TestCase('baaac', 'baaaac', []),
-
-            TestCase('abc', 'abc', [0]),
-            TestCase('abc', 'zabc', [1]),
-            TestCase('abc', 'abcd', [0]),
-            TestCase('abc', 'aabcc', [1]),
-
-            TestCase('abc', 'abcbc', [0]),
-            TestCase('abc', 'abcabc', [0, 3]),
-            TestCase('aaa', 'aaaaaa', [0, 1, 2, 3]),
-            TestCase('a', 'baaaaaac', [1, 2, 3, 4, 5, 6]),
-            TestCase('aa', 'abaaaaaaca', [2, 3, 4, 5, 6]),
-            TestCase('aaa', 'aabaaaaaacaa', [3, 4, 5, 6]),
-            TestCase('aaaa', 'aaabaaaaaacaaa', [4, 5, 6]),
-            TestCase('aaaaa', 'aaaabaaaaaacaaaa', [5, 6]),
-            TestCase('aaaaaa', 'aaaaabaaaaaacaaaaa', [6]),
-
-            # kmp specific tests
-            TestCase('aabcaa', 'aabcabaabcaa', [6]),
-            TestCase('aaabc', 'aaaaabcaaabc', [2, 7]),
-            TestCase('aaabc', 'aaaaabcaaaabc', [2, 8]),
-            TestCase('abcabcg', 'aaabcabcabcxabcabcg', [12]),
-
-            TestCase('onions', 'onionionspl', [3]),
-
-
-        ]
-
-        time_complexity_test_cases: list[TestCase] = [
-            # todo: better time complexity test(s)
-            TestCase('a' * 1_000 + 'd', 'a' * 1_000_000 + 'd', [999_000]),
-
-
-        ]
-
-        # def __init__(self, all_functions: tuple[t.FunctionType]):
-        #     super().__init__()
-        #     self.all_functions = all_functions
-        #     self.primary_fns = (i for i in self.all_functions if i.__name__ != '_' and 'naive' not in i.__name__)
-        #     print(self.primary_fns)
-
-        def run_failure_function_tests(self):
-            # todo: fix after refactor
+        @staticmethod
+        def run_failure_function_tests(tests):
+            # todo: refactor (implement Results() etc.)
             function = tuple(x for x in all_fns if 'failure' in x.__name__)[0]
-            failure_function_tests = self.failure_function_tests
-
             # results = dict()
 
             print(f'\nTESTING: {function.__name__.upper()}')
             failures = 0
-            for ff_test in failure_function_tests:
-                inp = ff_test[0]
-                out = ff_test[1]
+            for ff_test in tests:
+                inp = ff_test.input_data
+                out = ff_test.expected
                 try:
                     assert [i[1] for i in function(inp)] == out
                     print(ff_test, 'PASS')
@@ -320,6 +230,25 @@ if __name__ == "__main__":
         def run_all(self):
             pass
 
+        @staticmethod
+        def run_perfect_hash_test(tests):
+            data = list()
+            fail_counter = 0
+            lookup = _get_alphabet()
+
+            for test in tests:
+                datum = Results(test.input_data)
+                datum.result = _hash(test.input_data, lookup)
+                try:
+                    assert datum.result == test.expected
+                    datum.passed = True
+                except AssertionError:
+                    fail_counter += 1
+                    datum.passed = False
+                data.append(datum)
+
+            return data
+
 
     testing = Testing()
     # testing.run_failure_function_tests()
@@ -327,17 +256,19 @@ if __name__ == "__main__":
     # testing.run_all()
 
     test_fns = tuple(f for f in all_fns if f.__name__[0] != '_' and 'NAIVE' not in f.__name__)
-    test_cases = testing.correctness_test_cases
+    test_fns = tuple(f for f in test_fns if "boyer" in f.__name__)
+    test_cases = correctness_test_cases
 
     red, green = 91, 92
     color = lambda color, obj: str(f'\x1b[{str(color)}m' + str(obj) + '\x1b[0m')  # noqa
 
-    print('fffffffffffffffffff', test_fns)
+    summary = dict()
     for test_fn in test_fns:
         test_fn = test_fn
         fn_name = test_fn.__name__.upper()
 
         results = testing.run_all_testcases_on_fn(test_fn, test_cases)
+        summary[fn_name] = results[:]
         fail_count = results[0]
         results = results[1]
         max_len = 4 + max([len(str(x)) for x in results])
@@ -357,4 +288,17 @@ if __name__ == "__main__":
 
     # todo: include easily viewable summary
 
-    # testing.run_failure_function_tests()
+    # ff_data = testing.run_failure_function_tests(failure_function_tests)
+    # print(ff_data)
+
+    # hash_fn_data = testing.run_perfect_hash_test(perfect_hash_tests)
+    # print(hash_fn_data)
+
+    # for fn, data_tup in summary.items():
+    #     print('asdf', fn)
+    #     if data_tup[0] > 0:
+    #         for data in data_tup[1].items():
+    #             if not data[1][0]:
+    #                 print(data)
+
+
