@@ -117,7 +117,7 @@ for test_fn in test_fns:
         print(f"{str(test_case):{max_len}}{output}")
     fail_txt = f"{color(red, 'FAIL ' + str(fail_count))}"
     pass_txt = f"{color(green, f'PASS ' + str(len(results) - fail_count))}"
-    print(f"{fn_name:{max_len}}{pass_txt} | {fail_txt}")
+    print(f"{fn_name:>{max_len - 1}} {pass_txt} | {fail_txt}")
 
 # for i in range(101):
 #     print(i, str(f'\x1b[{str(i)}m' + 'ABCDEF' + '\x1b[0m'))
