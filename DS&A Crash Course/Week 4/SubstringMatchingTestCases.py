@@ -78,6 +78,12 @@ correctness_test_cases: list[TestCase] = [
     TestCase('i', 'a', []),
     TestCase('k', 'a', []),
 
+    # boyer-moore
+    TestCase('baa', 'aaa', []),
+    TestCase('baa', 'aaaaaaaaa', []),
+    TestCase('abc', 'dddddddddddd', []),
+    TestCase('abc', 'cacccbabc', [6]),
+
 ]
 
 time_complexity_test_cases: list[TestCase] = [
