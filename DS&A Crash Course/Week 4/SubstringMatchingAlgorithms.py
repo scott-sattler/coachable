@@ -159,12 +159,11 @@ def rabin_karp_naive(pattern: str, text: str) -> list[int]:
 
 # implementation limited to bad character rule
 # only O(n + m) if no match occurs (e.g. ('aa...', 'aaaa...') -> [0, 1, 2...])
-# https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm#Performance
+# wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm#Performance
 def boyer_moore(pattern: str, text: str) -> list[int]:
     if not pattern or len(pattern) > len(text):
         return []
 
-    patl = len(pattern)
     matches = list()
     table = _bad_char_table(pattern)
 
@@ -186,7 +185,7 @@ def boyer_moore(pattern: str, text: str) -> list[int]:
             # if rightmost occurrence to left of mismatch
             # shift table to that occurrence, else shift 1
             shift = table[text[txt_j]]
-            txt_i += shift if patl - pat_i < shift else 1
+            txt_i += shift if len(pattern) - pat_i < shift else 1
 
     return matches
 
@@ -202,8 +201,6 @@ def _bad_char_table(pattern: str, alphabet: list[str] = None) -> dict[str, int]:
     for i, c in enumerate(pattern):
         table[c] = max(1, len(pattern) - i - 1)
     return table
-
-
 
 
 all_fns = (
