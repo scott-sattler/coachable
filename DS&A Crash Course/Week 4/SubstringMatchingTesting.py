@@ -46,13 +46,15 @@ class Testing:
         fail_counter = 0
 
         for test in tests:
-            out = function(test.pattern, test.text)
             try:
+                out = function(test.pattern, test.text)
                 assert out == test.match_index
                 data[test] = (True, out)
             except AssertionError:
                 fail_counter += 1
                 data[test] = (False, out)
+            except Exception as e:
+                print(type(e), str(test), sep='\n')
 
         return fail_counter, data
 
