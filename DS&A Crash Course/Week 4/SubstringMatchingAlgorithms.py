@@ -24,12 +24,12 @@ def brute_force(pattern: str, text: str) -> list[int]:
     return matches
 
 
-def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+def knuth_morris_pratt(pattern: str, text: str) -> list[int]:
     if not pattern or len(pattern) > len(text):
         return []
 
     matches = list()
-    fail_fun = _failure_function(pattern)
+    fail_fn = _failure_function(pattern)
 
     i, j = 0, 0  # text index; pattern index
     while i < len(text):
@@ -38,24 +38,25 @@ def knuth_morris_pratt(pattern: str, text: str) -> list[int]:  # noqa: shadows n
             j += 1
             if j == len(pattern):  # full pattern match
                 matches.append(i - len(pattern))
-                j = fail_fun[-1][1]  # lookup for more nearby matches
+                j = fail_fn[-1][1]  # lookup for more nearby matches
         else:  # no char match
             if j != 0:  # failure function lookup on pattern mismatch
-                j = fail_fun[j - 1][1]
+                j = fail_fn[j - 1][1]
             else:  # (j == 0) indicates first element mismatched
                 i += 1
 
     return matches
 
 
-def _failure_function(pat: str) -> list[list[str | int]]:
+# partial match table
+def _failure_function(pattern: str) -> list[list[str | int]]:
     ''' longest proper prefix which is also a suffix '''  # noqa
-    processed = [[c, 0] for c in pat]
+    processed = [[c, 0] for c in pattern]
 
     # i is prefix size
     i, j = 0, 1
-    while j < len(pat):
-        if pat[i] == pat[j]:
+    while j < len(pattern):
+        if pattern[i] == pattern[j]:
             i += 1
             processed[j][1] = i
         else:
@@ -65,7 +66,7 @@ def _failure_function(pat: str) -> list[list[str | int]]:
     return processed
 
 
-def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+def rabin_karp(pattern: str, text: str) -> list[int]:
     if not pattern or len(pattern) > len(text):
         return []
 
@@ -98,7 +99,7 @@ def rabin_karp(pattern: str, text: str) -> list[int]:  # noqa: shadows name
 
 
 def _get_alphabet():
-    # remap a-Z to base 52
+    # remap a-Z to base 52 (in base 10)
     alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa string.ascii_letters
     return {k: i + 1 for i, k in enumerate(alphabet)}
 
@@ -118,7 +119,7 @@ def _hash(inp: str, lookup: dict) -> int:
 
 # naive implementation O(n*m)
 # perfect hash fn required for O(n + m)
-def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows name
+def rabin_karp_naive(pattern: str, text: str) -> list[int]:
     if not pattern or len(pattern) > len(text):
         return []
 
@@ -156,8 +157,53 @@ def rabin_karp_naive(pattern: str, text: str) -> list[int]:  # noqa: shadows nam
     return matches
 
 
-def boyer_moore(pattern: str, text: str) -> list[int]:  # noqa: shadows name
-    return []
+# implementation limited to bad character rule
+# only O(n + m) if no match occurs (e.g. ('aa...', 'aaaa...') -> [0, 1, 2...])
+# https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm#Performance
+def boyer_moore(pattern: str, text: str) -> list[int]:
+    if not pattern or len(pattern) > len(text):
+        return []
+
+    patl = len(pattern)
+    matches = list()
+    table = _bad_char_table(pattern)
+
+    txt_i = len(pattern) - 1
+    while txt_i < len(text):
+        txt_j = txt_i
+        pat_i = len(pattern) - 1
+        while pat_i > -1 and text[txt_j] == pattern[pat_i]:
+            txt_j -= 1
+            pat_i -= 1
+
+        if pat_i < 0:  # match
+            matches.append(txt_j + 1)
+
+            # check bounds and shift by lookup for next text char
+            txt_i += 1
+            txt_i += table[text[txt_i]] - 1 if txt_i < len(text) else txt_i
+        else:
+            # if rightmost occurrence to left of mismatch
+            # shift table to that occurrence, else shift 1
+            shift = table[text[txt_j]]
+            txt_i += shift if patl - pat_i < shift else 1
+
+    return matches
+
+
+# bad character/shift table
+# p763: delta_1 is "the difference between [the pattern length] and
+# the position of the rightmost occurrence of char in [pattern]"
+def _bad_char_table(pattern: str, alphabet: list[str] = None) -> dict[str, int]:
+    # implicit data structures (i.e. table[ord(char)] <- val) disfavored
+    alphabet = list(_get_alphabet().keys()) if not alphabet else alphabet
+
+    table = {k: len(pattern) for k in alphabet}
+    for i, c in enumerate(pattern):
+        table[c] = max(1, len(pattern) - i - 1)
+    return table
+
+
 
 
 all_fns = (
@@ -168,4 +214,6 @@ all_fns = (
     _hash,
     rabin_karp_naive,
     boyer_moore,
+    _bad_char_table,
+
 )
