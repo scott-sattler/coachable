@@ -46,6 +46,7 @@ class Testing:
         fail_counter = 0
 
         for test in tests:
+            out = None
             try:
                 out = function(test.pattern, test.text)
                 assert out == test.match_index
@@ -53,8 +54,9 @@ class Testing:
             except AssertionError:
                 fail_counter += 1
                 data[test] = (False, out)
-            except Exception as e:
-                print(type(e), str(test), sep='\n')
+            # except Exception as e:
+            #     print(type(e), str(test), sep='\n')
+            #     break
 
         return fail_counter, data
 
@@ -94,19 +96,20 @@ testing = Testing()
 # testing.run_all()
 
 test_fns = tuple(f for f in all_fns if f.__name__[0] != '_' and 'NAIVE' not in f.__name__)
-test_fns = tuple(f for f in test_fns if "boyer" in f.__name__)
+# test_fns = tuple(f for f in test_fns if "boyer" in f.__name__)
 test_cases = correctness_test_cases
 
 red, green = 91, 92
 color = lambda color, obj: str(f'\x1b[{str(color)}m' + str(obj) + '\x1b[0m')  # noqa
 
-summary = dict()
+# summary = dict()
+summary = list()
 for test_fn in test_fns:
     test_fn = test_fn
     fn_name = test_fn.__name__.upper()
 
     results = testing.run_all_testcases_on_fn(test_fn, test_cases)
-    summary[fn_name] = results[:]
+    # summary[fn_name] = results[:]
     fail_count = results[0]
     results = results[1]
     max_len = 4 + max([len(str(x)) for x in results])
@@ -120,17 +123,18 @@ for test_fn in test_fns:
     fail_txt = f"{color(red, 'FAIL ' + str(fail_count))}"
     pass_txt = f"{color(green, f'PASS ' + str(len(results) - fail_count))}"
     print(f"{fn_name:>{max_len - 1}} {pass_txt} | {fail_txt}")
+    summary.append(f"{fn_name:>{len('KNUTH_MORRIS_PRATT')}} {pass_txt} | {fail_txt}")
 
-# for i in range(101):
-#     print(i, str(f'\x1b[{str(i)}m' + 'ABCDEF' + '\x1b[0m'))
+print('\n\n')
+for info in summary:
+    print(info)
 
-# todo: include easily viewable summary
 
 # ff_data = testing.run_failure_function_tests(failure_function_tests)
 # print(ff_data)
 
-hash_fn_data = testing.run_perfect_hash_test(perfect_hash_tests)
-print(hash_fn_data)
+# hash_fn_data = testing.run_perfect_hash_test(perfect_hash_tests)
+# print(hash_fn_data)
 
 # for fn, data_tup in summary.items():
 #     print('asdf', fn)
@@ -140,5 +144,5 @@ print(hash_fn_data)
 #                 print(data)
 
 
-# move
+# todo move/implement
 # if __name__ == "__main__":
