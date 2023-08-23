@@ -177,10 +177,8 @@ def boyer_moore(pattern: str, text: str) -> list[int]:
 
         if pat_i < 0:  # match
             matches.append(txt_j + 1)
-
             # check bounds and shift by lookup for next text char
-            txt_i += 1
-            txt_i += table[text[txt_i]] - 1 if txt_i < len(text) else txt_i
+            txt_i += table[text[txt_i + 1]] if txt_i + 1 < len(text) else 1
         else:
             # if rightmost occurrence to left of mismatch
             # shift table to that occurrence, else shift 1
