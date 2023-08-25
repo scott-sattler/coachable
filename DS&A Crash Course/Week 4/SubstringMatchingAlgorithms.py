@@ -5,20 +5,20 @@ def brute_force(pattern: str, text: str) -> list[int]:
         return []
 
     matches = list()
-    p_i, s_i = 0, 0
-    while s_i < len(text):
+    p_i, t_i = 0, 0  # pattern index; text index
+    while t_i < len(text):
         # individual char match
-        if pattern[p_i] != text[s_i]:
-            s_i = (s_i - p_i) + 1  # backtrack (reset), increment
+        if pattern[p_i] != text[t_i]:
+            t_i = (t_i - p_i) + 1  # backtrack (reset), increment
             p_i = 0
         # full pattern match
         elif p_i == len(pattern) - 1:
-            matches.append((s_i - p_i))
-            s_i = (s_i - p_i) + 1  # backtrack (reset), increment
+            matches.append((t_i - p_i))
+            t_i = (t_i - p_i) + 1  # backtrack (reset), increment
             p_i = 0
         # increment
         else:
-            s_i += 1
+            t_i += 1
             p_i += 1
 
     return matches
