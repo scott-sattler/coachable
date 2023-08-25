@@ -186,13 +186,17 @@ if __name__ == "__main__":
     ]
 
     # pad = max([len(str(fn).split()[1]) for fn in functions])  # fn len pad
+    # debugging = True
+    debugging = False
     pad = max([len(fn) for fn in test_cases])
     failed = 0
     for function in functions:
+        # if 'td' not in function.__name__:
+        #     continue
         print(f'\nTESTING: {str(function).split()[1].upper()}')
         for inp in test_cases:
             try:
-                assert function(list(inp)) == ''.join(sorted(inp))
+                assert function(list(inp), debug=debugging) == ''.join(sorted(inp))
                 print(f'{inp:>{pad}}   PASSED   {function(list(inp))}')
             except AssertionError:
                 print(f'{inp:>{pad}}   FAILED   {function(list(inp))}')
