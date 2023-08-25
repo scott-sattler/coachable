@@ -70,15 +70,14 @@ def rabin_karp(pattern: str, text: str) -> list[int]:
     if not pattern or len(pattern) > len(text):
         return []
 
+    matches = list()
     lookup = _get_alphabet()
 
-    # hash pattern
+    # hash the pattern and first occurrence in text
     pattern_hash = _hash(pattern, lookup)
-    # hash text
     text_hash = _hash(text[:len(pattern)], lookup)
 
     # compare first occurrence
-    matches = list()
     if pattern_hash == text_hash:
         matches.append(0)
 
