@@ -310,7 +310,23 @@ Substring Matching Algorithms
     Knuth-Morris-Pratt algorithm to find all occurrences of P in S. Show the intermediate values of the failure function
     and the table used to match the characters in P against S. Indicate the starting index of each occurrence of P in S,
     and explain how the algorithm identifies each occurrence.
-        todo
+        failure function:
+        [0, 0, 0, 1]
+
+        'ABCABDABCA'
+        'ABCA      '
+        '    ?     '
+        full match, jump to 'B'
+
+        'ABCABDABCA'
+        '   ABCA   '
+        '     x    '
+        fail at 'D', not present, full jump
+
+        'ABCABDABCA'
+        '      ABCA'
+        full match, end of string
+
 
     Rabin Karp
 
@@ -319,7 +335,57 @@ Substring Matching Algorithms
     Assume a prime base number of 101. Show the intermediate hash values for each P window in S, and explain how the
     algorithm identifies each occurrence. Note any false positives the algorithm might produce, and explain why they
     occur.
-        todo
+        this implementation at O(n*m) is of a similar, or greater,
+        complexity to using a perfect hash function of O(n + m).
+
+        'ABC'
+        ord('A') -> 65
+        ord('B') -> 66
+        ord('C') -> 67
+        'ABC' -> (65 + 66 + 67) -> 198 % 101 -> 97
+
+        'ABCCABCABCA' -> (65 + 66 + 67) -> 198 % 101 -> 97
+        'ABC        ' -> (65 + 66 + 67) -> 198 % 101 -> 97
+        potential match (implementation requires verification)
+
+        'ABCCABCABCA' -> 97 - 65 + 67 -> 99
+        ' ABC       ' -> 97
+
+        'ABCCABCABCA' -> 98
+        '  ABC      ' -> 97
+
+        'ABCCABCABCA' -> 97
+        '   ABC     ' -> 97
+        potential match (implementation requires verification)
+        this false positive is the result of the lossy hash function being used
+
+        'ABCCABCABCA' -> 97
+        '    ABC    ' -> 97
+        potential match (implementation requires verification)
+
+        'ABCCABCABCA' -> 97
+        '     ABC   ' -> 97
+        potential match (implementation requires verification)
+        this false positive is the result of the lossy hash function being used
+
+        'ABCCABCABCA' -> 97
+        '      ABC  ' -> 97
+        potential match (implementation requires verification)
+        this false positive is the result of the lossy hash function being used
+
+        'ABCCABCABCA' -> 97
+        '       ABC ' -> 97
+        potential match (implementation requires verification)
+
+        'ABCCABCABCA' -> 97
+        '       ABC ' -> 97
+        potential match (implementation requires verification)
+
+        'ABCCABCABCA' -> 97
+        '        ABC' -> 97
+        potential match (implementation requires verification)
+        this false positive is the result of the lossy hash function being used
+
 
     Boyer-Moore
 
