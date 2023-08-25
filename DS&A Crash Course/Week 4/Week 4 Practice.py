@@ -240,6 +240,22 @@ don't need to include every swap, but you should include the most important inte
         CEKLORS
         AABCCCEHKLOORS
 
+        implemented:
+        COACHABLEROCKS
+        AO
+        ACO
+        CH
+        AB
+        ABCH
+        AABCCHO
+        ER
+        ELR
+        CO
+        KS
+        CKOS
+        CEKLORS
+        AABCCCEHKLOORS
+
 
 Match Sorting Algorithms
 
