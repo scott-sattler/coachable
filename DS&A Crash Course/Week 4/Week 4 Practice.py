@@ -18,7 +18,7 @@ Strings
         both strings have same letter frequency
 
     4. What are 2 ways to determine if a string is a palindrome?
-        reverse the sting and compare to original
+        reverse the string and compare to original
         compare first/last elements, move inwards (0, -1; 1, -2; ...)
 
     5. What is the runtime to concatenate a string with a character?
@@ -46,7 +46,7 @@ Sorting
     1. What does it mean to sort an array?
         impose order
 
-    2. How does sorting work for strings? How is different than sorting arrays?
+    2. How does sorting work for strings? How is it different from sorting arrays?
         a < b < c ... z, where ord(a) = 97, ord(b) = 98...
         in Python, sorting a string should be done using a char list, ultimately joined back into a string
 
@@ -335,8 +335,9 @@ Substring Matching Algorithms
     Assume a prime base number of 101. Show the intermediate hash values for each P window in S, and explain how the
     algorithm identifies each occurrence. Note any false positives the algorithm might produce, and explain why they
     occur.
-        this implementation at O(n*m) is of a similar, or greater,
-        complexity to using a perfect hash function of O(n + m).
+        this implementation produces O(n*m) runtime complexity and is of a
+        similar, or greater, complexity to using a hash function that does not
+        require verification (and would therefore have a runtime of O(n + m)).
 
         'ABC'
         ord('A') -> 65
@@ -378,10 +379,6 @@ Substring Matching Algorithms
         potential match (implementation requires verification)
 
         'ABCCABCABCA' -> 97
-        '       ABC ' -> 97
-        potential match (implementation requires verification)
-
-        'ABCCABCABCA' -> 97
         '        ABC' -> 97
         potential match (implementation requires verification)
         this false positive is the result of the lossy hash function being used
@@ -395,6 +392,12 @@ Substring Matching Algorithms
     occurrence and how it uses the 'bad character' and 'good suffix' rules to skip unnecessary comparisons. Note any
     edge or corner cases the algorithm needs to handle, and explain how it handles them.
         todo
+        'bad character' shift table
+        {'a': len(S), ... 'A': 1, 'B': 2, 'C': 1, ... 'Z': len(S)}
+
+        'good suffix'
+
+
 
 
 '''
