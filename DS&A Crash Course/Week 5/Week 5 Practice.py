@@ -320,7 +320,7 @@ Identifying Recursive Relationships
             e. A similar solution works but instead. size(root) = 1 + sum(root.child) for each child node.
 
         2. sum(root) finds the sum of all the nodes in the binary tree. sum(A) = 1+3+8+6+4+&+10+14+12= 65
-            1. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
                 sum(A) => 65
                 sum(B) => 15
@@ -328,41 +328,226 @@ Identifying Recursive Relationships
                 sum(D) => 23
                 sum(E) => 48
 
-            2. Base Case - When does the recursion stop?
-                if node is None
+            b. Base Case - When does the recursion stop?
+                if node is None:
+                    return 0
 
-            3. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                sum(root) = sum(left) + sum(right) + root
+                sum(node) = node + sum(node.left) + sum(node.right)
 
-            4. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
+                verified; the proposed relation is an application of the recursive definition of trees
 
-
-            5. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                sum(root) = sum(leftmost) + sum(leftmost + 1) ... + sum(rightmost) + root
+                sum(node) = node + builtins.sum([sum(child) for child in node.children])
+
 
         3. max_val(root) finds the maximum value among all nodes in a binary tree. max_val(A) = 14 since it is the
         largest element in the tree.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                max_val(A) = 14
+                max_val(B) = 5
+                max_val(C) = 11
+                max_val(D) = 5
+                max_val(E) = 10
+
+            b. Base Case - When does the recursion stop?
+                if node is None:
+                    return float('-inf')
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                max_val(node) = max(node.val, max_val(node.left), max_val(node.right))
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                max_val(root) = max([node] + [max_val(child) for child in node.children])
+
 
         4. is_symmetric(root) returns True if the tree is symmetric and False if it is not. is_symmetric(A) = False and
         is_symmetric(D) = True. A tree is symmetric if the left and right subtrees are mirror images of each other.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                is_symmetric(A) = False
+                is_symmetric(B) = False
+                is_symmetric(C) = False
+                is_symmetric(D) = True
+                is_symmetric(E) = False
+
+            b. Base Case - When does the recursion stop?
+                todo: review
+                if node is None:
+                    return ?
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo: incorrect
+                is_symmetric(node) = all(node.left == node.right, is_symmetric(node.left), is_symmetric(node.right))
+
+                uhh:
+                is_symmetric(node) = level_order(node.left) == level_order(node.right)[::-1]
+                is_symmetric(node) = level_order[:level//2] == level_order[:level//2 - 1:-1]
+
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                todo
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                todo: incorrect
+                is_symmetric(root) = all([node.left == node.right] + [is_symmetric(child) for child in node.children])
+
 
         5. height(root) finds the height of the tree. The distance from the root to the lowest child. height(A) = 3
         because 12 is 3 levels down from the 8.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                height(A) = 3
+                height(B) = 4
+                height(C) = 3
+                height(D) = 2
+                height(E) = 4
+
+            b. Base Case - When does the recursion stop?
+                if node is None:
+                    return 0
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                height(root) = max(height(node.left), height(node.right)) + 1
+                each level returns the maximum depth below, plus itself (less the root)
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+
+                todo
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                height(node) = max([child for child in node.children]) + 1
+
 
         6. The diameter of a binary tree is the length of the longest path between any two nodes in the tree. This path
         may or may not pass through the root of the tree. diameter(root) finds the diameter of this tree.
         diameter(A) = 6 because the path from 4 or 7 to 12  has length 6.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                diameter(A) = todo
+                diameter(B) =
+                diameter(C) =
+                diameter(D) =
+                diameter(E) =
+
+            b. Base Case - When does the recursion stop?
+                todo
+                if node is None:
+                    return 0
+
+
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                diameter(node) = node.left + node.right + 1
+                each level returns the maximum depth below, plus itself (less the root)
+
+                longest single branch?
+                each node tracks current path and longest path
+                if current path becomes longer, update longest path
+
+                create lists with the 0th element the start node
+                any two lists with the same 0th element can be added together
+
+                todo
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                todo
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                height(node) = max([child for child in node.children]) + 1
+                todo verify
+
 
         7. leafs(root) calculates the number of leaves in a binary tree. leafs(A)=4 because 1,4,7,12 are all leaf nodes.
         Recall leaf nodes are nodes with no children.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                leafs(A) = 4
+                leafs(B) = 1
+                leafs(C) = 6
+                leafs(D) = 4
+                leafs(E) = 3
+
+            b. Base Case - When does the recursion stop?
+                if node is None:
+                    return 0
+
+                if not node.left and not node.right:
+                    return 1
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                leafs(node) = leafs(node.left) + leafs(node.right)
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+                todo
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                leafs(node) = sum([child for child in node.children])
+
 
         8. top_ordered(root) returns True if the root of every subtree is the smallest element in its subtree.
         top_ordered(E) = True because every Node, it is smaller than the elements in its subtree. top_ordered(A) = False
         because 3 is larger than its left child of 1.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                top_ordered(A) = False
+                top_ordered(B) = True
+                top_ordered(C) = True
+                top_ordered(D) = True
+                top_ordered(E) = True
+
+            b. Base Case - When does the recursion stop?
+                if node is None:
+                    return True
+
+                left = node.left.val if node.left else node.val + 1
+                right = node.right.val if node.right else node.val + 1
+                return True if left > node.val and right > node.val else False
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo: review
+                top_ordered(node) = top_ordered(node.left) and top_ordered(node.right)
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+                todo
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                top_ordered(node) = all([top_ordered(child) for child in node.children])
 
         9. find_height(root, height) determines the number of nodes that have height height. find_height(A, 2) = 3
         because of 1,6,14 are the nodes with height 2. find_height(any non empty tree, 0) = 1 because it will be just
@@ -401,7 +586,16 @@ Tries
         nodes are a valid prefix (e.g. a word in a dictionary)
 
     2. When do we use a trie?
-
+        any time you want efficient runtime in a problem that can be reduced to, or would otherwise significantly
+        benefit from, finding a prefix
+        e.g.:
+        implementation of the dictionary,
+        pattern searching,
+        longest prefix matching algorithm used for routing tables for IP addresses,
+        storing/querying XML documents,
+        data compression,
+        computational biology,
+        ...
 
     3. How do we know that “dog” is an actual word in our trie and is not just a prefix of the word “doghouse”?
         the 'g' node would contain a prefix indicator
