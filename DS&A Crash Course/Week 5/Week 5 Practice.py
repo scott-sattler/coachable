@@ -335,6 +335,7 @@ Identifying Recursive Relationships
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
                 sum(node) = node + sum(node.left) + sum(node.right)
+                each recursive call sums the current node with children sums
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -363,6 +364,7 @@ Identifying Recursive Relationships
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
                 max_val(node) = max(node.val, max_val(node.left), max_val(node.right))
+                each recursive call finds the maximum value between the current node and its children
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -397,6 +399,14 @@ Identifying Recursive Relationships
                 uhh:
                 is_symmetric(node) = level_order(node.left) == level_order(node.right)[::-1]
                 is_symmetric(node) = level_order[:level//2] == level_order[:level//2 - 1:-1]
+
+                is_symmetric(node) = level(nodes) == level(nodes)[::-1]
+
+                is_symmetric(node) = is_symmetric(node.left)
+
+                the tree is_semmetric() when each level is palindromic (has reflectional symmetry across the vertical
+                axis when represented as a tree structure)
+
 
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
@@ -445,43 +455,34 @@ Identifying Recursive Relationships
         diameter(A) = 6 because the path from 4 or 7 to 12  has length 6.
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
-                diameter(A) = todo
-                diameter(B) =
-                diameter(C) =
-                diameter(D) =
-                diameter(E) =
+                diameter(A) = 6
+                diameter(B) = 4
+                diameter(C) = 5
+                diameter(D) = 4
+                diameter(E) = 7
 
             b. Base Case - When does the recursion stop?
-                todo
                 if node is None:
                     return 0
 
-
-
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                diameter(node) = node.left + node.right + 1
-                each level returns the maximum depth below, plus itself (less the root)
 
-                longest single branch?
-                each node tracks current path and longest path
-                if current path becomes longer, update longest path
+                diameter(node) = max(diameter(node.left), diameter(node.right)) + 1
+                todo: vs
+                diameter(node, longest) = max(diameter(node.left, longest), diameter(node.right, longest)) + 1
 
-                create lists with the 0th element the start node
-                any two lists with the same 0th element can be added together
-
-                todo
+                each level updates the longest path (diameter) by comparing the previous best and current longest paths,
+                and returns the longest left or right path plus one to the parent node.
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
-                todo
+                verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                height(node) = max([child for child in node.children]) + 1
-                todo verify
-
+                diameter(node) = max([diameter(child) for child in node.children]) + 1
 
         7. leafs(root) calculates the number of leaves in a binary tree. leafs(A)=4 because 1,4,7,12 are all leaf nodes.
         Recall leaf nodes are nodes with no children.
@@ -536,8 +537,12 @@ Identifying Recursive Relationships
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo: review
-                top_ordered(node) = top_ordered(node.left) and top_ordered(node.right)
+                top_ordered(node) = node.left.val > node.val and node.right.val > node.val
+                                    and top_ordered(node.left) and top_ordered(node.right)
+
+                top_ordered(node) = node.each_child.val > node.val and top_ordered(node.each_child)
+
+                each recursive call compares the current node to its children, and checks that all children are valid
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -547,7 +552,7 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                top_ordered(node) = all([top_ordered(child) for child in node.children])
+                top_ordered(node) = all([child.val > node.val and top_ordered(child) for child in node.children])
 
         9. find_height(root, height) determines the number of nodes that have height height. find_height(A, 2) = 3
         because of 1,6,14 are the nodes with height 2. find_height(any non empty tree, 0) = 1 because it will be just
@@ -602,6 +607,7 @@ Tries
 
     4. Suppose our dictionary has n words and the longest of them is m characters long. What is the time and space
     complexity of building our trie?
+
 
 
 
