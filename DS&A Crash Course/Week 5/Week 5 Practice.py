@@ -507,6 +507,7 @@ Identifying Recursive Relationships
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
                 leafs(node) = leafs(node.left) + leafs(node.right)
+                each recursive call adds the left and right leaf sums
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -608,12 +609,13 @@ Identifying Recursive Relationships
                     return 0
 
                 todo (d == h) or (d >= h ) or (d > h - 1)
-                if depth >= height:
+                if height < 1:
                     return 1
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                find_height(node, height) = find_height(node.left, height + 1) + find_height(node.right, height + 1)
+                find_height(node, height) = find_height(node.left, height - 1) + find_height(node.right, height - 1)
+                each recursive call decrements height until height is zero, indicating a node of the desired height
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -622,31 +624,35 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                find_height(node, height) = sum([find_height(child, height + 1) for child in node.children])
+                find_height(node, height) = sum([find_height(child, height - 1) for child in node.children])
+
 
         10. sum_only_child_parents(root) determines the sum of nodes with exactly one child.
         sum_only_child_parents(A) = 24 because 10,14 are the nodes with one child, and their sum if 24.
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
-                sum_only_child_parents(A) = 2
-                sum_only_child_parents(B) = 4
+                sum_only_child_parents(A) = 24
+                sum_only_child_parents(B) = 10
                 sum_only_child_parents(C) = 0
                 sum_only_child_parents(D) = 0
-                sum_only_child_parents(E) = 4
+                sum_only_child_parents(E) = 21
 
             b. Base Case(s) - When does the recursion stop?
                 if not node.left and not node.right:
                     return 0
 
+            Recursive Case(s):
                 if not node.left:
-                    return 1 + sum_only_child_parents(node.right)
+                    return node.val + sum_only_child_parents(node.right)
 
                 if not node.right:
-                    return 1 + sum_only_child_parents(node.left)
+                    return node.val + sum_only_child_parents(node.left)
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo
                 sum_only_child_parents(node) = sum_only_child_parents(node.left) + sum_only_child_parents(node.right)
+                each recursive call recursively sums of the value of the single child parents
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -654,21 +660,118 @@ Identifying Recursive Relationships
                 verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
-            todo: base case etc. Does the same solution work? If not, what additional changes need to be made?
+            Does the same solution work? If not, what additional changes need to be made?
+                if all([True if not child else False for child in node.children]): return 0
+                if len(node.children) == 1: return 1 + sum_only_child_parents(node.children[0])
+
                 sum_only_child_parents(node) = sum([sum_only_child_parents(child) for child in node.children])
+
 
         11. sum_only_child(root) determines the sum of all nodes that do not have a sibling sum_only_child(A) = 34
         because 8,14,12 are the nodes without siblings and their sum if 35. The root does not have a sibling node and is
         an "only child" node.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                sum_only_child(A) = 34
+                sum_only_child(B) = 15
+                sum_only_child(C) = 1
+                sum_only_child(D) = 1
+                sum_only_child(E) = 34
+
+            b. Base Case(s) - When does the recursion stop?
+                if not node.left and not node.right:
+                    return 0
+
+            Recursive Case(s):
+                if not node.left:
+                    return 1 + sum_only_child(node.right)
+
+                if not node.right:
+                    return 1 + sum_only_child(node.left)
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo
+                sum_only_child(node) = sum_only_child(node.left) + sum_only_child(node.right)
+                each recursive call recursively adds the children without siblings, and the root
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                todo
 
         12. level_min(root, height) determines the node of minimum value height equal to the given height.
         level_min(A, 0) = 8,level_min(A,1) = 3, level_min(A,2) = 1
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                level_min(A, 0) = 8
+                level_min(B, 0) = 1
+                level_min(C, 0) = 1
+                level_min(D, 0) = 1
+                level_min(E, 0) = 1
+
+                level_min(A, 1) = 3
+                level_min(B, 1) = 2
+                level_min(C, 1) = 2
+                level_min(D, 1) = 2
+                level_min(E, 1) = 2
+
+                level_min(A, 2) = 1
+                level_min(B, 2) = 3
+                level_min(C, 2) = 4
+                level_min(D, 2) = 4
+                level_min(E, 2) = 4
+
+                level_min(A, 3) = 4
+                level_min(B, 3) = 4
+                level_min(C, 3) = 8
+                level_min(D, 3) = float('inf')
+                level_min(E, 3) = 8
+
+                level_min(A, 4) = float('inf')
+                level_min(B, 4) = 5
+                level_min(C, 4) = float('inf')
+                level_min(D, 4) = float('inf')
+                level_min(E, 4) = 9
+
+                level_min(A, 5) = float('inf')
+                level_min(B, 5) = float('inf')
+                level_min(C, 5) = float('inf')
+                level_min(D, 5) = float('inf')
+                level_min(E, 5) = float('inf')
+
+
+            b. Base Case(s) - When does the recursion stop?
+                if node is None:
+                    return float('inf')
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo
+                level_min(node, height) = min(level_min(node.left, height), level_min(node.right, height))
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                todo
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                todo
+
 
         13. full(root) determines if a binary tree is full. A binary tree is said to be full if every node has 0 or 2
         children. full(D) = True, full(A) = False
 
+
         14. same(root_a, root_b) returns True if root_a and root_b represent the same binary tree and False otherwise.
         Your recurrence will require you to use both root_a, root_b as inputs. same(A, A) = True, same(A,B) = False
+
 
         15. Challenge Question. almost_same(root_a, root_b, k) returns True if root_a and root_b represent the same
         binary tree except the k of the values can be different. Suppose we're using example A. If k=1 then you can
