@@ -558,7 +558,7 @@ Identifying Recursive Relationships
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
                 if not node: return True
-                if all([True if not node or child.val > node.val else False for child in node.children]): return True
+                if all([True if not child or child.val > node.val else False for child in node.children]): return True
 
                 top_ordered(node) = all([child.val > node.val and top_ordered(child) for child in node.children])
 
