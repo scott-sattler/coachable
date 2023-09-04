@@ -329,7 +329,8 @@ Identifying Recursive Relationships
                 sum(E) => 48
 
             b. Base Case(s) - When does the recursion stop?
-                if node is None:
+                # todo: consider converting all to (if not node:)
+                if node is None:  # equivalent to: if not node: return 0
                     return 0
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
@@ -398,7 +399,8 @@ Identifying Recursive Relationships
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                is_symmetric(left, right) = is_symmetric(left.left, right.right) and is_symmetric(left.right, right.left)
+                is_symmetric(left, right) = is_symmetric(left.left, right.right)
+                                            and is_symmetric(left.right, right.left)
                 # a recursive call that, when starting from a root, compares pairs of mirrored nodes
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
@@ -408,6 +410,13 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
+                todo
+                this recursive approach:
+                for n = 3:
+                f(ll, rr) and f(lm, rm) and f(lr, rl), and f(ml, mr)
+                for n = 4:
+                8 fn calls...
+
                 compare the corresponding mirrored element...
                 leftmost <-> rightmost, second to leftmost <-> second to rightmost, ...
 
@@ -506,6 +515,9 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
+                if not node: return 0
+                if all(not leafs(child) for child in node.children): return 1
+
                 leafs(node) = sum([leafs(child) for child in node.children])
 
 
@@ -545,6 +557,9 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
+                if not node: return True
+                if all([True if not node or child.val > node.val else False for child in node.children]): return True
+
                 top_ordered(node) = all([child.val > node.val and top_ordered(child) for child in node.children])
 
         9. find_height(root, height) determines the number of nodes that have height height. find_height(A, 2) = 3
@@ -610,7 +625,37 @@ Identifying Recursive Relationships
                 find_height(node, height) = sum([find_height(child, height + 1) for child in node.children])
 
         10. sum_only_child_parents(root) determines the sum of nodes with exactly one child.
-        sum_only_child_parents(A) = 24because 10,14 are the nodes with one child, and their sum if 24.
+        sum_only_child_parents(A) = 24 because 10,14 are the nodes with one child, and their sum if 24.
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                sum_only_child_parents(A) = 2
+                sum_only_child_parents(B) = 4
+                sum_only_child_parents(C) = 0
+                sum_only_child_parents(D) = 0
+                sum_only_child_parents(E) = 4
+
+            b. Base Case(s) - When does the recursion stop?
+                if not node.left and not node.right:
+                    return 0
+
+                if not node.left:
+                    return 1 + sum_only_child_parents(node.right)
+
+                if not node.right:
+                    return 1 + sum_only_child_parents(node.left)
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                sum_only_child_parents(node) = sum_only_child_parents(node.left) + sum_only_child_parents(node.right)
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            todo: base case etc. Does the same solution work? If not, what additional changes need to be made?
+                sum_only_child_parents(node) = sum([sum_only_child_parents(child) for child in node.children])
 
         11. sum_only_child(root) determines the sum of all nodes that do not have a sibling sum_only_child(A) = 34
         because 8,14,12 are the nodes without siblings and their sum if 35. The root does not have a sibling node and is
