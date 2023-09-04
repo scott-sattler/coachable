@@ -552,28 +552,62 @@ Identifying Recursive Relationships
         the root (assuming the tree is not empty)
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
-                (A) =
-                (B) =
-                (C) =
-                (D) =
-                (E) =
+                find_height(A, 0) = 1
+                find_height(B, 0) = 1
+                find_height(C, 0) = 1
+                find_height(D, 0) = 1
+                find_height(E, 0) = 1
+
+                find_height(A, 1) = 2
+                find_height(B, 1) = 1
+                find_height(C, 1) = 2
+                find_height(D, 1) = 2
+                find_height(E, 1) = 2
+
+                find_height(A, 2) = 3
+                find_height(B, 2) = 1
+                find_height(C, 2) = 4
+                find_height(D, 2) = 4
+                find_height(E, 2) = 2
+
+                find_height(A, 3) = 3
+                find_height(B, 3) = 1
+                find_height(C, 3) = 4
+                find_height(D, 3) = 0
+                find_height(E, 3) = 2
+
+                find_height(A, 4) = 0
+                find_height(B, 4) = 1
+                find_height(C, 4) = 0
+                find_height(D, 4) = 0
+                find_height(E, 4) = 1
+
+                find_height(A, 5) = 0
+                find_height(B, 5) = 0
+                find_height(C, 5) = 0
+                find_height(D, 5) = 0
+                find_height(E, 5) = 0
 
             b. Base Case(s) - When does the recursion stop?
-                todo
+                if node is None:
+                    return 0
+
+                todo (d == h) or (d >= h ) or (d > h - 1)
+                if depth >= height:
+                    return 1
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo
+                find_height(node, height) = find_height(node.left, height + 1) + find_height(node.right, height + 1)
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
-                todo
                 verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo
+                find_height(node, height) = sum([find_height(child, height + 1) for child in node.children])
 
         10. sum_only_child_parents(root) determines the sum of nodes with exactly one child.
         sum_only_child_parents(A) = 24because 10,14 are the nodes with one child, and their sum if 24.
