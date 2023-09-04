@@ -1,3 +1,20 @@
+"""###########################
+######## linked lists ########
+###########################"""
+
+
+class TreeNode:
+    def __init__(self, val=None, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+class nAryNode:  # noqa: naming
+    def __init__(self, val=None, children: list | None = None):
+        self.val = val
+        self.children = children
+
 
 """###########################
 ######## linked lists ########
