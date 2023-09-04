@@ -236,7 +236,7 @@ Identifying Recursive Relationships
         1. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
         understanding of the question.
 
-        2. Base Case - When does the recursion stop?
+        2. Base Case(s) - When does the recursion stop?
 
         3. Recurrence Relation - How can you solve for the parent using the solution for the children? You can describe
         this with an equation or in English - whichever is more effective at communicating your approach.
@@ -312,7 +312,7 @@ Identifying Recursive Relationships
         nodes in the tree.
 
             a. size(B) = 5, size(C) = 11, size(D) = 7, size(E) = 9
-            b. Base Case: if root is None: return 0 in other words size(None) = 0
+            b. Base Case(s): if root is None: return 0 in other words size(None) = 0
             c. Recurrence Relation: size(root) = size(left) + size(right) + 1
             d. Yes: Verified. size(left/3) = 5, size(right/10) = 3, size(root) = 5+3+1 = 9 You should verify all 5 of
             them. Here left/3 just identifies the left child is the one with value of 3 and right/10 identifies the
@@ -328,7 +328,7 @@ Identifying Recursive Relationships
                 sum(D) => 23
                 sum(E) => 48
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return 0
 
@@ -357,7 +357,7 @@ Identifying Recursive Relationships
                 max_val(D) = 5
                 max_val(E) = 10
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return float('-inf')
 
@@ -386,38 +386,33 @@ Identifying Recursive Relationships
                 is_symmetric(D) = True
                 is_symmetric(E) = False
 
-            b. Base Case - When does the recursion stop?
-                todo: review
-                if node is None:
-                    return ?
+            b. Base Case(s) - When does the recursion stop?
+                if not right and not left:
+                    return True
+
+                if not left or not right:
+                    return False
+
+                if left.val != right.val:
+                    return False
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo: incorrect
-                is_symmetric(node) = all(node.left == node.right, is_symmetric(node.left), is_symmetric(node.right))
-
-                uhh:
-                is_symmetric(node) = level_order(node.left) == level_order(node.right)[::-1]
-                is_symmetric(node) = level_order[:level//2] == level_order[:level//2 - 1:-1]
-
-                is_symmetric(node) = level(nodes) == level(nodes)[::-1]
-
-                is_symmetric(node) = is_symmetric(node.left)
-
-                the tree is_semmetric() when each level is palindromic (has reflectional symmetry across the vertical
-                axis when represented as a tree structure)
-
-
+                is_symmetric(left, right) = is_symmetric(left.left, right.right) and is_symmetric(left.right, right.left)
+                # a recursive call that, when starting from a root, compares pairs of mirrored nodes
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
-                todo
+                verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo: incorrect
-                is_symmetric(root) = all([node.left == node.right] + [is_symmetric(child) for child in node.children])
+                compare the corresponding mirrored element...
+                leftmost <-> rightmost, second to leftmost <-> second to rightmost, ...
+
+                traverse level order while creating a list for each level, then compare each level order list:
+                0 with -1, 1 with -2, and so on... ll_list == ll_list[::-1]
 
 
         5. height(root) finds the height of the tree. The distance from the root to the lowest child. height(A) = 3
@@ -430,7 +425,7 @@ Identifying Recursive Relationships
                 height(D) = 2
                 height(E) = 4
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return 0
 
@@ -442,12 +437,11 @@ Identifying Recursive Relationships
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
-
-                todo
+                verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                height(node) = max([child for child in node.children]) + 1
+                height(node) = max([height(child) for child in node.children]) + 1
 
 
         6. The diameter of a binary tree is the length of the longest path between any two nodes in the tree. This path
@@ -461,7 +455,7 @@ Identifying Recursive Relationships
                 diameter(D) = 4
                 diameter(E) = 7
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return 0
 
@@ -494,7 +488,7 @@ Identifying Recursive Relationships
                 leafs(D) = 4
                 leafs(E) = 3
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return 0
 
@@ -509,11 +503,10 @@ Identifying Recursive Relationships
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
                 verified
-                todo
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                leafs(node) = sum([child for child in node.children])
+                leafs(node) = sum([leafs(child) for child in node.children])
 
 
         8. top_ordered(root) returns True if the root of every subtree is the smallest element in its subtree.
@@ -527,7 +520,7 @@ Identifying Recursive Relationships
                 top_ordered(D) = True
                 top_ordered(E) = True
 
-            b. Base Case - When does the recursion stop?
+            b. Base Case(s) - When does the recursion stop?
                 if node is None:
                     return True
 
@@ -540,6 +533,7 @@ Identifying Recursive Relationships
                 top_ordered(node) = node.left.val > node.val and node.right.val > node.val
                                     and top_ordered(node.left) and top_ordered(node.right)
 
+                generalized to n-ary:
                 top_ordered(node) = node.each_child.val > node.val and top_ordered(node.each_child)
 
                 each recursive call compares the current node to its children, and checks that all children are valid
@@ -548,7 +542,6 @@ Identifying Recursive Relationships
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
                 verified
-                todo
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
@@ -557,6 +550,30 @@ Identifying Recursive Relationships
         9. find_height(root, height) determines the number of nodes that have height height. find_height(A, 2) = 3
         because of 1,6,14 are the nodes with height 2. find_height(any non empty tree, 0) = 1 because it will be just
         the root (assuming the tree is not empty)
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                (A) =
+                (B) =
+                (C) =
+                (D) =
+                (E) =
+
+            b. Base Case(s) - When does the recursion stop?
+                todo
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                todo
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                todo
 
         10. sum_only_child_parents(root) determines the sum of nodes with exactly one child.
         sum_only_child_parents(A) = 24because 10,14 are the nodes with one child, and their sum if 24.
@@ -581,6 +598,37 @@ Identifying Recursive Relationships
         from Z in the root value. If the tree structure is any different, i.e. you find None in one tree at the same
         position as a Node in the other tree, then return False. If k = 0 , then the output should be equivalent to same
         function in the previous problem. Namely, almost_same(root_a, root_b,0) == same(root_a, root_b) .
+
+
+
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                (A) =
+                (B) =
+                (C) =
+                (D) =
+                (E) =
+
+            b. Base Case(s) - When does the recursion stop?
+                todo
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                todo
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                todo
+
+
+
+
 
 Tries
 
