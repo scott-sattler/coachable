@@ -839,14 +839,18 @@ Identifying Recursive Relationships
                 if not node_a or not node_b:
                     return False
 
+                if node_a != node_b:
+                    return False
+
             Recursive Case(s):
-                if node_a == node_b:
+                if node_a.val == node_b.val:
                     return all(same(node_a.left, node_b.left), same(node_a.right, node_b.right))
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
+                todo: node_a == node_b ?
                 same(node_a, node_b) = all(
-                                           node_a == node_b,
+                                           node_a.val == node_b.val,
                                            same(node_a.left, node_b.left),
                                            same(node_a.right, node_b.right)
                                        )
@@ -859,7 +863,18 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo
+                todo: node_a == node_b ?
+                same(node_a, node_b) = all(
+                                           node_a.val == node_b.val,
+                                           all[
+                                               same(node_a, node_b) for node_a, node_b in
+                                               zip(
+                                                   [child_a for child_a in node_a.children],
+                                                   [child_b for child_b in node_b.children]
+                                               )
+                                           ]
+                                       )
+                call same() for each child
 
 
         15. Challenge Question. almost_same(root_a, root_b, k) returns True if root_a and root_b represent the same
@@ -871,11 +886,11 @@ Identifying Recursive Relationships
         function in the previous problem. Namely, almost_same(root_a, root_b,0) == same(root_a, root_b) .
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
-                (A) =
-                (B) =
-                (C) =
-                (D) =
-                (E) =
+                almost_same(A) =
+                almost_same(B) =
+                almost_same(C) =
+                almost_same(D) =
+                almost_same(E) =
 
             b. Base Case(s) - When does the recursion stop?
                 todo
