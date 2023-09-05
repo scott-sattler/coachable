@@ -886,18 +886,33 @@ Identifying Recursive Relationships
         function in the previous problem. Namely, almost_same(root_a, root_b,0) == same(root_a, root_b) .
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
-                almost_same(A) =
-                almost_same(B) =
-                almost_same(C) =
-                almost_same(D) =
-                almost_same(E) =
+                almost_same(root_a, root_b, k) =
+                almost_same(root_a, root_b, k) =
+                almost_same(root_a, root_b, k) =
+                almost_same(root_a, root_b, k) =
+                almost_same(root_a, root_b, k) =
 
             b. Base Case(s) - When does the recursion stop?
-                todo
+                if not node:
+                    return True
+
+                if node_a != node_b:
+                    k -= 1
+                    if k < 0:
+                        return False
+
+            Recursive Case(s):
+                return
+
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo
+                todo: consider k
+                almost_same(root_a, root_b, k) = all(
+                                                     root_a.val == root_b.val,
+                                                     almost_same(root_a.left, root_b.left, k),
+                                                     almost_same(root_a.right, root_b.right, k)
+                                                 )
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
