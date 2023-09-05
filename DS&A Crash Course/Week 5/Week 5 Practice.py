@@ -329,7 +329,6 @@ Identifying Recursive Relationships
                 sum(E) => 48
 
             b. Base Case(s) - When does the recursion stop?
-                # todo: consider converting all to (if not node:)
                 if node is None:  # equivalent to: if not node: return 0
                     return 0
 
@@ -410,16 +409,17 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo
-                this recursive approach:
+                recursive approach:
                 for n = 3:
                 f(ll, rr) and f(lm, rm) and f(lr, rl), and f(ml, mr)
                 for n = 4:
                 8 fn calls...
+                2^(n - 1) fn calls
 
                 compare the corresponding mirrored element...
                 leftmost <-> rightmost, second to leftmost <-> second to rightmost, ...
 
+                alternative/iterative approach:
                 traverse level order while creating a list for each level, then compare each level order list:
                 0 with -1, 1 with -2, and so on... ll_list == ll_list[::-1]
 
@@ -485,6 +485,7 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
+                todo
                 diameter(node) = max([diameter(child) for child in node.children]) + 1
 
         7. leafs(root) calculates the number of leaves in a binary tree. leafs(A)=4 because 1,4,7,12 are all leaf nodes.
@@ -608,7 +609,6 @@ Identifying Recursive Relationships
                 if node is None:
                     return 0
 
-                todo (d == h) or (d >= h ) or (d > h - 1)
                 if height < 1:
                     return 1
 
@@ -691,7 +691,6 @@ Identifying Recursive Relationships
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo
                 sum_only_child(node) = sum_only_child(node.left) + sum_only_child(node.right)
                 each recursive call recursively adds the children without siblings, and the root
 
@@ -702,7 +701,8 @@ Identifying Recursive Relationships
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo
+                sum_only_child(node) = sum([sum_only_child(child) for child in node.children])
+
 
         12. level_min(root, height) determines the node of minimum value height equal to the given height.
         level_min(A, 0) = 8,level_min(A,1) = 3, level_min(A,2) = 1
@@ -749,10 +749,107 @@ Identifying Recursive Relationships
                 if node is None:
                     return float('inf')
 
+                if height < 1:
+                    return node.val
+
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo
-                level_min(node, height) = min(level_min(node.left, height), level_min(node.right, height))
+                level_min(node, height) = min(level_min(node.left, height - 1), level_min(node.right, height - 1))
+                each recursive call finds the minimum node value from  calls that decrement height until height is zero
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                level_min(node, height) = min([level_min(child, height - 1) for child in node.children])
+
+
+        13. full(root) determines if a binary tree is full. A binary tree is said to be full if every node has 0 or 2
+        children. full(D) = True, full(A) = False
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                full(A) = False
+                full(B) = False
+                full(C) = True
+                full(D) = True
+                full(E) = False
+
+            b. Base Case(s) - When does the recursion stop?
+                if not node.left and not node.right:
+                    return True
+
+                if not node.left or not node.right:
+                    return False
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                full(node) = all(full(node.left), full(node.right))
+                each recursive call tests for all children being full
+
+            d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
+            these as test cases - we will be pretty critical if your proposed solution does not work on the provided
+            examples.
+                verified
+
+            e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
+            Does the same solution work? If not, what additional changes need to be made?
+                full(node) = all([full(child) for child in node.children])
+
+        14. same(root_a, root_b) returns True if root_a and root_b represent the same binary tree and False otherwise.
+        Your recurrence will require you to use both root_a, root_b as inputs. same(A, A) = True, same(A,B) = False
+            a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
+            understanding of the question.
+                same(A, A) = True
+                same(B, A) = False
+                same(C, A) = False
+                same(D, A) = False
+                same(E, A) = False
+
+                same(A, B) = False
+                same(B, B) = True
+                same(C, B) = False
+                same(D, B) = False
+                same(E, B) = False
+
+                same(A, C) = False
+                same(B, C) = False
+                same(C, C) = True
+                same(D, C) = False
+                same(E, C) = False
+
+                same(A, D) = False
+                same(B, D) = False
+                same(C, D) = False
+                same(D, D) = True
+                same(E, D) = False
+
+                same(A, E) = False
+                same(B, E) = False
+                same(C, E) = False
+                same(D, E) = False
+                same(E, E) = True
+
+            b. Base Case(s) - When does the recursion stop?
+                if not node_a and not node_b:
+                    Return True
+
+                if not node_a or not node_b:
+                    return False
+
+            Recursive Case(s):
+                if node_a == node_b:
+                    return all(same(node_a.left, node_b.left), same(node_a.right, node_b.right))
+
+            c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
+            describe this with an equation or in English - whichever is more effective at communicating your approach.
+                same(node_a, node_b) = all(
+                                           node_a == node_b,
+                                           same(node_a.left, node_b.left),
+                                           same(node_a.right, node_b.right)
+                                       )
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
@@ -765,14 +862,6 @@ Identifying Recursive Relationships
                 todo
 
 
-        13. full(root) determines if a binary tree is full. A binary tree is said to be full if every node has 0 or 2
-        children. full(D) = True, full(A) = False
-
-
-        14. same(root_a, root_b) returns True if root_a and root_b represent the same binary tree and False otherwise.
-        Your recurrence will require you to use both root_a, root_b as inputs. same(A, A) = True, same(A,B) = False
-
-
         15. Challenge Question. almost_same(root_a, root_b, k) returns True if root_a and root_b represent the same
         binary tree except the k of the values can be different. Suppose we're using example A. If k=1 then you can
         replace the value of the root in A to 20 instead of 8. We have a modified version of A call this Z, then you
@@ -780,9 +869,6 @@ Identifying Recursive Relationships
         from Z in the root value. If the tree structure is any different, i.e. you find None in one tree at the same
         position as a Node in the other tree, then return False. If k = 0 , then the output should be equivalent to same
         function in the previous problem. Namely, almost_same(root_a, root_b,0) == same(root_a, root_b) .
-
-
-
             a. Verify Understanding - Compute the expected output for all the example trees. Do this manually to verify
             understanding of the question.
                 (A) =
@@ -807,9 +893,6 @@ Identifying Recursive Relationships
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
                 todo
-
-
-
 
 
 Tries
