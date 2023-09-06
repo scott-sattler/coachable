@@ -113,7 +113,6 @@ Graph Traversals
         but, if we removed edge 3 -> 4:
         10 4 9 5 3 2 7 8 6 1
 
-
 Inorder for Graphs
 
     We have a preorder, inorder, and postorder for binary trees. However, an inorder traversal doesn't really make sense
@@ -206,6 +205,7 @@ Intermediate Processing BFS/DFS
     4. At the moment when v is removed from the queue during BFS, if G includes an edge v → w for which w is currently
     a vertex in the queue, then G must contain a directed cycle containing v.
 
+
 (Optional Section) MSTs
 
     1. What is a minimum spanning tree?
@@ -214,6 +214,7 @@ Intermediate Processing BFS/DFS
     giving just the algorithm name.
 
     3. If the graph is not connected, can I still create an MST? Why or why not? What about a Minimum Spanning Forest
+
 
 Heaps
 
@@ -250,7 +251,7 @@ Free Response Questions
 
 True or False
 
-Determine if the statements are true or false. If false, provide a counter-example. If true, explain why.
+    Determine if the statements are true or false. If false, provide a counter-example. If true, explain why.
 
     1. Let a[] be a max-oriented binary heap that contains the N distinct integers 1, 2, . . . , N in a[1] through a[N].
     Then, key N must be in a[1]; key N − 1 must be in either a[2] or a[3]; and key N − 2 must be in either a[2] or a[3].
