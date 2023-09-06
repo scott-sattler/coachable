@@ -6,26 +6,74 @@ Free Response Questions
 General
 
     Figure 1:
-    6 - 2
+     6 - 2
      |   |
      5 - 1 - 4
          |
          3
 
     1. What are the differences between graphs and trees?
+        trees are an acyclic subset of graphs that have exactly one edge between any two vertices
 
     2. For the graph (Figure 1), write the Adjacency Matrix and Adjacency List representations.
+        adjacency matrix:
+           1  2  3  4  5  6
+        1  1  1  1  1  1  0
+        2  1  0  0  0  0  1
+        3  1  0  0  0  0  0
+        4  1  0  0  0  0  0
+        5  1  0  0  0  0  1
+        6  0  1  0  0  1  0
+
+        adjacency list:
+        [
+            [2, 3, 4, 5],
+            [1, 6],
+            [1],
+            [1],
+            [1, 6],
+            [2, 5]
+        ]
+        {
+            1: [2, 3, 4, 5],
+            2: [1, 6],
+            3: [1],
+            4: [1],
+            5: [1, 6],
+            6: [2, 5]
+        }
+        LLNode[1] -> LLNode[2] -> LLNode[3] -> LLNode[4] -> LLNode[5]
+        LLNode[2] -> LLNode[1] -> LLNode[6]
+        LLNode[3] -> LLNode[1]
+        LLNode[4] -> LLNode[1]
+        LLNode[5] -> LLNode[1] -> LLNode[6]
+        LLNode[6] -> LLNode[2] -> LLNode[5]
+
 
     3. What does it mean for a graph to be directed?
+        for vertex connections (edges) to be unidirectional
+        predecessors (tail nodes) can access their successors (head nodes)
+        a --> b : a implies b; b does not imply a
+        a <-- b : b implies a; a does not imply b
+        a <-> b : a implies b, b implies a
 
     4. What does it mean for a graph to have a cycle?
+        for a path (trail) to lead back to the originating vertex
 
     5. How can you detect a cycle in a graph?
+        1. keep track of visited nodes
+        2. Floyd's cycle detection algorithm (two pointers)
+        3. todo other
 
     6. If you have a graph with N vertices, what is the maximum number of edges it could have?
+        n(n-1) directed graph without self loops
+        n(n-1)/2 undirected graph (each path is bidirectional)
+        n^2 directed graph with self loops
 
     7. Recall that a binary tree is an example of a graph. If a binary tree has N nodes, what is the maximum number of
     edges it can have?
+        the first node has 0 connections, with every additional node will having a maximum of 1 connection
+        -> (N - 1)
 
 Graph Traversals
 
@@ -35,24 +83,36 @@ Graph Traversals
     < FIGURE 2 >
 
     1. Give the postorder of the graph when visited by DFS. Start from O.
+        M W Y I P S E B O
 
     2. Give the preorder of the graph when visited by DFS. Start from O.
+        O B E S I W M Y P
 
     3. Give the BFS traversal of the graph. Start from O.
+        O B E Y S W I M P
 
     4. Is there a topological order starting from O? If there is not, why not? If there is one, write the topological
     order.
+        no. topological order requires a directed acyclic graph because the sort orders the vertices of directed edges
+        such that parents precede children; cycles have no parent (cycles contain neither predecessor nor successor).
 
     < FIGURE 3 >
 
     1. Give the postorder of the graph when visited by DFS. Start from node 10.
+        1 6 8 7 2 5 4 3 9 10
 
     2. Give the preorder of the graph when visited by DFS. Start from 1O.
+        10 9 3 2 1 7 6 8 4 5
 
     3. Give the level order of the graph. Start from 10.
+        10 9 3 5 8 2 4 7 1 6
 
     4. Is there a topological order starting from 10? If there is not, why not? If there is one, write the topological
     order.
+        no. 4 -> 9 -> 3 -> 4
+        but, if we removed edge 3 -> 4:
+        10 4 9 5 3 2 7 8 6 1
+
 
 Inorder for Graphs
 
