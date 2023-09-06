@@ -950,8 +950,8 @@ Tries
 
     4. Suppose our dictionary has n words and the longest of them is m characters long. What is the time and space
     complexity of building our trie?
-
-
+        time complexity: O(n*m)
+        space complexity: O(n*m)
 
 
 Building a Trie
