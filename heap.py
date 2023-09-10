@@ -3,7 +3,6 @@ import unittest
 
 class MaxHeap:
     """    one-indexed    """
-
     def __init__(self, default=None):
         if default is None:
             default = []
@@ -41,10 +40,10 @@ class MaxHeap:
         if len(self.heap) > 2:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
         else:
-            return self.heap.pop(1)
+            self.heap[0], self.heap[1] = self.heap[1], self.heap[0]
+            return self.heap.pop()
 
         pop_element = self.heap.pop()
-
         self._sift_down()
 
         return pop_element
@@ -81,7 +80,7 @@ class MaxHeap:
     # https://stackoverflow.com/q/9755721
     def heapify(self) -> list:
         # siftdown avoids last level
-        last_parent = len(self.heap) // 2
+        last_parent = (len(self.heap) - 1) // 2
         for i in range(last_parent, 0, -1):
             self._sift_down(i)
 
@@ -137,11 +136,35 @@ class TestMaxHeap(unittest.TestCase):
         expected = [11, 10, 6, 8, 9, 5, 0, 7, 3, 1, 4, 2]
         self.assertEqual(h.heap[1:], expected)
 
-    def test_8(self):
+    def test_push_1(self):
         h = MaxHeap([0])
         h.push(1)
         h.push(2)
         expected = [2, 0, 1]
+        self.assertEqual(h.heap[1:], expected)
+
+    def test_pop_1(self):
+        h = MaxHeap([8, 6, 1, 3, 5])
+        h.pop()
+        expected = [6, 5, 1, 3]
+        self.assertEqual(h.heap[1:], expected)
+
+    def test_pop_2(self):
+        h = MaxHeap([8, 6, 1, 3, 5])
+        h.pop()
+        h.pop()
+        expected = [5, 3, 1]
+        self.assertEqual(h.heap[1:], expected)
+
+    def test_pop_3(self):
+        h = MaxHeap([6, 5, 1, 3])
+        h.pop()
+        expected = [5, 3, 1]
+        self.assertEqual(h.heap[1:], expected)
+
+    def test_sift_down_heapify_1(self):
+        h = MaxHeap([5, 3, 1, 8, 6])
+        expected = [8, 6, 1, 3, 5]
         self.assertEqual(h.heap[1:], expected)
 
 # h = MaxHeap()
