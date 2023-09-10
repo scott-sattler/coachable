@@ -1,4 +1,4 @@
-'''
+"""
 Week 1 Practice Exercises
 
 Python Fundamentals and Object-Oriented Programming
@@ -114,4 +114,4 @@ Free Response Questions
           print(customer)
 
 
-'''
+"""
