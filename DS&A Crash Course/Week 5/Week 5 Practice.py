@@ -848,24 +848,16 @@ Identifying Recursive Relationships
 
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
-                todo: node_a == node_b ?
-                same(node_a, node_b) = all(
-                                           node_a.val == node_b.val,
-                                           same(node_a.left, node_b.left),
-                                           same(node_a.right, node_b.right)
-                                       )
+                same(node_a, node_b) = all(same(node_a.left, node_b.left), same(node_a.right, node_b.right))
 
             d. Check Unit Tests. Double-check your proposed relation works for the examples trees provided. Think of
             these as test cases - we will be pretty critical if your proposed solution does not work on the provided
             examples.
-                todo
                 verified
 
             e. N-Ary Extension. How would this change if you were dealing with an n-ary tree instead of a binary tree?
             Does the same solution work? If not, what additional changes need to be made?
-                todo: node_a == node_b ?
                 same(node_a, node_b) = all(
-                                           node_a.val == node_b.val,
                                            all[
                                                same(node_a, node_b) for node_a, node_b in
                                                zip(
@@ -908,6 +900,7 @@ Identifying Recursive Relationships
             c. Recurrence Relation - How can you solve for the parent using the solution for the children? You can
             describe this with an equation or in English - whichever is more effective at communicating your approach.
                 todo: consider k
+                todo: == considering Tim's slack comments
                 almost_same(root_a, root_b, k) = all(
                                                      root_a.val == root_b.val,
                                                      almost_same(root_a.left, root_b.left, k),
