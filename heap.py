@@ -2,7 +2,7 @@ import unittest
 
 
 class MaxHeap:
-    """    one-indexed    """
+    """    one-based indexing    """
     def __init__(self, default=None):
         if default is None:
             default = []
