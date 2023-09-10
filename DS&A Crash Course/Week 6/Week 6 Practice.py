@@ -1,4 +1,4 @@
-'''
+"""
 Graphs
 
 Free Response Questions
@@ -221,33 +221,58 @@ Heaps
 Free Response Questions
 
     1. What underlying data structure(s) can a heap use?
+        list (array) or binary tree
 
     2. What is the difference between a min and a max heap?
+        min heap: every parent is less than either child
+        max heap: every parent is greater than either child
 
     3. What is the runtime of pushing an element into a heap?
+        O(log n), where n is the size of the heap
 
     4. What is the runtime of popping an element out of a heap?
+        O(log n), where n is the size of the heap
 
     5. We can store integers in a heap. What about an arbitrary object? Which ones can we keep, and which ones can’t we?
+        todo: reword
+        any object which has a (unique) value that can be compared (e.g. 97 < 98, a < b), can be used in a heap
 
     6. If we wanted to store some of those objects we can’t keep, what concept do we need to add to those objects?
+        todo: unique value?
+        the object needs to be assigned a value that will be used for comparison
 
     7. If I wanted to find the K smallest elements in a stream, would I use a min or a max heap of size K? Why?
+        max heap; you would add elements from the stream, popping the max value whenever the heap exceeded size K
 
-    8. What if I wanted to find the K most significant elements in a stream? Why?
+    8. What if I wanted to find the K most significant (frequently occurring) elements in a stream? Why?
+        todo: review
+        create a key-value pair for each new element: key is the element ID that will be observed in the stream, and
+        value is the frequency (or a two element list also containing the current index if not using a binary tree).
+        for each time a key-value pair is created or updated: (1) if the element is created, add it to the min-heap of
+        size K, and pop() the root (sift_down is O(log K)); (2) if the element is updated, and NOT within the heap,
+        treat it as if it were a new element; (3) if the element is updated within in the heap, sift_down that element
+        for O(log K).
+        O(n * log K) time complexity, where n is the number of stream elements, and K is the size of the heap
+        O(n + K) space complexity, where n is the total stream count, and K is size of the heap
 
-    9. If I have a collection of N elements, and I insert each of them into a min heap, and then pop + print each element
-    from the heap. What did I just do?
+    9. If I have a collection of N elements, and I insert each of them into a min heap, and then pop + print each
+    element from the heap. What did I just do?
+        sort ascending
 
     10. What if I inserted each of them into a max heap and did the same thing?
+        sort descending
 
     11. Suppose I insert the following sequence of numbers into a min heap: 5, 7, 9, 2, 4.
 
         a. What does the min heap look like?
+            2 4 9 7 5
 
         b. Now suppose I pop twice. What does the heap look like now?
+            4 5 9 7
+            5 7 9
 
         c. Now suppose I insert 3, 9, 12. What does the heap look like now?
+            3 5 9 7 9 12
 
 True or False
 
@@ -255,13 +280,30 @@ True or False
 
     1. Let a[] be a max-oriented binary heap that contains the N distinct integers 1, 2, . . . , N in a[1] through a[N].
     Then, key N must be in a[1]; key N − 1 must be in either a[2] or a[3]; and key N − 2 must be in either a[2] or a[3].
+        true. max heaps have the property of each node being greater than all children/descendant nodes.
+
+        Given that N > N - 1 > N - 2,
+
+               N
+             /   \
+           /      \
+        N - 1    N - 2
+
+               N
+             /   \
+           /      \
+        N - 2    N - 1
+
+        both satisfy the max-heap property
 
     2. The order of growth of the total number of compares to insert N distinct keys in descending order into an
     initially empty max-oriented binary heap is N.
 
+
     3. A 3-heap is an array representation (using 1-based indexing) of a complete 3-way tree, where the key in each node
     is greater than (or equal to) its children’s keys. In the worst case, the number of compares to insert a key in a
     3-heap containing N keys is ∼ 1 log3 N.
+
 
 Number of Comparisons
 
@@ -275,4 +317,4 @@ Number of Comparisons
     3. Suppose you delete the maximum key from the binary heap in figure A. How many keys are involved in one or more
     comparisons?
 
-'''
+"""
