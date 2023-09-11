@@ -234,18 +234,16 @@ Free Response Questions
         O(log n), where n is the size of the heap
 
     5. We can store integers in a heap. What about an arbitrary object? Which ones can we keep, and which ones can’t we?
-        todo: reword
-        any object which has a (unique) value that can be compared (e.g. 97 < 98, a < b), can be used in a heap
+        any object that is orderable  (i.e. has some value that can be compared, such as 97 < 98, a < b) can be used in
+        a heap. objects without this property cannot - unless they're assigned such a value
 
     6. If we wanted to store some of those objects we can’t keep, what concept do we need to add to those objects?
-        todo: unique value?
         the object needs to be assigned a value that will be used for comparison
 
     7. If I wanted to find the K smallest elements in a stream, would I use a min or a max heap of size K? Why?
         max heap; you would add elements from the stream, popping the max value whenever the heap exceeded size K
 
     8. What if I wanted to find the K most significant (frequently occurring) elements in a stream? Why?
-        todo: review
         create a key-value pair for each new element: key is the element ID that will be observed in the stream, and
         value is the frequency (or a two element list also containing the current index if not using a binary tree).
         for each time a key-value pair is created or updated: (1) if the element is created, add it to the min-heap of
@@ -298,11 +296,26 @@ True or False
 
     2. The order of growth of the total number of compares to insert N distinct keys in descending order into an
     initially empty max-oriented binary heap is N.
+        false. insertion time complexity is O(log k), where k is the heap size. what we mean by this is that for each
+        insertion, we're going to be doing up to log_2(k) compares - not N. so, the order of growth of the number of
+        compares for this problem is N*log(k). we can, however, heapify an already existing array in O(N) time by
+        starting at the rightmost (in an array/list) parent, iterating to the topmost node, and sifting down...
 
+        disregarding the bottommost level (they have no children), we have O(1) operations on the level above. this
+        results in ~(n/4) nodes remaining...
+        n/4 nodes at level 1, n/8 nodes at level 2, n/16 nodes at level 3... 1 node at log(n) level...
+        n/4(1c) + n/8(2c) + n/16(3c) + ... 1(log(n)c)
+        if n/4 = 2^k, the above becomes: c2^k(1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k)
+        and (1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k) converges to less than 3...
+        so, c2^kc -> c2^k -> c(n)/4 -> c(n) -> O(n)
 
     3. A 3-heap is an array representation (using 1-based indexing) of a complete 3-way tree, where the key in each node
     is greater than (or equal to) its children’s keys. In the worst case, the number of compares to insert a key in a
     3-heap containing N keys is ∼ 1 log3 N.
+        true. insertions append the key, then sift-up. in binary trees, sift-up operations compare the child to the
+        parent at most, log_2(N) times, where N is the height of the tree. when we say log_2(N) times, what we're saying
+        is how many times some number has doubled (or been multiplied by our base 2) - because we're using binary trees.
+        however, if we were to use ternary, or 3-way trees, each level triples (not doubles), hence ~ log_3(N).
 
 
 Number of Comparisons
@@ -310,11 +323,15 @@ Number of Comparisons
     < FIGURE A >
 
     1. If we insert a new element y into the heap. How many positions could it end up in?
+        5; root, root.right, root.right.right, root.right.right.right, root.right.right.right.left
 
     2. See the binary heap in Figure A. Supposed the last operation was insert(x). How many values could it possibly
     have been? Hint: Try to identify which values specifically would be possible.
+        5; 19, 26, 32, 35, 38
 
     3. Suppose you delete the maximum key from the binary heap in figure A. How many keys are involved in one or more
     comparisons?
+        7: 37 35, 19 37; 34 36, 19 36; 14 17, 19 17
+        19 37 35 34 36 14 17
 
 """
