@@ -3,7 +3,10 @@ import unittest
 
 class MaxHeap:
     """    one-based indexing    """
-    def __init__(self, default=None):
+    def __init__(self, default=None, track_index=False):
+        self.track_index = track_index
+        self.index = dict()
+
         if default is None:
             default = []
         if not isinstance(default, list):
@@ -12,20 +15,28 @@ class MaxHeap:
         self.heap = [0] + default
 
         if len(self.heap) > 2:
-            self.heapify()
+            self.build_heap()
 
     def __repr__(self):
         return str(self.heap[1:])
 
     def push(self, element: int | float) -> None:
+        if self.track_index:
+            self.index[element] = len(self.heap)
+
         self.heap.append(element)
         self._sift_up()
 
-    def _sift_up(self) -> None:
-        child_i = len(self.heap) - 1
+    def _sift_up(self, child: int = -1) -> None:
+        child_i = child
+        if child < 1:
+            child_i = len(self.heap) - 1
         parent_i = child_i // 2
         while self.heap[child_i] > self.heap[parent_i]:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
+            if self.track_index:
+                self.index[self.heap[parent_i]] = parent_i
+                self.index[self.heap[child_i]] = child_i
 
             child_i = parent_i
             parent_i = child_i // 2
@@ -39,11 +50,19 @@ class MaxHeap:
 
         if len(self.heap) > 2:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
+            if self.track_index:
+                self.index[self.heap[1]] = 1
+                self.index[self.heap[-1]] = len(self.heap) - 1
         else:
-            self.heap[0], self.heap[1] = self.heap[1], self.heap[0]
+            self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
+            if self.track_index:
+                self.index[self.heap[1]] = 1
+                self.index.pop(self.heap[-1])
             return self.heap.pop()
 
         pop_element = self.heap.pop()
+        if self.track_index:
+            self.index.pop(pop_element)
         self._sift_down()
 
         return pop_element
@@ -60,6 +79,9 @@ class MaxHeap:
 
         while self.heap[parent_i] < self.heap[child_i]:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
+            if self.track_index:
+                self.index[self.heap[child_i]] = child_i
+                self.index[self.heap[parent_i]] = parent_i
 
             parent_i = child_i
             child_i = parent_i * 2
@@ -71,6 +93,9 @@ class MaxHeap:
 
     # pop root and push new key (avoids duplicate balance)
     def replace(self, replace_max_with):
+        if self.track_index:
+            raise NotImplementedError
+
         replaced_elem = self.heap[1]
         self.heap[1] = replace_max_with
         self._sift_down()
@@ -78,7 +103,10 @@ class MaxHeap:
 
     # O(n)
     # https://stackoverflow.com/q/9755721
-    def heapify(self) -> list:
+    def build_heap(self) -> list:
+        if self.track_index:
+            for i, ele in enumerate(self.heap[1:]):
+                self.index[ele] = i + 1
         # siftdown avoids last level
         last_parent = (len(self.heap) - 1) // 2
         for i in range(last_parent, 0, -1):
@@ -162,10 +190,16 @@ class TestMaxHeap(unittest.TestCase):
         expected = [5, 3, 1]
         self.assertEqual(h.heap[1:], expected)
 
-    def test_sift_down_heapify_1(self):
+    def test_sift_down_build_heap_1(self):
         h = MaxHeap([5, 3, 1, 8, 6])
         expected = [8, 6, 1, 3, 5]
         self.assertEqual(h.heap[1:], expected)
+
+    def test_track_index_1(self):
+        h = MaxHeap([5, 3, 1, 8, 6], True)
+        expected = [8, 6, 1, 3, 5]
+        expected = {k: i + 1 for i, k in enumerate(expected)}
+        self.assertEqual(h.index, expected)
 
 # h = MaxHeap()
 # print(h)
