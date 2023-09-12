@@ -283,7 +283,7 @@ class TestMaxHeap(unittest.TestCase):
         actual = h.heap[1:]
         self.assertEqual(expected, actual)
 
-    def test_tuple_track_index_1(self):  # todo
+    def test_tuple_track_index_1(self):
         h = MaxHeap([(5, 'y'), (3, 'b'), (1, 99), (8, 'z'), (6, 'a')], True)
         expected = [(8, 'z'), (6, 'a'), (1, 99), (3, 'b'), (5, 'y')]
         expected = {k[1]: i + 1 for i, k in enumerate(expected)}
