@@ -1,5 +1,15 @@
 import unittest
 
+# unused
+class HeapNode:
+    def __init__(self, val, obj, reverse=False):
+        self.val = val
+        self.obj = obj
+        self.rev = reverse
+
+    def __repr__(self):
+        return str(f'value: {self.val}, object: {self.obj}')
+
 
 class MaxHeap:
     """    one-based indexing    """
@@ -12,9 +22,11 @@ class MaxHeap:
             default = []
         if not isinstance(default, list):
             raise TypeError
+        if default and isinstance(default[0], tuple):
+            if len(default[0]) > 2:
+                raise ValueError('tuples are limited to (value, object)')
 
         self.heap = [0] + default
-
         if len(self.heap) > 2:
             self.build_heap()
 
@@ -112,7 +124,8 @@ class MaxHeap:
     def build_heap(self) -> list:
         if self.track_index:
             for i, ele in enumerate(self.heap[1:]):
-                self.index_map[ele] = i + 1
+                key = self._get_key(ele)
+                self.index_map[key] = i + 1
 
         last_parent = (len(self.heap) - 1) // 2
         for i in range(last_parent, 0, -1):
@@ -125,17 +138,20 @@ class MaxHeap:
             raise AttributeError
 
         element_i = self.index_map[element]
-        self.heap[element_i] = new_val
-        if new_val > element:
+        if isinstance(self.heap[element_i], tuple):
+            old_val = self.heap[element_i][0]
+            self.heap[element_i] = (new_val, element)
+        else:
+            old_val = self.heap[element_i]
+            self.heap[element_i] = new_val
+
+        if new_val > old_val:
             self._sift_up(element_i)
         else:
             self._sift_down(element_i)
 
-    def _update_index_map(self):
-        # todo
+    def _update_index_map(self):  # todo
         pass
-
-
 
     @staticmethod
     def _get_key(element):
@@ -267,10 +283,15 @@ class TestMaxHeap(unittest.TestCase):
         actual = h.heap[1:]
         self.assertEqual(expected, actual)
 
-    def test_tuple_track_index(self):
-        # todo
-        pass
+    def test_tuple_track_index_1(self):  # todo
+        h = MaxHeap([(5, 'y'), (3, 'b'), (1, 99), (8, 'z'), (6, 'a')], True)
+        expected = [(8, 'z'), (6, 'a'), (1, 99), (3, 'b'), (5, 'y')]
+        expected = {k[1]: i + 1 for i, k in enumerate(expected)}
+        actual = h.index_map
+        self.assertEqual(expected, actual)
 
+    def test_tuple_size_1(self):  # todo
+        pass
 
 # h = MaxHeap()
 # print(h)
