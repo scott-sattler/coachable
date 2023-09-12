@@ -3,6 +3,7 @@ import unittest
 
 class MaxHeap:
     """    one-based indexing    """
+    """    only supports values and 2-length tuples    """
     def __init__(self, default=None, track_index=False):
         self.track_index = track_index
         self.index_map = dict()
@@ -22,24 +23,28 @@ class MaxHeap:
 
     def push(self, element) -> None:
         if self.track_index:
-            self.index_map[element] = len(self.heap)
+            key = self._get_key(element)
+            self.index_map[key] = len(self.heap)
 
         self.heap.append(element)
         self._sift_up()
 
-    def _sift_up(self, child: int = -1) -> None:
+    def _sift_up(self, child_i: int = -1) -> None:
         if len(self.heap) < 3:
             return
 
-        child_i = child
-        if child < 1:
+        if child_i < 1:
             child_i = len(self.heap) - 1
         parent_i = child_i // 2
         while self.heap[child_i] > self.heap[parent_i]:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
+
             if self.track_index:
-                self.index_map[self.heap[parent_i]] = parent_i
-                self.index_map[self.heap[child_i]] = child_i
+                # todo _update_index_map
+                key_p = self._get_key(self.heap[parent_i])
+                key_c = self._get_key(self.heap[child_i])
+                self.index_map[key_p] = parent_i
+                self.index_map[key_c] = child_i
 
             child_i = parent_i
             parent_i = child_i // 2
@@ -76,9 +81,13 @@ class MaxHeap:
 
         while self.heap[parent_i] < self.heap[child_i]:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
+
             if self.track_index:
-                self.index_map[self.heap[child_i]] = child_i
-                self.index_map[self.heap[parent_i]] = parent_i
+                # todo _update_index_map
+                key_c = self._get_key(self.heap[child_i])
+                key_p = self._get_key(self.heap[parent_i])
+                self.index_map[key_c] = child_i
+                self.index_map[key_p] = parent_i
 
             parent_i = child_i
             child_i = parent_i * 2
@@ -121,6 +130,18 @@ class MaxHeap:
             self._sift_up(element_i)
         else:
             self._sift_down(element_i)
+
+    def _update_index_map(self):
+        # todo
+        pass
+
+
+
+    @staticmethod
+    def _get_key(element):
+        if isinstance(element, tuple):
+            return element[1]
+        return element
 
 
 class TestMaxHeap(unittest.TestCase):
@@ -245,6 +266,10 @@ class TestMaxHeap(unittest.TestCase):
         expected = [9, 6, 8, 3, 5]
         actual = h.heap[1:]
         self.assertEqual(expected, actual)
+
+    def test_tuple_track_index(self):
+        # todo
+        pass
 
 
 # h = MaxHeap()
