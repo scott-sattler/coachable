@@ -28,6 +28,9 @@ class MaxHeap:
         self._sift_up()
 
     def _sift_up(self, child: int = -1) -> None:
+        if len(self.heap) < 3:
+            return
+
         child_i = child
         if child < 1:
             child_i = len(self.heap) - 1
@@ -48,17 +51,11 @@ class MaxHeap:
         if len(self.heap) < 2:
             return None
 
-        if len(self.heap) > 2:
+        if len(self.heap) > 1:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
             if self.track_index:
                 self.index_map[self.heap[1]] = 1
                 self.index_map[self.heap[-1]] = len(self.heap) - 1
-        else:
-            self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
-            if self.track_index:
-                self.index_map[self.heap[1]] = 1
-                self.index_map.pop(self.heap[-1])
-            return self.heap.pop()
 
         pop_element = self.heap.pop()
         if self.track_index:
@@ -124,18 +121,6 @@ class MaxHeap:
             self._sift_up(element_i)
         else:
             self._sift_down(element_i)
-
-    @staticmethod
-    def _parent(index: int):
-        return index // 2
-
-    @staticmethod
-    def _left_child(index: int):
-        return index * 2
-
-    @staticmethod
-    def _right_child(index: int):
-        return index * 2 + 1
 
 
 class TestMaxHeap(unittest.TestCase):
