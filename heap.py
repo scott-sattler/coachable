@@ -12,8 +12,8 @@ class HeapNode:
 
 
 class MaxHeap:
-    """    one-based indexing    """
-    """    only supports values and 2-length tuples    """
+    """ one-based indexing
+        tuples are limited to (value, object) """
     def __init__(self, default=None, track_index=False):
         self.track_index = track_index
         self.index_map = dict()
