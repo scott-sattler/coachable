@@ -1,4 +1,6 @@
-from __future__ import annotations
+# from __future__ import annotations
+import unittest
+
 
 '''
 Given a DAG that is represented as a collection of edges, i.e. ["n1", "n2"] means that n1 precedes n2 (visually, n1 -> n2),
@@ -81,18 +83,59 @@ where each connection costs 1 to traverse. Return -1 if there is no path.
 '''
 
 
+# Dijkstra's Algorithm
+# todo just rewrite using minheap ffs
 def find_shortest_path_distance(s: str, d: str, edges: list[list[str]]) -> int:
-    visited = dict()
+    import heap  # maxheap
 
-    for vertex in edges:
-        if vertex[1] in visited:
-            visited[vertex[1]].append([1, vertex[0]])
-        else:
-            visited[vertex[1]] = [[1, vertex[0]]]
+    p_que = heap.MaxHeap(track_index=True)
+    visited = set()
+    adj_list = to_adjacency_list(edges)
 
-    print(visited)
-    print('x' * 111)
+    distance = dict()
+    for vertex in adj_list.keys():
+        distance[vertex] = _v(float('inf'))
+        p_que.push((_v(float('inf')), vertex))
+    distance[s] = 0
+    p_que.update_element(s, 0)
 
+    while p_que:
+        next_item = p_que.pop()
+        vertex = next_item[1]
+        visited.add(vertex)
+        for neighbor in adj_list[vertex]:
+            if neighbor in visited:
+                continue
+
+            new_dist = distance[vertex] + _v(1)  # all weights are 1
+            if _v(new_dist) < _v(distance[neighbor]):  # reversed comparison using maxheap
+                distance[neighbor] = new_dist
+
+                p_que.update_element(neighbor, new_dist)
+
+    return _v(distance[d]) if distance[d] != _v(float('inf')) else -1
+
+
+def _v(val):
+    return -val
+
+
+def find_shortest_path_distance_bfs(s: str, d: str, edges: list[list[str]]) -> int:
+    from collections import deque
+
+    adj_list = to_adjacency_list(edges)
+    seed = [[1, node] for node in adj_list[s]]
+    queue = deque(seed)
+    while queue:
+        current = queue.popleft()
+        neighbors = adj_list[current[-1]]
+        for neighbor in neighbors:
+            path = [current[0] + 1, neighbor]
+
+            if path[1] == d:
+                return path[0]
+
+    return -1
 
 '''
 Modify the above algorithm to return the path itself. 
@@ -101,7 +144,27 @@ For the test inputs, the path will always exist.
 
 
 def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
-    pass
+    return []
+
+
+def find_shortest_path_bfs_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
+    from collections import deque
+
+    adj_list = to_adjacency_list(edges)
+    queue = deque([[s, node] for node in adj_list[s]])
+    while queue:
+        current = queue.popleft()
+        neighbors = adj_list[current[-1]]
+        for neighbor in neighbors:
+            path = current[:]
+            if neighbor not in path:
+                path.append(neighbor)
+                queue.append(path)
+
+            if path[-1] == d:
+                return path
+
+    return -1
 
 
 '''
@@ -141,85 +204,72 @@ def output_mst(edges: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]:
     pass
 
 
-# from stencil import *
+class TestClass(unittest.TestCase):
+    adj_list = dict()
+    adj_list["v1"] = ["v2", "v3"]
+    adj_list["v2"] = ["v4", "v5"]
+    adj_list["v3"] = []
+    adj_list["v4"] = ["v3"]
+    adj_list["v5"] = ["v6"]
+    adj_list["v6"] = ["v4"]
 
-adj_list = {}
-adj_list["v1"] = ["v2", "v3"]
-adj_list["v2"] = ["v4", "v5"]
-adj_list["v3"] = []
-adj_list["v4"] = ["v3"]
-adj_list["v5"] = ["v6"]
-adj_list["v6"] = ["v4"]
+    adj_matrix = [
+        [0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 0, 0]
+    ]
 
-adj_matrix = [
-    [0, 1, 1, 0, 0, 0],
-    [0, 0, 0, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 1],
-    [0, 0, 0, 1, 0, 0]
-]
+    edges = [["v1", "v2"], ["v1", "v3"], ["v2", "v4"], ["v2", "v5"], ["v4", "v3"], ["v5", "v6"], ["v6", "v4"]]
+    courses = [[0, 1], [1, 2], [0, 2], [1, 3], [2, 3]]
+    courses_none = [[0, 1], [1, 2], [2, 0]]
 
-edges = [["v1", "v2"], ["v1", "v3"], ["v2", "v4"], ["v2", "v5"], ["v4", "v3"], ["v5", "v6"], ["v6", "v4"]]
-courses = [[0, 1], [1, 2], [0, 2], [1, 3], [2, 3]]
-courses_none = [[0, 1], [1, 2], [2, 0]]
+    graph = list()
+    graph.append(("e1", "e2", 6))
+    graph.append(("e2", "e3", 2))
+    graph.append(("e1", "e3", 4))
+    graph.append(("e4", "e5", 3))
+    graph.append(("e1", "e4", 5))
 
-graph = []
-graph.append(("e1", "e2", 6))
-graph.append(("e2", "e3", 2))
-graph.append(("e1", "e3", 4))
-graph.append(("e4", "e5", 3))
-graph.append(("e1", "e4", 5))
+    mst = [("e2", "e3", 2), ("e4", "e5", 3), ("e1", "e3", 4), ("e1", "e4", 5)]
 
-mst = [("e2", "e3", 2), ("e4", "e5", 3), ("e1", "e3", 4), ("e1", "e4", 5)]
+    def test_to_adjacency_list_1(self):
+        assert to_adjacency_list(self.edges) == self.adj_list
 
+    def test_to_adjacency_matrix_1(self):
+        assert to_adjacency_matrix(self.edges) == self.adj_matrix
 
-def test_to_adjacency_list_1():
-    assert to_adjacency_list(edges) == adj_list
+    def test_find_shortest_path_distance_1(self):
+        assert find_shortest_path_distance("v1", "v4", self.edges) == 2
 
+    def test_find_shortest_path_distance_2(self):
+        assert find_shortest_path_distance("v4", "v5", self.edges) == -1
 
-def test_to_adjacency_matrix_1():
-    assert to_adjacency_matrix(edges) == adj_matrix
+    def test_find_shortest_path_1(self):
+        assert find_shortest_path("v1", "v4", self.edges) == ["v1", "v2", "v4"]
 
+    def test_find_shortest_path_2(self):
+        assert find_shortest_path("v1", "v6", self.edges) == ["v1", "v2", "v5", "v6"]
 
-def test_find_shortest_path_distance_1():
-    assert find_shortest_path_distance("v1", "v4", edges) == 2
+    def test_find_shortest_path_wt_1(self):
+        assert find_shortest_path_wt("v1", "v6", self.edges, 5) == ["v1", "v2", "v5", "v6"]
 
+    def test_find_valid_course_ordering_if_exists_1(self):
+        assert find_valid_course_ordering_if_exists(self.courses, 4) == [0, 1, 2, 3]
 
-def test_find_shortest_path_distance_2():
-    assert find_shortest_path_distance("v4", "v5", edges) == -1
+    def test_find_valid_course_ordering_if_exists_2(self):
+        assert find_valid_course_ordering_if_exists(self.courses_none, 4) is None
 
+    def test_output_mst_1(self):
+        assert set(output_mst(self.graph)) == set(self.mst)
 
-def test_find_shortest_path_1():
-    assert find_shortest_path("v1", "v4", edges) == ["v1", "v2", "v4"]
+    # from stencil import *
+    # from main_test import *
 
+    # order should not be assumed
+    edges_ooo = [["v4", "v3"], ["v5", "v6"], ["v6", "v4"], ["v1", "v2"], ["v1", "v3"], ["v2", "v4"], ["v2", "v5"]]
 
-def test_find_shortest_path_2():
-    assert find_shortest_path("v1", "v6", edges) == ["v1", "v2", "v5", "v6"]
-
-
-def test_find_shortest_path_wt_1():
-    assert find_shortest_path_wt("v1", "v6", edges, 5) == ["v1", "v2", "v5", "v6"]
-
-
-def test_find_valid_course_ordering_if_exists_1():
-    assert find_valid_course_ordering_if_exists(courses, 4) == [0, 1, 2, 3]
-
-
-def test_find_valid_course_ordering_if_exists_2():
-    assert find_valid_course_ordering_if_exists(courses_none, 4) == None
-
-
-def test_output_mst_1():
-    assert set(output_mst(graph)) == set(mst)
-
-
-# from stencil import *
-# from main_test import *
-
-# order should not be assumed
-edges_ooo = [["v4", "v3"], ["v5", "v6"], ["v6", "v4"], ["v1", "v2"], ["v1", "v3"], ["v2", "v4"], ["v2", "v5"]]
-
-
-def test_to_adjacency_matrix_2():
-    assert to_adjacency_matrix(edges_ooo) == adj_matrix
+    def test_to_adjacency_matrix_2(self):
+        assert to_adjacency_matrix(self.edges_ooo) == self.adj_matrix
