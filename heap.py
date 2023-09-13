@@ -1,5 +1,6 @@
 import unittest
 
+
 # unused
 class HeapNode:
     def __init__(self, val, obj, reverse=False):
@@ -32,6 +33,11 @@ class MaxHeap:
 
     def __repr__(self):
         return str(self.heap[1:])
+
+    def __bool__(self):
+        if len(self.heap) < 2:
+            return False
+        return True
 
     def push(self, element) -> None:
         if self.track_index:
@@ -71,12 +77,15 @@ class MaxHeap:
         if len(self.heap) > 1:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
             if self.track_index:
-                self.index_map[self.heap[1]] = 1
-                self.index_map[self.heap[-1]] = len(self.heap) - 1
+                key_1 = self._get_key(self.heap[1])
+                key_n1 = self._get_key(self.heap[-1])
+                self.index_map[key_1] = 1
+                self.index_map[key_n1] = len(self.heap) - 1
 
         pop_element = self.heap.pop()
         if self.track_index:
-            self.index_map.pop(pop_element)
+            key = self._get_key(pop_element)
+            self.index_map.pop(key)
         self._sift_down()
 
         return pop_element
@@ -292,6 +301,34 @@ class TestMaxHeap(unittest.TestCase):
 
     def test_tuple_size_1(self):  # todo
         pass
+
+    def test_bool_1(self):
+        h = MaxHeap()
+        expected = False
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_2(self):
+        h = MaxHeap([0])
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_3(self):
+        h = MaxHeap([0, 1])
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_4(self):
+        h = MaxHeap([0, 1])
+        h.pop()
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_5(self):
+        h = MaxHeap([0, 1])
+        h.pop()
+        h.pop()
+        expected = False
+        self.assertEqual(bool(h), expected)
 
 # h = MaxHeap()
 # print(h)
