@@ -61,7 +61,7 @@ class MaxHeap:
             child_i = parent_i
             parent_i = child_i // 2
 
-    def pop(self) -> int | tuple[int, object]:
+    def pop(self) -> int | tuple:
         if len(self.heap) < 2:
             raise IndexError("Cannot remove element from empty heap.")
 
