@@ -131,7 +131,13 @@ class MaxHeap:
 
         return self.heap[1:]
 
-    def update_element(self, element: int | tuple, new_val: int | tuple) -> None:
+    def update_element(self, element: any, new_val: int | tuple) -> None:
+        """
+        updates an element within the index map and heap, then heapifies the heap
+        :param element: element to update
+        :param new_val: new element value
+        :return: None
+        """
         if not self.track_index:
             raise AttributeError
 
