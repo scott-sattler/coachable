@@ -34,7 +34,7 @@ class MaxHeap:
             return False
         return True
 
-    def push(self, element) -> None:
+    def push(self, element: int | tuple) -> None:
         self.heap.append(element)
 
         if self.track_index:
@@ -42,7 +42,7 @@ class MaxHeap:
 
         self._sift_up()
 
-    def _sift_up(self, child_i=None) -> None:
+    def _sift_up(self, child_i: int | None = None) -> None:
         if len(self.heap) < 3:
             return
 
@@ -61,9 +61,9 @@ class MaxHeap:
             child_i = parent_i
             parent_i = child_i // 2
 
-    def pop(self) -> any:
+    def pop(self) -> tuple[int, object]:
         if len(self.heap) < 2:
-            return None
+            raise IndexError("Cannot remove element from empty heap.")
 
         if len(self.heap) > 1:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
@@ -108,7 +108,7 @@ class MaxHeap:
                 child_i = right
 
     # pop root and push new key (avoids duplicate balance)
-    def replace(self, replace_max_with) -> int:
+    def replace(self, replace_max_with: int | tuple) -> int:
         if self.track_index:
             raise NotImplementedError
 
@@ -130,7 +130,7 @@ class MaxHeap:
 
         return self.heap[1:]
 
-    def update_element(self, element, new_val) -> None:
+    def update_element(self, element: int | tuple, new_val: int | tuple) -> None:
         if not self.track_index:
             raise AttributeError
 
@@ -147,7 +147,7 @@ class MaxHeap:
         else:
             self._sift_down(element_i)
 
-    def _update_index_map(self, heap_index):
+    def _update_index_map(self, heap_index: int) -> None:
         element = self.heap[heap_index]
         if isinstance(element, tuple):
             element = element[1]
@@ -156,6 +156,14 @@ class MaxHeap:
 
 class TestMaxHeap(unittest.TestCase):
     # expected, actual
+    # mixed types? [3, (2, 'a'), 5]
+
+    def test_error_create_1(self):
+        self.assertRaises(TypeError, MaxHeap, (1, 2, 3))
+
+    def test_error_create_2(self):
+        self.assertRaises(TypeError, MaxHeap, {1, 2, 3})
+
     def test_create_1(self):
         h = MaxHeap()
         expected = []
@@ -284,8 +292,17 @@ class TestMaxHeap(unittest.TestCase):
         actual = h.index_map
         self.assertEqual(expected, actual)
 
-    def test_tuple_size_1(self):  # todo
-        pass
+    def test_tuple_size_1(self):
+        self.assertRaises(ValueError, MaxHeap, [(3, 4, 5)])
+
+    def test_tuple_size_2(self):
+        self.assertRaises(ValueError, MaxHeap, [(3, 'a', [1, 2])])
+
+    def test_tuple_size_3(self):
+        h = MaxHeap([(3, [1, 2])])
+        expected = [(3, [1, 2])]
+        actual = h.heap[1:]
+        self.assertEqual(expected, actual)
 
     def test_bool_1(self):
         h = MaxHeap()
@@ -314,3 +331,14 @@ class TestMaxHeap(unittest.TestCase):
         h.pop()
         expected = False
         self.assertEqual(bool(h), expected)
+
+    def test_error_empty_pop_1(self):
+        h = MaxHeap()
+        self.assertRaises(IndexError, h.pop)
+
+    def test_error_empty_pop_2(self):
+        h = MaxHeap([2])
+        h.pop()
+        self.assertRaises(IndexError, h.pop)
+
+
