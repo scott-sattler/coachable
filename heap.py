@@ -61,7 +61,7 @@ class MaxHeap:
             child_i = parent_i
             parent_i = child_i // 2
 
-    def pop(self) -> tuple[int, object]:
+    def pop(self) -> int | tuple[int, object]:
         if len(self.heap) < 2:
             raise IndexError("Cannot remove element from empty heap.")
 
@@ -76,8 +76,9 @@ class MaxHeap:
         pop_element = self.heap.pop()  # list.pop()
         if self.track_index:
             if isinstance(pop_element, tuple):
-                pop_element = pop_element[1]
-            self.index_map.pop(pop_element)
+                self.index_map.pop(pop_element[1])
+            else:
+                self.index_map.pop(pop_element)
         self._sift_down()
 
         return pop_element
