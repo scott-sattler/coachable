@@ -1,33 +1,28 @@
 import unittest
 
 
-# unused
-class HeapNode:
-    def __init__(self, val, obj, reverse=False):
-        self.val = val
-        self.obj = obj
-        self.rev = reverse
-
-    def __repr__(self):
-        return str(f'value: {self.val}, object: {self.obj}')
-
-
 class MaxHeap:
-    """ one-based indexing
-        tuples are limited to (value, object) """
-    def __init__(self, default=None, track_index=False):
+    """
+    one-based indexing. \n
+    tuples are limited to (value, object)
+    """
+    def __init__(self, heapify_list=None, track_index=False):
+        """
+        :param heapify_list: strictly (value, object)
+        :param track_index: used for, e.g. Dijkstra's
+        """
         self.track_index = track_index
         self.index_map = dict()
 
-        if default is None:
-            default = []
-        if not isinstance(default, list):
+        if heapify_list is None:
+            heapify_list = []
+        if not isinstance(heapify_list, list):
             raise TypeError
-        if default and isinstance(default[0], tuple):
-            if len(default[0]) > 2:
+        if heapify_list and isinstance(heapify_list[0], tuple):
+            if len(heapify_list[0]) > 2:
                 raise ValueError('tuples are limited to (value, object)')
 
-        self.heap = [0] + default
+        self.heap = [0] + heapify_list
         if len(self.heap) > 2:
             self.build_heap()
 
@@ -40,35 +35,31 @@ class MaxHeap:
         return True
 
     def push(self, element) -> None:
-        if self.track_index:
-            key = self._get_key(element)
-            self.index_map[key] = len(self.heap)
-
         self.heap.append(element)
+
+        if self.track_index:
+            self._update_index_map(-1)
+
         self._sift_up()
 
-    def _sift_up(self, child_i: int = -1) -> None:
+    def _sift_up(self, child_i=None) -> None:
         if len(self.heap) < 3:
             return
 
-        if child_i < 1:
+        # default operation assumes appended to list
+        if child_i is None:
             child_i = len(self.heap) - 1
         parent_i = child_i // 2
-        while self.heap[child_i] > self.heap[parent_i]:
+
+        while parent_i > 0 and self.heap[child_i] > self.heap[parent_i]:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
 
             if self.track_index:
-                # todo _update_index_map
-                key_p = self._get_key(self.heap[parent_i])
-                key_c = self._get_key(self.heap[child_i])
-                self.index_map[key_p] = parent_i
-                self.index_map[key_c] = child_i
+                self._update_index_map(child_i)
+                self._update_index_map(parent_i)
 
             child_i = parent_i
             parent_i = child_i // 2
-
-            if parent_i < 1:
-                break
 
     def pop(self) -> any:
         if len(self.heap) < 2:
@@ -76,16 +67,17 @@ class MaxHeap:
 
         if len(self.heap) > 1:
             self.heap[1], self.heap[-1] = self.heap[-1], self.heap[1]
-            if self.track_index:
-                key_1 = self._get_key(self.heap[1])
-                key_n1 = self._get_key(self.heap[-1])
-                self.index_map[key_1] = 1
-                self.index_map[key_n1] = len(self.heap) - 1
 
-        pop_element = self.heap.pop()
+            if self.track_index:
+                self._update_index_map(1)
+                # self._update_index_map(-1)
+
+        # remove from heap and index mapper
+        pop_element = self.heap.pop()  # list.pop()
         if self.track_index:
-            key = self._get_key(pop_element)
-            self.index_map.pop(key)
+            if isinstance(pop_element, tuple):
+                pop_element = pop_element[1]
+            self.index_map.pop(pop_element)
         self._sift_down()
 
         return pop_element
@@ -104,11 +96,8 @@ class MaxHeap:
             self.heap[parent_i], self.heap[child_i] = self.heap[child_i], self.heap[parent_i]
 
             if self.track_index:
-                # todo _update_index_map
-                key_c = self._get_key(self.heap[child_i])
-                key_p = self._get_key(self.heap[parent_i])
-                self.index_map[key_c] = child_i
-                self.index_map[key_p] = parent_i
+                self._update_index_map(child_i)
+                self._update_index_map(parent_i)
 
             parent_i = child_i
             child_i = parent_i * 2
@@ -133,8 +122,7 @@ class MaxHeap:
     def build_heap(self) -> list:
         if self.track_index:
             for i, ele in enumerate(self.heap[1:]):
-                key = self._get_key(ele)
-                self.index_map[key] = i + 1
+                self._update_index_map(i + 1)
 
         last_parent = (len(self.heap) - 1) // 2
         for i in range(last_parent, 0, -1):
@@ -159,14 +147,11 @@ class MaxHeap:
         else:
             self._sift_down(element_i)
 
-    def _update_index_map(self):  # todo
-        pass
-
-    @staticmethod
-    def _get_key(element):
+    def _update_index_map(self, heap_index):
+        element = self.heap[heap_index]
         if isinstance(element, tuple):
-            return element[1]
-        return element
+            element = element[1]
+        self.index_map[element] = heap_index
 
 
 class TestMaxHeap(unittest.TestCase):
@@ -329,59 +314,3 @@ class TestMaxHeap(unittest.TestCase):
         h.pop()
         expected = False
         self.assertEqual(bool(h), expected)
-
-# h = MaxHeap()
-# print(h)
-# h.push(0)
-# print(h)
-# h.push(1)
-# print(h)
-# h.push(2)
-# print(h)
-# h.push(3)
-# print(h)
-# h.push(4)
-# print(h)
-# h.push(5)
-# print(h)
-#
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-# print('pop', h.pop(), end=' ')
-# print(h)
-
-
-# h = MaxHeap([1])
-# print(h.heap)
-# h = MaxHeap([1, 2])
-# print(h.heap)
-# h = MaxHeap([1, 2, 3])
-# print(h.heap)
-# h = MaxHeap([1, 2, 3, 4])
-# print(h.heap)
-# h = MaxHeap([1, 2, 3, 4, 5])
-# print(h.heap)
-
-
-
-# a_heap = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-#
-# #                   1                       1   1
-# #           2                 3             2   3
-# #       4       5         6       7         4   7
-# #     8   9  10   11    12  13  14  15      8   15
-#
-# i = 1
-# parent = i // 2  # parent
-# left_child = i * 2
-# right_child = i * 2 + 1
