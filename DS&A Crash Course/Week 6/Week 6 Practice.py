@@ -141,8 +141,84 @@ Inorder for Graphs
     Determine the alphabetical in-order traversal for
 
         The graph in figure 2 starting from O.
+            B E I M P S W O Y
+
+            dfs(O)
+                dfs(B)
+                dfs(E)
+                process(O)
+                dfs(Y)
+
+            dfs(B)
+                process(B)
+
+            dfs(E)
+                process(E)
+                dfs(S)
+                dfs(W)
+
+            dfs(S)
+                dfs(I)
+                dfs(M)
+                dfs(P)
+                process(S)
+
+            dfs(I)
+                process(I)
+
+            dfs(M)
+                process(M)
+
+            dfs(P)
+                process(P)
+
+            dfs(W)
+                process(W)
+
+            dfs(Y)
+                process(Y)
 
         The graph in figure 3 starting from 10
+            1 2 3 4 6 7 5 8 9 10
+
+            dfs(10)
+                dfs(9)
+                process(10)
+
+            dfs(9)
+                dfs(3)
+                dfs(5)
+                dfs(8)
+                process(9)
+
+            dfs(3)
+                dfs(2)
+                process(3)
+                dfs(4)
+                dfs(7)
+
+            dfs(2)
+                dfs(1)
+                process(2)
+
+            dfs(1)
+                process(1)
+
+            dfs(4)
+                process(4)
+
+            dfs(7)
+                dfs(6)
+                process(7)
+
+            dfs(6)
+                process(6)
+
+            dfs(5)
+                process(5)
+
+            dfs(8)
+                process(8)
 
 Shortest Path
 
@@ -150,6 +226,9 @@ Shortest Path
     of the following scenarios?
 
         a. Every edge in G has weight 1.
+            bfs, return length at first encounter of t
+            dijkstra's
+
 
         b. Every edge in G has uniform edge weight e where e > 0?
 
@@ -246,10 +325,16 @@ Free Response Questions
     8. What if I wanted to find the K most significant (frequently occurring) elements in a stream? Why?
         create a key-value pair for each new element: key is the element ID that will be observed in the stream, and
         value is the frequency (or a two element list also containing the current index if not using a binary tree).
-        for each time a key-value pair is created or updated: (1) if the element is created, add it to the min-heap of
-        size K, and pop() the root (sift_down is O(log K)); (2) if the element is updated, and NOT within the heap,
-        treat it as if it were a new element; (3) if the element is updated within in the heap, sift_down that element
-        for O(log K).
+
+        for each time a key-value pair is created or updated:
+            (1) if the element is newly created, append it to the min-heap and
+                (1a) if capacity is not yet filled, sift_up for O(log K), or
+                (1b) when over max capacity,
+                    (1b.i) if the new element is less than the root, do not add it to the heap,
+                    (1b.ii) if it is greater than the root, replace the root and sift_down for O(log K);
+            (2) if the element is updated, and NOT within the heap, treat it as if it were a new element;
+            (3) if the element is updated within in the heap, sift_down that element for O(log K).
+
         O(n * log K) time complexity, where n is the number of stream elements, and K is the size of the heap
         O(n + K) space complexity, where n is the total stream count, and K is size of the heap
 
@@ -297,17 +382,18 @@ True or False
     2. The order of growth of the total number of compares to insert N distinct keys in descending order into an
     initially empty max-oriented binary heap is N.
         false. insertion time complexity is O(log k), where k is the heap size. what we mean by this is that for each
-        insertion, we're going to be doing up to log_2(k) compares - not N. so, the order of growth of the number of
+        insertion, we're going to be doing up to 2*log_2(k) compares - not N. so, the order of growth of the number of
         compares for this problem is N*log(k). we can, however, heapify an already existing array in O(N) time by
-        starting at the rightmost (in an array/list) parent, iterating to the topmost node, and sifting down...
+        starting at the rightmost (in an array/list) parent, iterating to the topmost node, and sifting the ith node
+        down on each iteration...
 
-        disregarding the bottommost level (they have no children), we have O(1) operations on the level above. this
-        results in ~(n/4) nodes remaining...
-        n/4 nodes at level 1, n/8 nodes at level 2, n/16 nodes at level 3... 1 node at log(n) level...
-        n/4(1c) + n/8(2c) + n/16(3c) + ... 1(log(n)c)
-        if n/4 = 2^k, the above becomes: c2^k(1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k)
-        and (1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k) converges to less than 3...
-        so, c2^kc -> c2^k -> c(n)/4 -> c(n) -> O(n)
+        disregarding the bottommost level (they have no children, hence, satisfy the heap property), we have O(1)
+        operations on the level above. this results in ~(n/4) nodes remaining...
+        we have n/4 nodes at level 1, n/8 nodes at level 2, n/16 nodes at level 3... and 1 node at log(n) level...
+        which can be rewritten as: n/4(1c) + n/8(2c) + n/16(3c) + ... 1(log(n)c)...
+        and if n/4 = 2^k, the above becomes: c2^k(1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k)...
+        notice that (1/2^0 + 2/2^1 + 3/2^2 + ... (k + 1)/2^k) converges to less than 3...
+        so we can rewrite the statement as, c2^kc -> c2^k -> c(n)/4 -> c(n) -> O(n)
 
     3. A 3-heap is an array representation (using 1-based indexing) of a complete 3-way tree, where the key in each node
     is greater than (or equal to) its children’s keys. In the worst case, the number of compares to insert a key in a
