@@ -143,11 +143,49 @@ For the test inputs, the path will always exist.
 '''
 
 
+# Dijkstra's: second attempt (min heap)
 def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
-    return []
+    import heapq
+
+    dist = dict()
+    prev = dict()
+    min_heap = list()
+    adj_list = to_adjacency_list(edges)
+
+    for v in adj_list.keys():
+        if v != s:
+            dist[v] = float('inf')
+            prev[v] = None
+            heapq.heappush(min_heap, (float('inf'), v))
+
+    dist[s] = 0
+    prev[s] = None
+    min_heap = [(0, s, None)] + min_heap  # todo sift_up/decrease_key
+
+    while min_heap:
+        next_element = heapq.heappop(min_heap)
+        next_vertex = next_element[1]
+        neighbors = adj_list[next_vertex]
+        for neighbor in neighbors:
+            neighbor_dist = 1
+            new_dist = dist[next_vertex] + neighbor_dist
+            if new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+                prev[neighbor] = next_vertex
+                # todo update min_heap: sift_down/increase_key
+                # heapq._sift_down(min_heap, neighbor, new_dist)
+
+    next_node = prev[d]
+    path = [d]
+    while next_node:
+        path.append(next_node)
+        next_node = prev[next_node]
+
+    print(path[::-1])
+    return path[::-1]
 
 
-def find_shortest_path_bfs_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
+def find_shortest_path_bfs_path(s: str, d: str, edges: list[list[str]]) -> list[str] | int:
     from collections import deque
 
     adj_list = to_adjacency_list(edges)
