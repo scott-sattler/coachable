@@ -114,7 +114,7 @@ class MinHeap:
             raise TypeError
 
 
-class MinHeapTests(unittest.TestCase, ):
+class MinHeapTests(unittest.TestCase):
     """ expected, actual """
     # todo: more testing
     #       negatives
