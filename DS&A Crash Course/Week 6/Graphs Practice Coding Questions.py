@@ -86,9 +86,9 @@ where each connection costs 1 to traverse. Return -1 if there is no path.
 # Dijkstra's Algorithm
 # todo just rewrite using minheap ffs
 def find_shortest_path_distance(s: str, d: str, edges: list[list[str]]) -> int:
-    import heap  # maxheap
+    import max_heap  # maxheap
 
-    p_que = heap.MaxHeap(track_index=True)
+    p_que = max_heap.MaxHeap(track_index=True)
     visited = set()
     adj_list = to_adjacency_list(edges)
 
@@ -211,6 +211,7 @@ Modify the above algorithm to work if each connection costs k where k > 0.
 
 
 def find_shortest_path_wt(s: str, d: str, edges: list[list[str]], k: int) -> list[str]:
+    from min_heap import MinHeap
     pass
 
 
