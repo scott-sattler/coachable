@@ -29,13 +29,8 @@ class MinHeap:
         else:
             self.heap = [zeroth]
 
-    def __repr__(self):
-        return str(self.heap[1:])
-
-    def __bool__(self):
-        if len(self.heap) < 2:
-            return False
-        return True
+    def __repr__(self): return str(self.heap[1:])  # exclude 0th index
+    def __bool__(self): return False if len(self.heap) < 2 else True  # preserve 0-indexed behavior
 
     # O(n) time complexity
     def heapify(self) -> None:
@@ -46,7 +41,7 @@ class MinHeap:
             self._sift_down(i)
 
     def push_heap(self, element) -> None:
-        self.heap.append(element)
+        self.heap.append(element)  # list append
         self._sift_up(len(self.heap) - 1)
 
     def pop_heap(self):
@@ -123,6 +118,7 @@ class MinHeapTests(unittest.TestCase):
     """ expected, actual """
     # todo: more testing
     #       negatives
+    #       force correct comp behavior
 
     """
     errors
