@@ -32,6 +32,11 @@ class MinHeap:
     def __repr__(self):
         return str(self.heap[1:])
 
+    def __bool__(self):
+        if len(self.heap) < 2:
+            return False
+        return True
+
     # O(n) time complexity
     def heapify(self) -> None:
         # start at bottommost parent
@@ -358,6 +363,37 @@ class MinHeapTests(unittest.TestCase):
         expected = [(1, 'b'), (1, 'c'), (4, 'e'), (5, 'f'), (3, 'd'), (99, 'h')]
         actual = h.heap[1:]
         self.assertEqual(expected, actual)
+
+    """
+    correctness: bool (truthy/falsy)
+    """
+    def test_bool_1(self):
+        h = MinHeap()
+        expected = False
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_2(self):
+        h = MinHeap([(0, 'a')])
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_3(self):
+        h = MinHeap([(0, 'a'), (1, 'b')])
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_4(self):
+        h = MinHeap([(0, 'a'), (1, 'b')])
+        h.pop_heap()
+        expected = True
+        self.assertEqual(bool(h), expected)
+
+    def test_bool_5(self):
+        h = MinHeap([(0, 'a'), (1, 'b')])
+        h.pop_heap()
+        h.pop_heap()
+        expected = False
+        self.assertEqual(bool(h), expected)
 
     @staticmethod
     def _convert(inp):
