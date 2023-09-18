@@ -226,17 +226,38 @@ Shortest Path
     of the following scenarios?
 
         a. Every edge in G has weight 1.
-            bfs, return length at first encounter of t
-            dijkstra's
-
+            1. dijkstra's
+            2. shortest path faster algorithm (SPFA)
+            3. bellman-ford
+            4. dfs, return length at first encounter of t
+            5. dfs, exhaustive
 
         b. Every edge in G has uniform edge weight e where e > 0?
+            1. dijkstra's
+            2. shortest path faster algorithm (SPFA)
+            3. bellman-ford
+            4. bfs, return length at first encounter of t
+            5. dfs, exhaustive
 
         c. Edges in G have nonuniform but strictly positive edge weights?
+            1. dijkstra's
+            2. shortest path faster algorithm (SPFA)
+            3. bellman-ford
+            4. bfs, exhaustive
+            5. dfs, exhaustive
 
         d. Edges in G have nonuniform negative/positive edge weights?
+            1. bellman-ford
+            2. SPFA
+            3. bfs, exhaustive
+            4. dfs, exhaustive
 
     2. How do any of these change if we want to return the path itself instead of the shortest path length?
+        dijkstra's distance map can also contain the previous node
+        bellman-ford's distance map can also contain the previous node
+        SPFA's distance map can also contain the previous node
+        bfs/dfs can store paths, rather than distances
+
 
 Valid Orderings
 
@@ -288,11 +309,20 @@ Intermediate Processing BFS/DFS
 (Optional Section) MSTs
 
     1. What is a minimum spanning tree?
+        weighted edges that connect all vertices at minimum cost, without loops
 
     2. How do I generate an MST for a graph with edge weights? Explain the algorithm in a few sentences instead of
     giving just the algorithm name.
+        1. pick any vertex
+        2. find lowest edge weight
+            ignore visited vertices
+        3. move to that vertex
+        4. repeat 2 and 3 until  all vertices are visited
 
     3. If the graph is not connected, can I still create an MST? Why or why not? What about a Minimum Spanning Forest
+        no. a tree requires all vertices be connected. however, a collection of MSTs, or disconnected MSTs are called
+        Minimum Spanning Forests (MSFs). of the algorithms mentioned within this section, we can find MSFs with
+        Kruskal's algorithm, or Prim's algorithm on each disconnected graph.
 
 
 Heaps
