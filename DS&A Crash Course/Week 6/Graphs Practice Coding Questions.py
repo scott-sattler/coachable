@@ -181,7 +181,6 @@ def find_shortest_path(s: str, d: str, edges: list[list[str]]) -> list[str]:
         path.append(next_node)
         next_node = prev[next_node]
 
-    print(path[::-1])
     return path[::-1]
 
 
@@ -211,8 +210,8 @@ Modify the above algorithm to work if each connection costs k where k > 0.
 
 
 def find_shortest_path_wt(s: str, d: str, edges: list[list[str]], k: int) -> list[str]:
-    from min_heap import MinHeap
-    pass
+    # from min_heap import MinHeap
+    return find_shortest_path(s, d, edges)
 
 
 '''
@@ -224,7 +223,47 @@ or None if not possible. Courses are numbered from 0 to n-1.
 
 
 def find_valid_course_ordering_if_exists(prerequisites: list[list[int]], n: int) -> list[int] | None:
-    pass
+    from collections import deque
+    no_incoming = deque()
+    top_sorted = list()
+
+    # find max
+    # for list/index approach
+    # O(E)
+    max_vert = 0
+    for edge in prerequisites:
+        if edge[1] > max_vert:
+            max_vert = edge[1]
+
+    # O(2V)
+    in_degrees = [0] * (max_vert + 1)
+    out_degrees: list[list[int]] = [[] for _ in range(max_vert + 1)]
+
+    # find degrees
+    # O(E)
+    for edge in prerequisites:
+        in_degrees[edge[1]] += 1
+        out_degrees[edge[0]].append(edge[1])
+
+    # find zero in-degrees
+    # O(E) (max(V, E) where E >= V)
+    for vertex_index in range(len(in_degrees)):
+        if in_degrees[vertex_index] == 0:
+            no_incoming.append(vertex_index)
+
+    # while zero incoming exist,
+    # decrement their outgoing,
+    # adding newly zero incoming to queue
+    # O(V + E)
+    while no_incoming:
+        vertex_index = no_incoming.popleft()
+        top_sorted.append(vertex_index)
+        for neighbor in out_degrees[vertex_index]:
+            in_degrees[neighbor] -= 1
+            if in_degrees[neighbor] == 0:
+                no_incoming.append(neighbor)
+
+    return top_sorted if len(top_sorted) == (max_vert + 1) else None
 
 
 '''
