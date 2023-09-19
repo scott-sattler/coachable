@@ -264,10 +264,17 @@ Valid Orderings
     1. If I have a directed acyclic graph (DAG) where c1 -> c2 means that I need to take course c1 before c2
 
         a. What algorithm can I use to sequence my coursework without skipping courses?
+            topological sort
 
         b. How is this algorithm different from a standard BFS/DFS?
+            todo:
+            topological sort is an ordering where for every directed edge (u, v), u is ordered before v in the ordering
+            neither BFS nor DFS specifically intend to maintain this property, and given certain graphs, will
+            predictably violate it (tho BFS often provides similar orderings when visiting nodes)
 
         c. What would happen if the directed graph was cyclic, and I tried using the same algorithm?
+            the algorithm would fail: a cycle has neither a predecessor, nor successor, therefore, cannot be
+            topologically ordered
 
 Intermediate Processing BFS/DFS
 
@@ -278,32 +285,48 @@ Intermediate Processing BFS/DFS
     I.e. if you think (2) is true, you can use it to help you prove (1).
 
     DFS. For each of the following statements, indicate whether it is true or false in the context of a depth-first
-    search on a digraph starting from vertex s starting with dfs(G,s) If it is false, provide a counterexample. If it is
-    true, explain why.
+    search on a digraph starting from vertex s starting with dfs(G,s). If it is false, provide a counterexample. If it
+    is true, explain why.
 
     1. At the moment when dfs(G, v) is called, there must be a directed path from s to v in G.
+        true; dfs being called on v indicates v is a (direct or indirect) successor to s
 
     2. At the moment when dfs(G, v) is called, there must be a directed path from s to v in the function-call stack.
+        true; dfs ordinarily does not operate on disjointed graphs, and in such cases, there must exist a directed path
+        from s to v, given lemma (1)
 
     3. At the moment when dfs(G, v) is called, if G includes an edge v → w for which w has been previously marked, then
     G must contain a directed cycle containing v.
+        false; this could be true if G were an undirected graph, or if w otherwise had a path to a direct or indirect
+        successor of s, which also had a directed path to any vertex on the path from s to v.
+        examples: [(s, v), (v, w) (w, s)], [(s, v), (s, t), (v, w), (w, t), (t, v)]
 
     4. At the moment when dfs(G, v) is called, if G includes an edge v → w for which w is currently a vertex on the
     function-call stack, then G must contain a directed cycle containing v.
+        true; in dfs, vertices on the function-call stack indicate those vertices are part of a path from s to v.
+        therefore, any edge which leads to a vertex on the function-call stack has formed a cycle
 
     BFS. For each of the following statements, indicate whether it is true or false in the context of a breadth-first
-    search on a digraph starting from vertex s.  If it is false, provide a counterexample. If it is true, explain why.
+    search on a digraph starting from vertex s. If it is false, provide a counterexample. If it is true, explain why.
 
     1. At the moment when v is removed from the queue during BFS, there must be a directed path from s to v in G.
+        true; the queue is populated with successors to all previously visited vertices, and just as each successor was
+        visited from the queue, a path can be found through those successors from s to v
 
     2. At the moment when v is removed from the queue during BFS, there must be a directed path from s to v in the
     queue.
+        false; the queue is populated with successors to all previously visited vertices, and does not necessarily
+        contain a path from s to v. example: given the graph [(s, v), (s, w), (v, w)], our queue would look like
+        [(s, v), (s, w)], we then .popleft() and obtain [(s, w)]. further, exploring v would get us no closer to
+        establishing the truth of that statement: [(s, w), (v, w)]
 
     3. At the moment when v is removed from the queue during BFS, if G includes an edge v → w for which w has been
     previously marked, then G must contain a directed cycle containing v.
+        false; w could also have been an acyclic successor of a previously visited node
 
     4. At the moment when v is removed from the queue during BFS, if G includes an edge v → w for which w is currently
     a vertex in the queue, then G must contain a directed cycle containing v.
+        false; given the graph [(s, v), (s, w), (v, w)], with v visited first, the queue for v would be [(s, w)]
 
 
 (Optional Section) MSTs
