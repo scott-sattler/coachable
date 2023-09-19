@@ -2,10 +2,15 @@ import unittest
 
 
 class MinHeap:
+    # one-based indexing
     """
-    One-based indexing. \n
-    Includes increase/decrease key functionality. \n
-    Works with Dijkstra's Algorithm.
+    Works with Dijkstra's Algorithm:                                        \n
+    Increase/decrease key using update().                                   \n
+
+    - heapify(existing_list)                                                \n
+    - push_heap(value, object)                                              \n
+    - pop_heap() -> (value, object)                                         \n
+    - update(object_id, new_val)                                            \n
     """
 
     def __init__(self, to_heapify: list[tuple[int, any]] = None):
