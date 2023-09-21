@@ -1,4 +1,5 @@
 # from __future__ import annotations
+import sys
 import unittest
 
 
@@ -305,16 +306,17 @@ def output_mst(edges: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]:
         if vertex in visited:
             continue
 
-        mst.append(next_edge)
+        mst.append(next_edge[1:] + next_edge[:1])
         visited.add(vertex)
         edges = mst_adj_list[vertex]
         for edge in edges:
             if edge[2] not in visited:
                 heapq.heappush(pq, edge)
 
-    print(mst)
-    print(sorted(mst))
-    return sorted(mst)
+    # order_vertices = lambda x: -sys.maxsize + int(x[-1]) if type(x) is str else x
+    # order_edges = lambda x: x[2]
+    # ordered_actual = sorted([tuple(sorted(list(edge), key=order_vertices)) for edge in mst], key=order_edges)
+    return mst
 
 
 class TestClass(unittest.TestCase):
@@ -376,7 +378,13 @@ class TestClass(unittest.TestCase):
         assert find_valid_course_ordering_if_exists(self.courses_none, 4) is None
 
     def test_output_mst_1(self):
-        assert set(output_mst(self.graph)) == set(self.mst)
+        # actual = output_mst(self.graph)
+        # order_vertices = lambda x: -sys.maxsize + int(x[-1]) if type(x) is str else x
+        # order_edges = lambda x: x[2]
+        # ordered_actual = sorted([tuple(sorted(list(edge), key=order_vertices)) for edge in actual], key=order_edges)
+        # assert ordered_actual == self.mst
+        # # assert set(output_mst(self.graph)) == set(self.mst)
+        assert self.mst == sorted([tuple(sorted(list(edge), key=lambda x: -sys.maxsize + int(x[-1]) if type(x) is str else x)) for edge in output_mst(self.graph)], key=lambda x: x[2])
 
     # from stencil import *
     # from main_test import *
