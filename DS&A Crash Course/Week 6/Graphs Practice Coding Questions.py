@@ -278,8 +278,43 @@ you should assume there is an equivalent edge (e2, e1, 3) as well.
 '''
 
 
+# 'lazy' Prim's
 def output_mst(edges: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]:
-    pass
+    import heapq
+    mst = list()
+
+    # build adjacency list
+    mst_adj_list = dict()
+    for edge in edges:
+        if edge[0] not in mst_adj_list:
+            mst_adj_list[edge[0]] = list()
+        mst_adj_list[edge[0]].append((edge[2], edge[0], edge[1]))
+        # undirected (v1, v2) implies both v1 -> v2 and v2 -> v1
+        if edge[1] not in mst_adj_list:
+            mst_adj_list[edge[1]] = list()
+        mst_adj_list[edge[1]].append((edge[2], edge[1], edge[0]))
+
+    vertex = edges[0][0]  # arbitrarily select starting edge
+    pq = mst_adj_list[vertex]  # seed pq
+    heapq.heapify(pq)
+    visited = {vertex}
+
+    while pq and len(mst) < len(mst_adj_list):
+        next_edge = heapq.heappop(pq)
+        vertex = next_edge[2]
+        if vertex in visited:
+            continue
+
+        mst.append(next_edge)
+        visited.add(vertex)
+        edges = mst_adj_list[vertex]
+        for edge in edges:
+            if edge[2] not in visited:
+                heapq.heappush(pq, edge)
+
+    print(mst)
+    print(sorted(mst))
+    return sorted(mst)
 
 
 class TestClass(unittest.TestCase):
