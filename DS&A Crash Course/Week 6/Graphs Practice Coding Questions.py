@@ -294,7 +294,7 @@ def output_mst(edges: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]:
             mst_adj_list[edge[1]] = list()
         mst_adj_list[edge[1]].append((edge[2], edge[1], edge[0]))
 
-    vertex = edges[0][0]  # arbitrarily select starting edge
+    vertex = edges[0][0]  # arbitrarily select starting vertex
     pq = mst_adj_list[vertex]  # seed pq
     heapq.heapify(pq)
     visited = {vertex}
