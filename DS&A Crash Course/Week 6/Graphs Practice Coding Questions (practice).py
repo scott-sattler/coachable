@@ -310,8 +310,9 @@ def output_mst(edges: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]:
         visited.add(vertex)
         edges = mst_adj_list[vertex]
         for edge in edges:
-            if edge[2] not in visited:
-                heapq.heappush(pq, edge)
+            if edge[2] in visited:
+                continue
+            heapq.heappush(pq, edge)
 
     # order_vertices = lambda x: -sys.maxsize + int(x[-1]) if type(x) is str else x
     # order_edges = lambda x: x[2]
