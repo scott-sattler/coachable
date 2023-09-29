@@ -6,6 +6,9 @@ old*
 *.idea
 *.iml
 
+coachable.iml
+vcs.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
