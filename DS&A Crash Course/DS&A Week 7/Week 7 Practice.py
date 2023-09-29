@@ -69,7 +69,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: F(n) = F(n - 1) + F(n - 2); if remaining_stairs == 0: return 1
+            F(n) = F(n - 1) + F(n - 2); if remaining_stairs == 0: return 1
                 base case with boundary control: if n < 1: return 1 * (n + 1))
             recurrence: at each step, you can choose either 1 or two steps. the recursive stack acts as tree nodes
             base case: when no choices can be made (no stairs remain), you count a unique outcome
@@ -100,7 +100,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: F(n) = n * F(n - 1); if n == 0: return 1
+            F(n) = n * F(n - 1); if n == 0: return 1
             recurrence: the 1st element can be in (n - 0) positions, the 2nd element (n - 1) positions, 3rd (n - 2)...
                         each element can take each position, the number of ways all other elements can be dif. ordered
                         while it is in that position
@@ -131,7 +131,7 @@ Problems That Can Be Solved with Recursion
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
-            value: F(n, m) = F(n - 1, m) + F(n, m - 1); if (n, m) == (0, 0): return 1
+            F(n, m) = F(n - 1, m) + F(n, m - 1); if (n, m) == (0, 0): return 1
             recurrence: each square (n, m) is the sum of paths that lead to it, with a choice of down or right
             base case: reaching the square (0, 0) indicates a unique path has been found
 
@@ -156,6 +156,7 @@ Problems That Can Be Solved with Recursion
     4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
         1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
 
+
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
 
@@ -170,10 +171,12 @@ Problems That Can Be Solved with Recursion
     5. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A.
         1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
             there are 2^n subsets within a set
-            0 -> 1; 1 2; 2 4; 3 9; 4 16
+            0 -> 1; 1 2; 2 4; 3 8; 4 16
 
         2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by
         giving a qualitative explanation in plain English.
+            F(n) = F(n - 1) + F(n - 1)
+
 
 
         3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
@@ -470,3 +473,53 @@ def _paths_t_down(n, m, memo):
 
 ans = paths_t_down(6, 6)
 print(ans)
+
+
+# ##### 4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
+print('4. dominoes (2xN)...')
+
+
+# 3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
+def domino___():
+    pass
+
+
+print(ans)
+
+
+# ##### 5. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A.
+print('5. subsets (power set)...')
+
+
+# 3. Bottom Up. Compute a small example using a bottom-up (n = 6, m = 6)
+def subsets_b_up():
+    pass
+
+
+# naive recursion power set
+# solution: starting with the empty set
+#           recurse inclusion/exclusion of each element
+# time complexity: O(n/2 * 2^n) -> O(n2^n) (n/2 full copies 2^n times)
+# space complexity: O(n/2 * 2^n) -> O(n2^n) auxiliary (avg. subset size on callstack)
+def subsets_naive(inp: set):                                                                        # runtime:
+    set_lst = list(inp)[::-1]                                                                       # O(n + n)
+    i = len(inp) - 1                                                                                # O(1)
+    return _subsets_naive(set_lst, [], i)                                                           # O( )
+
+
+# power_set = list()
+def _subsets_naive(ref_set: list, curr: list, i):
+    if i < 0:                                                                                       # O(1)
+        # power_set.append(curr)
+        return 1                                                                                    # O(1)
+
+    curr.append(ref_set[i])                                                                         # O(1)
+    return _subsets_naive(ref_set, curr[:], i - 1) + _subsets_naive(ref_set, curr[:-1], i - 1)      # O( )
+
+
+tst_inp = {i for i in range(6)}
+ans = subsets_naive(tst_inp)
+print(ans)
+# print(sorted(power_set, key=lambda x: len(x)))
+
+
