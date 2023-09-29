@@ -4,6 +4,7 @@ scratch.py
 old.py
 old*
 *.idea
+*.iml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
