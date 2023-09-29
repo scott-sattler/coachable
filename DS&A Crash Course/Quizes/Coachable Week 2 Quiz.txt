@@ -1,0 +1,829 @@
+Week 2 Quiz
+
+--------------------------------------------------
+
+What is printed?
+
+lst = [] 
+lst.append(0) 
+lst.extend([1]) 
+lst.remove(0)
+print(lst)
+
+[[1]]
+X [1]
+[]
+[0, 1]
+
+--------------------------------------------------
+
+Which of the following data types is not hashable?
+
+Integers
+Strings
+X Lists
+Boolean
+
+--------------------------------------------------
+
+What does Python print here?
+
+city_to_state_map = {} 
+city_to_state_map["San Diego"] = "California"
+city_to_state_map["Boise"] = "Idaho"
+print(city_to_state_map["San Diego"])
+print(city_to_state_map["San Francisco"])
+
+California
+None
+
+X California
+Error
+
+California
+California
+
+California
+Idaho
+
+--------------------------------------------------
+
+What is the issue here?
+
+cities_to_state_map = {} 
+cities_to_state_map[["San Diego", "San Francisco"]] = "California"
+
+Syntax error because you can't insert 2 keys into a hashmap.
+X Syntax error because lists are not Hashable
+There is no issue
+Syntax error because "San Diego" does not exist in the hashmap.
+
+--------------------------------------------------
+
+What is the purpose of the init() in a class?
+
+For garbage collection of objects in memory
+X Create a new object and specify its initial attributes
+Specify the class attributes
+There is no purpose
+
+--------------------------------------------------
+
+Which ones are the class attribute? instance attribute?
+
+class Human:
+  scientific_name = "Homo Sapiens"
+  def __init__(self, height, age):
+    self.height = height
+    self.age = age 
+
+X class: scientific_name, instance: height, age
+class: N/A, instance: height, age
+class: height, age, instance: scientific_name
+class: height, age, instance: N/A
+
+--------------------------------------------------
+
+What is printed?
+
+a = [1, 2, 3]
+b = a
+b.append(2)
+print(a)
+
+X [1, 2, 3, 2]
+[1, 2, 3]
+It will raise an error
+None
+
+--------------------------------------------------
+
+What is printed here?
+
+a = 2
+b = a
+b = 1
+print(a)
+
+Something else
+None
+X 2
+1
+
+--------------------------------------------------
+
+What is happening in this code? Assume that a linked list is created where head points to the first element of the linked list
+
+a = 0
+while head:
+  a += 1
+  head = head.next
+return a 
+
+X Returns the length of the linked list
+Returns the length of the linked list + 1
+Returns 1
+Returns 0
+
+--------------------------------------------------
+
+What is happening in this code? Assume that a linked list is created where head points to the first element of the linked list
+
+while head.next:
+  head = head.next
+  print(head)
+
+Prints out everything in the list
+Prints out everything in the list except the first and last element
+Prints out everything in the list except for the last element
+X Prints out everything in the list except the first element
+
+--------------------------------------------------
+
+What is happening in this code? Assume that a linked list is created where head points to the first element of the linked list
+
+while head.next:
+  print(head)
+  head = head.next
+
+Prints out everything in the list except for the last element
+Prints out everything in the list except the first element
+X Prints out everything in the list
+Prints out everything in the list except the first and last element
+
+--------------------------------------------------
+
+What will be printed in the console?
+
+def foo(a):
+  print(a)
+  a += 1
+
+b = 2
+print(foo(b))
+print(b)
+
+X 2
+None
+2
+
+Error
+
+2
+3
+3
+
+
+2
+None
+3
+
+--------------------------------------------------
+
+What is the main difference between a Stack and Queue?
+
+
+X Stack is last in first out, Queue is first in first out
+Stack is first in first out, Queue is last in first out
+A Stack has strictly worse runtimes on all methods compared to those of a Queue
+A Queue has strictly worse runtimes on all methods compared to those of a Stack
+
+--------------------------------------------------
+
+What is the runtime here? Assuming N is the size of the input `lst`
+
+def foo(lst):
+  for i in range(10):
+    lst.append(i) 
+
+X O(1)
+O(N)
+O(N^2)
+O(Log N)
+
+--------------------------------------------------
+
+What is the runtime here? Assuming N is the size of the input
+
+def foo(lst):
+  new_list = []
+  for x in lst:
+      new_list.append(x)
+
+  while new_list:
+     new_list.pop(0)
+
+
+O(1)
+X O(N^2)
+O(Log N)
+O(N)
+
+--------------------------------------------------
+
+Let’s say I had a function where the input was N, and we generated every possible bit representation of length N. What is the runtime of this function?
+
+For instance, for N=2, I'd generate 00, 01, 10, 11.
+
+O(1)
+O(N^2)
+X O(2^N)
+O(N)
+
+--------------------------------------------------
+
+Which of the following statements is true about the following Python code?
+
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# Create three nodes with values 1, 2, and 3
+node1 = Node(1)
+node2 = Node(2)
+node3 = Node(3)
+node4 = node1
+node1.next = node2
+node2.next = node3
+node3.next = node4
+
+
+def print_list(node):
+   cur = node
+   while cur is not None:
+       print(cur.value)
+
+print_list(node1)
+
+
+But there is an error and the code above does not print the list (1,2,3,4)
+
+What is the problem?
+
+The node values will be printed in reverse
+X There will be an infinite loop
+There will be a None type error.
+The print_list function is missing a parameter.
+
+--------------------------------------------------
+
+If a function is O(3 * N^2 + N), what would the runtime simplify as?
+
+X O(N^2)
+O(1)
+O(Log N)
+O(N)
+
+--------------------------------------------------
+
+Is there a problem with this code? What is the value of b at the end? 
+
+def foo(a):
+  a = 2
+b = 1
+foo(b)
+
+X No; b = 1
+Yes, the function is missing a return statement; N/A
+No; b = 2
+Yes, the code will throw an Attribute Error; N/A
+
+--------------------------------------------------
+
+Is there a problem with this code?
+
+def foo(a):
+  a = 2
+b = 1
+foo(b)
+print(a)
+
+
+X Yes, the variable a is only accessible within the function scope
+No, the console will print 1
+Yes, the variable b needs to change from b to a
+No, the console will print 2
+
+--------------------------------------------------
+
+What is the output of the below code snippet?
+
+def foo(a):
+  a = 5
+a = 3
+foo(a)
+print(a)
+
+
+5
+None
+It will raise an error
+X 3
+
+--------------------------------------------------
+
+What is the output of the below code snippet? 
+
+def foo(a):
+  a = 5
+  print(a)
+a = 3
+foo(a)
+
+None
+It will raise an error
+3
+X 5
+
+--------------------------------------------------
+
+What is the output of the below code snippet? 
+
+def foo(a):
+  a = 5
+a = 3
+print(foo(a))
+
+X None
+It will raise an error
+5
+3
+
+--------------------------------------------------
+
+What is the output of the following code block? 
+
+def foo(a):
+  a.append(3)
+a = [1, 2]
+foo(a)
+print(a)
+
+X [1, 2, 3]
+None
+It will raise an error
+[1, 2]
+What is the output of the following code block? 
+
+--------------------------------------------------
+
+def foo(a):
+  b = [1, 3, 5]
+  a.append(3)
+b = [2, 4, 6]
+foo(b)
+print(b)
+
+[1, 3, 5, 3]
+None
+[1, 3, 5]
+It will raise an error
+[2, 4, 6]
+X [2, 4, 6, 3]
+
+--------------------------------------------------
+
+A double-ended queue (aka "deque") is a generalization of a stack and a queue. That is, it supports memory efficient appends and pops from either side of the deque with the same O(1) performance in either direction.
+
+What would be a valid reason for choosing a stack or queue over a deque?
+
+
+None of the other answers is correct
+
+X Reduced memory overhead per element. One less pointer per Node.
+
+All of the other answers (Reduced memory..., Stack is more efficient..., Queue is more efficient...) are correct
+
+Queue is more efficient in terms of big-O runtime at enqueue/dequeue
+
+Stack is more efficient in terms of big-O runtime at push/pop
+
+--------------------------------------------------
+
+A double-ended queue (aka "deque") is a generalization of a stack and a queue. That is, it supports memory efficient appends and pops from either side of the deque with the same O(1) performance in either direction.
+
+The basic API is as follows:
+
+pop() returns and removes the rightmost item
+popleft() returns and removes the leftmost item
+append() adds a new entry to the deque to the right side
+appendleft() adds a new entry to the deque to the left side
+
+
+What is the output of the following code block? 
+
+from collections import deque
+
+d = deque()
+d.append('a')
+d.appendleft('b')
+d.append('c')
+d.appendleft('d')
+d.pop()
+print(d)
+
+
+deque(['b', 'a', 'c'])
+deque(['a', 'b', 'c', 'd'])
+X deque(['d', 'b', 'a'])
+deque(['a', 'b', 'c'])
+
+--------------------------------------------------
+
+What does this code do?
+
+Join documentation: https://python-reference.readthedocs.io/en/latest/docs/str/join.html
+
+
+class ListNode(object):
+  def __init__(self, val=0, next=None):
+	  self.val = val
+	  self.next = next
+
+def f(a, b):
+  c = 0
+  p1, p2 = a, b
+  d = ListNode(None)
+  cur = d
+  while p1 or p2:
+    v1 = 0 if p1 is None else p1.val
+    v2 = 0 if p2 is None else p2.val
+    v = v1 + v2 + c
+    n = ListNode(v % 10)
+    c = v // 10
+    cur.next = n
+    cur = cur.next
+    if p1:
+      p1 = p1.next
+    if p2:
+      p2 = p2.next
+    if c != 0:
+      cur.next = ListNode(c)
+  return d.next
+
+def print_list(l):
+  sb = []
+  cur = l
+  while cur:
+    sb.append(str(cur.val))
+    cur = cur.next 
+  print(' -> '.join(sb))
+
+a = ListNode(4, ListNode(3, ListNode(3)))
+b = ListNode(5, ListNode(6, ListNode(4)))
+
+print_list(f(a, b))
+
+Adds up (4 -> 3 -> 3)and (5 -> 6 -> 4) and prints out the resultant linked list representation (7 -> 9 -> 9)
+Adds up (3 -> 3 -> 4) and (4 -> 6 -> 5) and prints out the resultant linked list representation (9 -> 9 -> 7)
+Adds up (3 -> 3 -> 4) and (4 -> 6 -> 5) and prints out the resultant linked list representation in reverse (7 -> 9 -> 9)
+X Adds up (4 -> 3 -> 3)and (5 -> 6 -> 4) and prints out the resultant linked list representation in reverse order (9 -> 9 -> 7)
+
+--------------------------------------------------
+
+What is the runtime of this code?
+
+def foo(n: int):
+    while n > 0:
+        print(n)
+        n = n // 2
+
+O(N log N)
+X O(log n)
+O(n)
+O(N^2)
+
+--------------------------------------------------
+
+What is the runtime of this code?
+
+def foo(lst: list[int], target: int):
+  lo = 0
+  hi = len(lst)
+  ans = -1
+  while lo <= hi:
+    mid = lo + (hi - lo) // 2
+    if target == lst[mid]:
+      return mid 
+    elif target > lst[mid]:
+      lo = mid + 1 
+    else:
+      hi = mid - 1
+  print(ans)
+
+X O(Log N)
+O(1)
+O(N Log N)
+O(N)
+
+--------------------------------------------------
+
+What is the runtime of this code?
+
+def foo(m: list[int], n: list[int]):
+  ans = 0
+  for a in m:
+    for b in n:
+        ans += a + b
+  return ans 
+
+X O(M * N)
+O(N^2)
+O(M^2)
+O(M)
+
+--------------------------------------------------
+
+What is the runtime of this code?
+
+def foo(m: list[int], n: list[int]):
+  ans = 0
+  for a in m:
+      for b in n[0:2]:
+        ans += a + b 
+  return ans 
+
+X O(M)
+O(M^2)
+O(M * N)
+O(1)
+
+--------------------------------------------------
+
+What is the runtime of this code?
+
+def foo(m: list[int], n: list[int]):
+  ans = 0
+  for a in m[0:1000]:
+      for b in n[0:1000]:
+        ans += a + b 
+  return ans 
+
+X O(1)
+O(M * N)
+O(M^2)
+O(N^2)
+
+--------------------------------------------------
+
+How much larger is 2^56 than 2^51? Don't use a calculator.
+
+X 32
+16
+8
+4
+
+--------------------------------------------------
+
+What is the equivalent to 2^3 = 8
+
+X log(8) / log(2) = 3
+log(3) = 2^8
+log(2) = 8
+8 = log(3/2)
+
+--------------------------------------------------
+
+In computer science, when you see log without the base specified, What is the base?
+
+X 2
+1
+16
+10
+
+--------------------------------------------------
+
+Estimate log(30) / log(2)
+
+
+Between 5 and 6
+Between 2 and 3
+X Between 4 and 5
+Between 3 and 4
+
+--------------------------------------------------
+
+What is the worst-case runtime of binary search for a list of length N?
+
+1
+X Log(N)
+N
+Log(2)
+
+--------------------------------------------------
+
+How many linked list pointers do you need to implement a stack?
+
+X 1
+2
+3
+0
+
+--------------------------------------------------
+
+How many linked list pointers do you need to implement a queue?
+
+0
+X 2
+1
+3
+
+
+
+
+
+
+
+
+
+--------------------------------------------------
+
+Week 2 Coding Quiz A
+
+--------------------------------------------------
+
+from __future__ import annotations
+
+'''
+Question 1. Filter out any elements in the list that are multiples of 5.
+'''
+def question1(lst: list[int]) -> list[int]:
+  pass
+
+'''
+Question 2. Return a running sum of a list of numbers. Each elem is the cumulative sum
+of each element before it and including it. For example, an input of [1, 2, 3, 4, 5] would
+be [1, 3, 6, 10, 15]
+
+'''
+def question2(lst: list[int]) -> list[int]:
+  pass
+
+'''
+Question 3. Return the factorial of the input
+'''
+def question3(n: int) -> int:
+  pass
+
+--------------------------------------------------
+
+from __future__ import annotations
+
+'''
+Question 1. Filter out any elements in the list that are multiples of 5.
+'''
+def question1(lst: list[int]) -> list[int]:
+  # map()
+  filtered = []
+  for each in lst:
+    if each % 5 != 0:
+      filtered.append(each)
+
+  return filtered  # fizbuzz
+
+'''
+Question 2. Return a running sum of a list of numbers. Each elem is the cumulative sum
+of each element before it and including it. For example, an input of [1, 2, 3, 4, 5] would
+be [1, 3, 6, 10, 15]
+
+'''
+def question2(lst: list[int]) -> list[int]:
+  for i in range(1, len(lst)):
+    lst[i] = lst[i] + lst[i - 1]
+  return lst
+
+'''
+Question 3. Return the factorial of the input
+'''
+def question3(n: int) -> int:
+  # math.factorial(n)
+  if n < 2:
+    return 1
+  return n * question3(n - 1)
+
+
+
+--------------------------------------------------
+
+Week 2 Coding Quiz B
+
+--------------------------------------------------
+
+from __future__ import annotations
+from node import Node
+
+'''
+Questions 4-5 use the Node class in node.py.
+
+In the test file, the 2 linked lists looks like the following, respectively
+1 -> 3 -> 5 -> 7 -> 9
+2 -> 4 -> 6 -> 8 
+'''
+
+'''
+Question 4. Write a function to find the length of a linked list
+'''
+
+def question4(node: Node) -> int:
+  pass
+
+
+'''
+Question 5. Write a function to find the sum of the values in a linked list
+'''
+
+def question5(node: Node) -> int:
+  pass
+
+--------------------------------------------------
+
+
+
+
+
+--------------------------------------------------
+
+Week 2 Coding Quiz C
+
+--------------------------------------------------
+
+from __future__ import annotations
+
+'''
+Questions 7-9 require you to fill in the Student class below.
+
+Question 7. Create a function to increment problems_solved by 1
+
+Question 8. Create a function to return true if a student is ready for mock interviews.
+A student is ready once they solve 150+ problems.
+
+Question 9. Create a class variable students_created that keeps track of the number of students created.
+'''
+
+class Student:
+  def __init__(self, problems_solved, name):
+    self.problems_solved = problems_solved
+    self.name = name 
+
+  def question7(self) -> None:
+    pass
+
+  def question8(self) -> bool:
+    pass    
+
+
+'''
+For Question 10-12, you are a hero in a video game. Your goal is to 
+build your health up. Your health begins at 0. 
+
+Your health can change in 2 ways
+1. Increase your health by a certain integer X (Question 10)
+2. Most recently recorded health is deleted. Revert your health to the previously logged health (Question 11)
+   Your health will not be reverted if there are no prior health values.
+
+Your latest health can be revealed via Question 12 
+'''
+class HealthTracker:
+  def __init__(self):
+    pass
+
+  def question10(self, health_increase: int) -> None:
+    pass
+
+  def question11(self) -> int:
+    pass
+
+  def question12(self) -> int:
+    pass
+
+
+'''
+For Question 13-15, you are designing a line at the movies.
+The line has a capacity and every person in the line as a unique
+id. 
+
+Create a function question13 to add a person at the back of the line. If the 
+capacity is full, then reject that person.
+
+Create a function question14 to remove a person from the front of the line and return their id.
+If there is no one to remove, then return None.
+
+Create a function question15 to return the size of the line at the current.
+'''
+
+class Line:
+  def __init__(self, capacity: int):
+    pass
+
+  def question13(self, id_to_add) -> bool:
+    pass
+
+  def question14(self) -> None | int:
+    pass
+
+  def question15(self) -> int:
+    pass
+
+--------------------------------------------------
