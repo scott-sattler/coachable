@@ -200,6 +200,17 @@ def _bad_char_table(pattern: str, alphabet: list[str] = None) -> dict[str, int]:
     return table
 
 
+# d2(k) distance between last letter of matched suffix of size k
+# and the last letter of its rightmost occurrence that is preceded
+# by a different pre/suf fix
+def _good_suffix_table(pattern: str) -> dict[str, int]:
+    # todo
+    table = dict()
+
+    # return table
+    raise NotImplementedError
+
+
 all_fns = (
     brute_force,
     knuth_morris_pratt,
@@ -211,3 +222,4 @@ all_fns = (
     _bad_char_table,
 
 )
+print(_bad_char_table('ABCBACBABCA', list('ABC')))
