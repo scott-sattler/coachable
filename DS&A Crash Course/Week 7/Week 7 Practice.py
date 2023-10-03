@@ -2,26 +2,44 @@
 Dynamic Programming
 Free Response Questions
     1. Describe dynamic programming.
+        an optimization technique that, when applicable, breaks a more complex problem into simpler subproblems, finds
+        solutions to those simpler subproblems, which are then used to solve a larger, more complex problems.
+        i.e. an optimization that utilizes optimal substructure to solve problems
 
     2. When should you use dynamic programming? What types of problems where you should consider dynamic programming as
     a possible solution?
+        when other approaches are too inefficient
+        question is asking for a total of something
+        min/max sum/product
+        repeatedly solving subproblem(s)
+
+        subproblems with substrings
+        subproblems of 1d/2d arrays are subarrays
+        binary trees with subproblems solution to each subtree
 
     3. What is the difference between top-down and bottom-up dynamic programming?
+        todo
 
     4. “Memoization” can be thought of as “caching” all the recursive calls that have already happened. What might be a
     reason why I wouldn’t want to do that?
+        repeated calls with the same arguments are impossible, unlikely, or are avoidable.
 
     5. Oftentimes, the answer  f(n) may only require the result from f(n-1) and f(n-2). What kind of space/memory
     optimization can we do if this is the case? If it helps, you can give an example of a specific problem.
+        only store the results for previous calls that are going to be reused
 
     6. What if we had a f(r, c) that relied only on f(r-1, c) for some arbitrary c? What kind of space/memory
     optimization can we do if this is the case? If it helps, you can give an example of a specific problem.
+        todo
 
     7. Fibonacci is one example of a 1-dimensional recurrence relation optimized with dynamic programming. Identify and
     share 3 other classes of dynamic programming problems that seem similar and describe what makes them feel similar.
+        todo
 
     8. Is this statement true or false?
-        "Dynamic programming only helps problems that have a brute-force recursive solution."
+    "Dynamic programming only helps problems that have a brute-force recursive solution."
+        false. todo, explain
+
 
 Dynamic Programming and Recurrence Examples
     Each of the below problems can be solved with recursion. Please  answer the following for each one.
@@ -41,7 +59,7 @@ Dynamic Programming and Recurrence Examples
 Problems That Can Be Solved with Recursion
     1. Number of paths up a staircase of length N where you take 1 or 2 steps each time. Example provided.
 
-    2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n]
+    2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n].
 
     3. Unique Paths: The number of paths from the top left corner of a grid to the bottom right corner when moving only
     down and to the right.
