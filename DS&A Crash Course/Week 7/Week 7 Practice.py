@@ -98,11 +98,38 @@ Problems That Can Be Solved with Recursion
     3. Unique Paths: The number of paths from the top left corner of a grid to the bottom right corner when moving only
     down and to the right.
         1. (n, m) -> paths: (0, 0) -> 0, (1, 1) -> 2, (2, 2) -> 2, (3, 3) -> 6
-        2.
-        3.
-        4.
-        5.
-        6.
+        2. recurrence relation: f(n, m) = f(n - 1, m) + f(n, m - 1); base case: f(n, m) = (0, 0) (or (n, m) if starting
+        from (0, 0)). We can move either right or down. From any given position, the number of paths is the number of
+        paths moving right, plus the number of paths moving down.
+        3. add up and left to get current
+           topmost and leftmost only ever have a single path
+           [0, 1, 1]
+           [1, 2, 3]
+           [1, 3, 6]
+
+           [  0,  1,  1,  1,   1,   1]
+           [  1,  2,  3,  4,   5,   6]
+           [  1,  3,  6, 10,  15,  21]
+           [  1,  4, 10, 20,  35,  56]
+           [  1,  5, 15, 35,  70, 126]
+           [  1,  6, 21, 56, 126, 252]
+        4. call stack:
+           f(1, 1) = 1
+           f(1, 2) = 1
+           f(1, 3) = 1
+           f(2, 1) = 1
+           f(2, 2) = 2
+           f(2, 3) = 3
+           f(3, 1) = 1
+           f(3, 2) = 3
+           f(3, 3) = 6
+
+        5. recursive: O(n * m) time; O(1) input space; O(n * m) memo space; O(n + m) call stack;
+           iterative: O(n * m) time; O(1) input space; O(n * m) table space;
+           optimized: O(n * m) time; O(1) input space; O(m) table space, where m = [int] * rows
+        6. Yes.
+           Optimized runtime reduces time complexity from O(2^n) to O(n^2);
+           Optimized tabulation reduces space from O(n + m) (call stack), to O(m) table space, where m = [int] * rows
 
     4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
         1.
