@@ -67,7 +67,7 @@ Dynamic Programming and Recurrence Examples
 Problems That Can Be Solved with Recursion
     1. Number of paths up a staircase of length N where you take 1 or 2 steps each time. Example provided.
         1. N -> paths: 1 -> 1, 2 -> 2, 3 -> 3, 4 -> 5
-        2. f(n) = f(n - 1) + f(n - 2)
+        2. f(n) = f(n - 1) + f(n - 2) todo: explanation
         3. f(n) = table[i - 1] + table[i - 2]
            [0, 0, 0, 0, 0, 0]
            [1, 2, 0, 0, 0, 0]
@@ -148,8 +148,9 @@ Problems That Can Be Solved with Recursion
         6.
 
     6. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A.
-        1.
-        2.
+        1. A(size) -> subsets: 0 -> 0, 1 -> 2, 2 -> 4, 3 -> 8
+        2. recurrence relation: f(n) = f(n - 1) + f(n - 1); base case: f(n) = 0. We can either include an element, or
+        not, for every element (n elements).
         3.
         4.
         5.
