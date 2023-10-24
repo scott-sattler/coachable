@@ -147,10 +147,10 @@ Problems That Can Be Solved with Recursion
         6.
 
     6. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A.
-        1. A(size) -> subsets: 0 -> 0, 1 -> 2, 2 -> 4, 3 -> 8
-        2. recurrence relation: f(n) = f(n - 1) + f(n - 1); base case: f(n) = 0, f(1) = 1. We can either include an
-        element, or not, for every element in n elements.
-        3. f(n) = table_i[i ^ 2] or f(n) = table_i[(i - 1) * 2]
+        1. A(size) -> subsets: 0 -> 1, 1 -> 2, 2 -> 4, 3 -> 8
+        2. recurrence relation: f(n) = f(n - 1) + f(n - 1); base case: f(0) = 1. We can either include an element, or
+        not, for every element in n elements.
+        3. f(n) = table_i[2 ^ i] or f(n) = table_i[(i - 1) * 2]
            [1, 2, 4, 8, 16, 32]
         4. call stack:
            f(0) = 1
