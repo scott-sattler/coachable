@@ -151,15 +151,15 @@ Problems That Can Be Solved with Recursion
         2. recurrence relation: f(n) = f(n - 1) + f(n - 1); base case: f(n) = 0, f(1) = 1. We can either include an
         element, or not, for every element in n elements.
         3. f(n) = table_i[i ^ 2] or f(n) = table_i[(i - 1) * 2]
-           [0, 2, 4, 8, 16, 32]
+           [1, 2, 4, 8, 16, 32]
         4. call stack:
-           f(0) = 0
-           f(1) = 1
-           f(2) = 2
-           f(3) = 4
-           f(4) = 8
-           f(5) = 16
-           f(6) = 32
+           f(0) = 1
+           f(1) = 2
+           f(2) = 4
+           f(3) = 8
+           f(4) = 16
+           f(5) = 32
+           f(6) = 64
         5. recursive: O(n) time; O(1) input space; O(n) call stack space; O(n) memo space
            iterative: O(n) time; O(1) input space; O(n) space keeping n array, O(1) space if just keeping last element
         6. Yes. A naive recursive approach takes O(2^n) time, and O(n) space.
@@ -167,7 +167,7 @@ Problems That Can Be Solved with Recursion
     7. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A that do not contain any 2 numbers
     that are 1 apart. For example, {1,2,4}  would not be valid because 1 and 2 are 1 apart.
         1.
-        2.
+        2. f(n) = f(n - 2)
         3.
         4.
         5.
