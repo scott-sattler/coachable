@@ -51,7 +51,7 @@ Free Response Questions
 
 Dynamic Programming and Recurrence Examples
     Each of the below problems can be solved with recursion. Please  answer the following for each one.
-    1. Unit Tests. Identify the solution cases up to n= 4. For 2D, do all cases up to (3,3)
+    1. Unit Tests. Identify the solution cases up to n = 4. For 2D, do all cases up to (3,3)
 
     2. Recurrence Relation.  Identify the recurrence relationship and base cases. Explain why they are true by giving a
     qualitative explanation in plain English.
@@ -69,6 +69,7 @@ Problems That Can Be Solved with Recursion
         1. N -> paths: 1 -> 1, 2 -> 2, 3 -> 3, 4 -> 5
         2. f(n) = f(n - 1) + f(n - 2). We can either take 1 or 2 steps towards reaching our goal.
         3. f(n) = table[i - 1] + table[i - 2]
+           f(1) = 1, f(2) = 2
            [0, 0, 0, 0, 0, 0]
            [1, 2, 0, 0, 0, 0]
            [1, 2, 3, 0, 0, 0]
@@ -76,23 +77,40 @@ Problems That Can Be Solved with Recursion
            [1, 2, 3, 5, 8, 0]
            [1, 2, 3, 5, 8, 13]
         4. call stack:
-           f(0) = 1
-           f(1) = 1
-           f(2) = 2
-           f(3) = 3
-           f(4) = 5
-           f(5) = 8
-           f(6) = 13
-        5. O(n) time; O(n) space
-        6. Yes; The recursive approach recomputes function calls.
+           f(1) = 1                   # base case or stored in memo upon creation
+           f(2) = 2                   # base case or stored in memo upon creation
+           f(3) = f(2) + f(1) = 3     # f(3) stored in memo
+           f(4) = f(3) + f(2) = 5     # f(4) stored in memo
+           f(5) = f(4) + f(3) = 8     # f(5) stored in memo
+           f(6) = f(5) + f(4) = 13    # f(6) stored in memo
+        5. recursive: O(n) time; O(1) input space; O(n) memo space; O(n) call stack space
+           iterative: O(n) time; O(1) input space; O(n) table space
+           optimized: O(n) time; O(1) input space; O(1) space to store the previous two results
+        6. Yes; Versus bottom-up optimized, the recursive approach recomputes function calls, with a call stack space of
+        O(n). todo reword/fix
 
     2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n].
-        1. ordered combinations
-        2. f(n) = f( no next ) + f( next )
-        3.
-        4.
-        5.
-        6.
+        1. n -> permutations: 0 -> 1, 1 -> 1, 2 -> 2, 3 -> 6, 4 -> 24
+        2. f(n) = n * f(n - 1). We can choose n objects, then (n - 1) objects, and (n - 2) objects until we can choose
+        one object. Each choice is followed by (n - 1) choices (multiplication).
+        3. f(0) = 1, f(1) = 1
+           [1, 0, 0, 0, 0, 0]
+           [1, 2, 0, 0, 0, 0]
+           [1, 2, 3, 0, 0, 0]
+           [1, 2, 3, 5, 0, 0]
+           [1, 2, 3, 5, 8, 0]
+           [1, 2, 3, 5, 8, 16]
+        4. call stack:
+           f(1) = 1                # base case or stored in memo upon creation
+           f(2) = 2                # base case or stored in memo upon creation
+           f(3) = 3 * f(2) = 3     # f(3) stored in memo
+           f(4) = 4 * f(3) = 5     # f(4) stored in memo
+           f(5) = 5 * f(4) = 8     # f(5) stored in memo
+           f(6) = 6 * f(5) = 16    # f(6) stored in memo
+        5. recursive: todo
+           iterative: todo
+           optimized: todo
+        6. Yes.  todo
 
     3. Unique Paths: The number of paths from the top left corner of a grid to the bottom right corner when moving only
     down and to the right.
@@ -126,7 +144,7 @@ Problems That Can Be Solved with Recursion
         5. recursive: O(n * m) time; O(1) input space; O(n * m) memo space; O(n + m) call stack;
            iterative: O(n * m) time; O(1) input space; O(n * m) table space;
            optimized: O(n * m) time; O(1) input space; O(m) table space, where m = [int] * rows
-        6. Yes.
+        6. Yes.  todo use this format elsewhere?
            Optimized runtime reduces time complexity from O(2^n) to O(n^2);
            Optimized tabulation reduces space from O(n + m) (call stack), to O(m) table space, where m = [int] * rows
 
@@ -170,32 +188,90 @@ Problems That Can Be Solved with Recursion
         2. recurrence relation: f(n) = f(n - 2) + f(n - 1); base case: f(0) = 1, f(1) = 0. We can either include an
         element, in which case we shift by two, or we can not, in which case we shift by one, for every element in n
         elements.
-        3.
-        4. [
-                [0, 2, 4],
-                [0, 2, 5],
-                [0, 2],
-                [0, 3, 5],
-                [0, 3],
-                [0, 4],
-                [0, 5],
-                [0],
-                [1, 3, 5],
-                [1, 3],
-                [1, 4],
-                [1, 5],
-                [1],
-                [2, 4],
-                [2, 5],
-                [2],
-                [3, 5],
-                [3],
-                [4],
-                [5],
-                []
-           ]
-        5.
-        6.
+        3. starting with an empty set, {}, iterating over A, loop through a queue
+           # nonconsecutive iterative
+           def iter_sets(n):
+               elements = [i for i in range(1, n + 1)]
+               sets = []
+               agenda = [[]]  # seed
+               while agenda:
+                   next_elem = agenda.pop(0)
+                   if next_elem not in sets:
+                       sets.append(next_elem)  # not included
+                   for elem in elements:  # included
+                       next_set = next_elem + [elem]
+                       if len(next_elem) < 1 or elem > next_elem[-1] + 1:
+                           sets.append(next_set)
+                           agenda.append(next_set)
+               return n, len(sets), sets  # list notation tho
+
+           {
+               {},
+               {1},
+               {2},
+               {3},
+               {4},
+               {5},
+               {6},
+               {1, 3},
+               {1, 4},
+               {1, 5},
+               {1, 6},
+               {2, 4},
+               {2, 5},
+               {2, 6},
+               {3, 5},
+               {3, 6},
+               {4, 6},
+               {1, 3, 5},
+               {1, 3, 6},
+               {1, 4, 6},
+               {2, 4, 6}
+           }
+
+        4. # nonconsecutive recursive
+           # while this tracks the sets themselves, cardinality does not require the sets themselves
+           def nc_subsets(n):
+               if n < 1:
+                   return n, 1, {}
+               subsets = []
+               _subsets(3, [1], n, subsets) + _subsets(2, [], n, subsets)
+               count = len(subsets)
+               subsets = ''.join(['{' if i == '[' else '}' if i == ']' else i for i in str(subsets)])  # otherwise use frozensets
+               return n, count, subsets
+
+           def _subsets(index, par_set, n, subsets):
+               if index > n:
+                   subsets.append(par_set)
+                   return 1
+               return _subsets(index + 2, par_set + [index], n, subsets) + _subsets(index + 1, par_set, n, subsets)
+            
+           call stack:
+           {
+               {1, 3, 5},
+               {1, 3, 6},
+               {1, 3},
+               {1, 4, 6},
+               {1, 4},
+               {1, 5},
+               {1, 6},
+               {1},
+               {2, 4, 6},
+               {2, 4},
+               {2, 5},
+               {2, 6},
+               {2},
+               {3, 5},
+               {3, 6},
+               {3},
+               {4, 6},
+               {4},
+               {5},
+               {6},
+               {}
+           }
+        5. DP optimal time/space: O(n) time complexity using memoization; O(n) space complexity using memoization
+        6. Yes. A naive recursive approach takes O(2^n) time, and O(n) space.
 
     8. Count the number of functions from {1,2,3,...,N} to a set of size {1,2,3,...,M}. Here is an additional
     explanation of functions.
