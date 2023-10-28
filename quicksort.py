@@ -3,7 +3,6 @@
 # leftmost pivot implementation
 def quicksort_leftmost(arr: list) -> None:
     # calls helper method _quicksort
-
     _quicksort_leftmost(arr, 0, len(arr) - 1)
 
 
@@ -98,18 +97,10 @@ quicksort_rightmost(unsorted_rightmost)
 print(unsorted_rightmost)
 
 
-
-
-
-
-
-
-
-
-
 # leftmost partition
 def quicksort(arr):
     _quicksort_helper(arr, 0, len(arr) - 1)
+
 
 def _quicksort_helper(arr, low, high):
     if low >= high:
@@ -120,6 +111,7 @@ def _quicksort_helper(arr, low, high):
     _quicksort_helper(arr, low, pivot_index -1)
     # upper
     _quicksort_helper(arr, pivot_index + 1, high)
+
 
 def partition(arr, low, high):
     pivot = arr[low]
@@ -138,68 +130,55 @@ quicksort(unsorted)
 print(unsorted)
 
 
+# median of 3 (mo3) partition
+def quicksort_mo3(arr):
+    return _quicksort_mo3(0, len(arr) - 1, arr)
 
 
+def _quicksort_mo3(lo, hi, arr):
+    if lo >= hi:
+        return
+
+    # find pivot
+    mo3_pivot = _mo3_pivot(lo, hi, arr)
+    # recurse left
+    _quicksort_mo3(lo, mo3_pivot - 1, arr)
+    # recurse right
+    _quicksort_mo3(mo3_pivot + 1, hi, arr)
 
 
+def _mo3_pivot(lo, hi, arr):
+    mid = lo + (hi - lo) // 2
+
+    # correctly order lo, mid, hi
+    # todo: reconsider/refactor
+    if arr[lo] > arr[mid]:
+        _swap(lo, mid, arr)
+    if arr[mid] > arr[hi]:
+        _swap(mid, hi, arr)
+    if arr[lo] > arr[mid]:
+        _swap(lo, mid, arr)
+
+    if (hi + 1) - (lo + 1) < 4:
+        return mid
+
+    # swap mid with leftmost
+    _swap(lo, mid, arr)
+    # then perform leftmost
+    piv = lo
+    for i in range(lo, hi + 1):
+        if arr[i] < arr[lo]:
+            _swap(i, piv + 1, arr)
+            piv += 1
+    _swap(piv, lo, arr)
+    return piv
 
 
+def _swap(ind_1, ind_2, arr):
+    arr[ind_1], arr[ind_2] = arr[ind_2], arr[ind_1]
 
 
-
-# # middle partition
-# # recursive_fn
-# #   base case (low >= high ?or? high <= low)
-# #   get partition index
-# #   quicksort lower (up to partition index)
-# #   quicksort upper (down to partition index)
-# # partition_fn
-# #   ! move partition index to correct location
-# #   to do so, correct number left/right less/greater
-# #   swaps
-#
-# def quicksort_middle(arr):
-#     _quicksort_middle(arr, 0, len(arr) - 1)
-#
-# def _quicksort_middle(arr, low, high):
-#     if low >= high:  # todo
-#         return
-#
-#     partition_index = partition_middle(arr, low, high)
-#     # lower subarray
-#     _quicksort_middle(arr, low, partition_index - 1)
-#     # upper subarray
-#     _quicksort_middle(arr, partition_index + 1, high)
-#
-# def partition_middle(arr, low, high):
-#     partition_index = low + (high - low) // 2
-#     # swap partition value with low
-#     arr[low], arr[partition_index] = arr[partition_index], arr[low]
-#     partition_value = arr[low]
-#
-#     low_index = low + 1
-#     high_index = high
-#     while low_index < high_index:
-#         if arr[low_index] < partition_value:
-#             low_index += 1
-#         elif arr[high_index] > partition_value:
-#             high_index -= 1
-#         else:
-#             print("\npart_value:", partition_value, "part_index:", partition_index)
-#             print("\t\t\t\t\t", arr)
-#             print(f"swap: {arr[low_index]} <-> {arr[high_index]}", end=" ")
-#             arr[low_index], arr[high_index] = arr[high_index], arr[low_index]
-#             print("\t",  arr)
-#     if low + 1 != low_index:
-#         arr[low], arr[low_index - 1] = arr[low_index - 1], arr[low]
-#     return low_index - 1
-#
-#
-# unsorted_middle = [3, 8, 4, 2, 13, 5, 6, -1, 7, 1, 2, 8, 3, 11, 100, 0, -3, -10, 9]
-# quicksort_middle(unsorted_middle)
-# print(unsorted_middle)
-
-
-
-
-
+# unsorted = [3, 4, 2, 1, 5, 6, 2, 7, 8, 8, 3, 11, 100, 0, -3, -10, 9]
+unsorted = [3, 4, 8, 9, 5, 6, 2, 7, 2, 8, 3, 11, 100, 0, -3, -10, 1]
+quicksort_mo3(unsorted)
+print(unsorted)
