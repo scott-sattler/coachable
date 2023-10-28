@@ -67,7 +67,7 @@ Dynamic Programming and Recurrence Examples
 Problems That Can Be Solved with Recursion
     1. Number of paths up a staircase of length N where you take 1 or 2 steps each time. Example provided.
         1. N -> paths: 1 -> 1, 2 -> 2, 3 -> 3, 4 -> 5
-        2. f(n) = f(n - 1) + f(n - 2). We can either take 1 or 2 steps towards reaching our goal.
+        2. recurrence relation: f(n) = f(n - 1) + f(n - 2). We can either take 1 or 2 steps towards reaching our goal.
         3. f(n) = table[i - 1] + table[i - 2]
            f(1) = 1, f(2) = 2
            [0, 0, 0, 0, 0, 0]
@@ -91,8 +91,8 @@ Problems That Can Be Solved with Recursion
 
     2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n].
         1. n -> permutations: 0 -> 1, 1 -> 1, 2 -> 2, 3 -> 6, 4 -> 24
-        2. f(n) = n * f(n - 1). We can choose n objects, then (n - 1) objects, and (n - 2) objects until we can choose
-        one object. Each choice is followed by (n - 1) choices (multiplication).
+        2. recurrence relation: f(n) = n * f(n - 1). We can choose n objects, then (n - 1) objects, and (n - 2) objects
+        until we can choose one object. Each choice is followed by (n - 1) choices (multiplication).
         3. f(0) = 1, f(1) = 1
            [1, 0, 0, 0, 0, 0]
            [1, 2, 0, 0, 0, 0]
@@ -275,8 +275,8 @@ Problems That Can Be Solved with Recursion
 
     8. Count the number of functions from {1,2,3,...,N} to a set of size {1,2,3,...,M}. Here is an additional
     explanation of functions.
-        1.
-        2.
+        1. N, M -> count: 1, 1 -> 1, 2, 2 -> 4, 3, 3 -> 27
+        2. f(n, m) = m * f(n - 1)
         3.
         4.
         5.
