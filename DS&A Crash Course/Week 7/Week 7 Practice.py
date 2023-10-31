@@ -276,9 +276,20 @@ Problems That Can Be Solved with Recursion
     8. Count the number of functions from {1,2,3,...,N} to a set of size {1,2,3,...,M}. Here is an additional
     explanation of functions.
         1. N, M -> count: 1, 1 -> 1, 2, 2 -> 4, 3, 3 -> 27
-        2. f(n, m) = m * f(n - 1)
+        2. recurrence relation: f(n, m) = m * f(n - 1)
         3.
-        4.
+           [1, 2, 3, 4, 5, 6]
+                         [36]
+                        [216]
+                      [1_296]
+                      [7_776]
+                     [4_6656]
+        4. f(1) = m = 6
+           f(2) = m * f(1) = 36
+           f(3) = m * f(2) = 216
+           f(4) = m * f(3) = 1_296
+           f(5) = m * f(4) = 7_776
+           f(6) = m * f(5) = 46_656
         5.
         6.
 
