@@ -27,7 +27,6 @@ Free Response Questions
         bottom up solutions usually order the solutions by "size", solving the "smaller" subproblems first.
         bottom up often has a superior constant factor, from lower overhead
 
-
     4. “Memoization” can be thought of as “caching” all the recursive calls that have already happened. What might be a
     reason why I wouldn’t want to do that?
         repeated calls with the same arguments are impossible, unlikely, or are avoidable.
@@ -43,11 +42,16 @@ Free Response Questions
     7. Fibonacci is one example of a 1-dimensional recurrence relation optimized with dynamic programming. Identify and
     share 3 other classes of dynamic programming problems that seem similar and describe what makes them feel similar.
         todo
+        1-d movement (e.g. climbing stairs)
+        dominos (that collapse to 1-d)
+
 
     8. Is this statement true or false?
     "Dynamic programming only helps problems that have a brute-force recursive solution."
-        false. todo, explain
-
+        false.
+        Dynamic programming is a mathematical optimization that exploits the property of optimal substructure to
+        (potentially) optimize a brute force recursive solution utilizing memoization. Such an optimization may also
+        use tabulation with iteration, and can be more efficient than corresponding recursive solutions.
 
 Dynamic Programming and Recurrence Examples
     Each of the below problems can be solved with recursion. Please  answer the following for each one.
