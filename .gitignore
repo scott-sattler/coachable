@@ -5,6 +5,7 @@ old.py
 old*
 *.idea
 *.iml
+logs*
 
 *coachable.iml
 *vcs.xml
