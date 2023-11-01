@@ -90,8 +90,8 @@ Problems That Can Be Solved with Recursion
         5. recursive: O(n) time; O(1) input space; O(n) memo space; O(n) call stack space
            iterative: O(n) time; O(1) input space; O(n) table space
            optimized: O(n) time; O(1) input space; O(1) space to store the previous two results
-        6. Yes; Versus bottom-up optimized, the recursive approach recomputes function calls, with a call stack space of
-        O(n). todo reword/fix
+        6. Yes. Versus bottom-up optimized, the recursive approach recomputes function calls, with a call stack space of
+        O(n).
 
     2. Computing the number of permutations of [1-n] i.e. [1,2,3,4,5,...n-1,n].
         1. n -> permutations: 0 -> 1, 1 -> 1, 2 -> 2, 3 -> 6, 4 -> 24
@@ -105,23 +105,24 @@ Problems That Can Be Solved with Recursion
            [1, 2, 3, 5, 8, 0]
            [1, 2, 3, 5, 8, 16]
         4. call stack:
-           f(1) = 1                # base case or stored in memo upon creation
-           f(2) = 2                # base case or stored in memo upon creation
-           f(3) = 3 * f(2) = 3     # f(3) stored in memo
-           f(4) = 4 * f(3) = 5     # f(4) stored in memo
-           f(5) = 5 * f(4) = 8     # f(5) stored in memo
-           f(6) = 6 * f(5) = 16    # f(6) stored in memo
-        5. recursive: todo
-           iterative: todo
-           optimized: todo
-        6. Yes.  todo
+           f(1) = 1
+           f(2) = 2
+           f(3) = 3 * f(2) = 3
+           f(4) = 4 * f(3) = 5
+           f(5) = 5 * f(4) = 8
+           f(6) = 6 * f(5) = 16
+        5. recursive: O(n) time; O(1) input space; O(n) call stack space
+           iterative: O(n) time; O(1) input space; O(n) array space
+           optimized: O(n) time; O(1) input space; O(1) cache space (fixed size array or variable(s))
+        6. Yes. While the naive recursive approach takes O(n) time, it requires O(n) space. The optimized DP solution
+        only requiring O(1) space.
 
     3. Unique Paths: The number of paths from the top left corner of a grid to the bottom right corner when moving only
     down and to the right.
         1. (n, m) -> paths: (0, 0) -> 0, (1, 1) -> 2, (2, 2) -> 2, (3, 3) -> 6
-        2. recurrence relation: f(n, m) = f(n - 1, m) + f(n, m - 1); base case: f(n, m) = (0, 0) (or (n, m) if starting
-        from (0, 0)). We can move either right or down. From any given position, the number of paths is the number of
-        paths moving right, plus the number of paths moving down.
+        2. recurrence relation: f(n, m) = f(n - 1, m) + f(n, m - 1); base cases: f(n, m) = (0, 0) (or (n, m) if starting
+        from (0, 0)); boundary (base) cases return 0 when exceeding bounds. We can move either right or down. From any
+        given position, the number of paths is the number of paths moving right, plus the number of paths moving down.
         3. add up and left to get current
            topmost and leftmost only ever have a single path
            [0, 1, 1]
@@ -144,11 +145,10 @@ Problems That Can Be Solved with Recursion
            f(3, 1) = 1
            f(3, 2) = 3
            f(3, 3) = 6
-
         5. recursive: O(n * m) time; O(1) input space; O(n * m) memo space; O(n + m) call stack;
            iterative: O(n * m) time; O(1) input space; O(n * m) table space;
            optimized: O(n * m) time; O(1) input space; O(m) table space, where m = [int] * rows
-        6. Yes.  todo use this format elsewhere?
+        6. Yes.
            Optimized runtime reduces time complexity from O(2^n) to O(n^2);
            Optimized tabulation reduces space from O(n + m) (call stack), to O(m) table space, where m = [int] * rows
 
@@ -183,7 +183,8 @@ Problems That Can Be Solved with Recursion
            f(5) = 32
            f(6) = 64
         5. recursive: O(n) time; O(1) input space; O(n) call stack space; O(n) memo space
-           iterative: O(n) time; O(1) input space; O(n) space keeping n array, O(1) space if just keeping last element
+           iterative: O(n) time; O(1) input space; O(n) space keeping n array
+           optimized: O(n) time; O(1) input space; O(1) space for storing the previous element
         6. Yes. A naive recursive approach takes O(2^n) time, and O(n) space.
 
     7. Given a set A = {1,2,3,...,N} calculate the number of possible subsets of A that do not contain any 2 numbers
@@ -288,14 +289,25 @@ Problems That Can Be Solved with Recursion
                       [1_296]
                       [7_776]
                      [4_6656]
+
+           [6,  0,   0,     0,     0,      0]
+           [6, 36,   0,     0,     0,      0]
+           [6, 36, 216,     0,     0,      0]
+           [6, 36, 216, 1_296,     0,      0]
+           [6, 36, 216, 1_296, 7_776,      0]
+           [6, 36, 216, 1_296, 7_776, 4_6656]
         4. f(1) = m = 6
            f(2) = m * f(1) = 36
            f(3) = m * f(2) = 216
            f(4) = m * f(3) = 1_296
            f(5) = m * f(4) = 7_776
            f(6) = m * f(5) = 46_656
-        5.
-        6.
+        5. recursive: O(n) time; O(1) input space; O(n) memo space; O(n) call stack space;
+           iterative: O(n) time; O(1) input space; O(n * m) table space OR O(n + m) table space (above) OR O(1) table
+           space when keeping only the most recent element
+           DP optimal: O(n) time; O(1) input space; O(1) table/cache space (previous result)
+        6. Yes. While the naive recursive approach takes O(n) time, it requires O(n) space. The optimized DP solution
+        only requires O(1) space.
 
     9. A function has a fixed point if f(x) = x for any x in the domain of f. How many functions are there from
     {1,2,3,...,N} to {1,2,3,...,M} without any fixed points? Hint, approach the problem in cases, then put it all
