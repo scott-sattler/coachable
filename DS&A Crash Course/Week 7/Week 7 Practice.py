@@ -153,12 +153,34 @@ Problems That Can Be Solved with Recursion
            Optimized tabulation reduces space from O(n + m) (call stack), to O(m) table space, where m = [int] * rows
 
     4. Given a 2xN grid, how many different ways can you fill the gird with 2x1 dominoes?
-        1.
-        2.
-        3.
-        4.
-        5.
-        6.
+        1. N -> arrangements: 1 -> 1, 2 -> 2, 3 -> 3, 4 -> 5
+        2. recurrence relation: f(n) = f(n - 1) + f(n - 2). For each additional space N, we can fill the new space by
+        adding either one (vertical, or f(1)) or two (horizontal, f(2)) dominos to the previous n-1 or n-2 arrangements,
+        respectively.
+        3. vertical -> |    horizontal -> =
+           |
+           ||, =
+           |||, =|, |=
+           ||||, =||, |=|, ||=, ==
+           |||||, =|||, |=||, ||=|, ==|, |||=, =|=, |==
+           ||||||, =||||, |=|||, ||=||, ==||, |||=|, =|=|, |==|, ||||=, =||=, |=|=, ||==, ===
+           f(1) = 1, f(2) = 2
+           [1, 2, 0, 0, 0,  0]
+           [1, 2, 3, 0, 0,  0]
+           [1, 2, 3, 5, 0,  0]
+           [1, 2, 3, 5, 8,  0]
+           [1, 2, 3, 5, 8, 13]
+        4. call stack:
+           f(1) -> 1             # base case stored in memo upon creation
+           f(2) -> 2             # base case stored in memo upon creation
+           f(3) = f(2) + f(1)    # f(3) stored in memo
+           f(4) = f(3) + f(2)    # f(4) stored in memo
+           f(5) = f(4) + f(3)    # f(5) stored in memo
+           f(6) = f(5) + f(4)    # f(6) stored in memo
+        5. recursive: O(n) time; O(1) input space; O(n) call stack space; O(n) memo space
+           iterative: O(n) time; O(1) input space; O(n) table space (1-d)
+           optimized: O(n) time; O(1) input space; O(1) store space (fixed array or variables)
+        6. Yes. A naive recursive approach takes O(2^n) time, and O(n) space.
 
     5. Given a 3xN grid, how many different ways can you fill the gird with 3x1 dominoes?
         1.
