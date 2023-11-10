@@ -1,3 +1,15 @@
+"""
+Review:
+- one char apart
+- number of unique BSTs you can form with 'n' distinct keys
+- searching rotated arrays in O(log n)
+
+"""
+
+
+
+##### ##### ##### ##### #####
+
 def topological_sort():
     """
     Q: topological_sort
