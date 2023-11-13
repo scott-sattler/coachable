@@ -3,6 +3,31 @@ Review:
 - one char apart
 - number of unique BSTs you can form with 'n' distinct keys
 - searching rotated arrays in O(log n)
+- longest common prefix
+- the algorithm best suited to find the kth smallest element in a BST
+- Bellman-Ford
+
+
+
+
+
+
+
+
+Longest Common Prefix
+How can you find the longest common prefix between an array of strings in O(N*M) time complexity, where N is the number
+of strings, and M is the length of the smallest string?
+1. Initialize the longest common prefix (LCP) as the first string in the array.
+2. Iterate over the remaining strings in the array. For each string, compare it character by character with the LCP.
+Once you hit a mismatch, update the LCP to be the substring from the start to the mismatched character. This ensures
+that the LCP only contains the characters that matched with the current string.
+3. Continue this process for all strings in the array. At the end, the LCP will be the longest common prefix of all
+strings.
+This solution has a time complexity of O(N*M), where N is the number of strings and M is the length of the smallest
+string, because in the worst case we are comparing M characters for each of the N strings.
+
+
+
 
 """
 
