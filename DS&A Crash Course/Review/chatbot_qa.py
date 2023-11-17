@@ -6,6 +6,8 @@ Review:
 - longest common prefix
 - the algorithm best suited to find the kth smallest element in a BST
 - Bellman-Ford
+- lowest common ancestor (on trees)
+- maximum sum of non-adjacent elements
 
 
 
