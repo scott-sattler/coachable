@@ -9,6 +9,9 @@ Review:
 - lowest common ancestor (on trees)
 - maximum sum of non-adjacent elements
 
+not-chatbot
+- Kruskals and Prims
+
 
 
 
