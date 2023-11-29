@@ -116,7 +116,6 @@ def check_connected(grid: list[list[NetworkNode]], max_diff: int) -> bool:
             if (seen[0] >= len(grid[0])) or (seen[1] >= len(grid[1])):
                 continue
             # node "type" (color) check
-            print(seen)
             if grid[node[0]][node[1]].node_type == grid[seen[0]][seen[1]].node_type:
                 node_queue.append(seen)
                 continue
