@@ -93,8 +93,8 @@ class NetworkNode:
 
 
 def check_connected(grid: list[list[NetworkNode]], max_diff: int) -> bool:
-    # cardinal -> north, south, east, west
-    cardinal = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    # cardinal directions -> north, south, east, west
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     explored = set()
     node_queue = [(0, 0)]
 
@@ -107,8 +107,8 @@ def check_connected(grid: list[list[NetworkNode]], max_diff: int) -> bool:
         if node == (len(grid) - 1, len(grid[0]) - 1):
             return True
 
-        # cardinal -> north, south, east, west
-        for direction in cardinal:
+        # directions -> north, south, east, west
+        for direction in directions:
             seen = (node[0] + direction[0], node[1] + direction[1])
             # bounds check
             if (seen[0] < 0) or (seen[1] < 0):
