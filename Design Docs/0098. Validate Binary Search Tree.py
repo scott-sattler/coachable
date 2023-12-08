@@ -15,6 +15,7 @@ class Solution:
         """
         uses implicit data structure
         O(n) stack space -> O(1)
+        still O(n) call stack space tho
         """
         last_seen = [float('-inf'), True]
         self._isValidBST(root, last_seen)
