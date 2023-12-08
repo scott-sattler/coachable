@@ -21,9 +21,9 @@ class Solution:
         return last_seen[1]
 
     # noinspection PyPep8Naming
-    def _isValidBST(self, node, last_seen) -> bool:
+    def _isValidBST(self, node, last_seen) -> None:
         if not node:
-            return True
+            return None
 
         self._isValidBST(node.left, last_seen)
 
@@ -57,6 +57,50 @@ class OtherSolutions:
 
         return True
 
-    # # noinspection PyPep8Naming
-    # def isValidBST(self, root: Optional[TreeNode]) -> bool:
-    #     # todo: write stack implementation
+    ###########################################################################
+    # stack solution
+
+    # validate the BST property
+    # root, left child, right child
+    # left < root < right
+
+    # traversed the BST in-order,
+    # store in stack
+    # verify correct order
+    # by looking to see if i < i+1
+
+    # O(n) time; O(n) aux. space (stack)
+
+    # noinspection PyPep8Naming,PyRedeclaration
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        stack = list()
+
+        # create in-order stack
+        self._isValidBST(root, stack)
+
+        # valid stack is increasing
+        i = 1
+        while i < len(stack):
+            if not stack[i - 1] < stack[i]:
+                return False
+            i += 1
+
+        return True
+
+    # noinspection PyPep8Naming,PyRedeclaration
+    def _isValidBST(self, node: Optional[TreeNode], stack) -> None:
+        # base case
+        if not node:
+            return None
+
+        # traverse left child
+        self._isValidBST(node.left, stack)
+
+        # add to stack
+        stack.append(node.val)
+
+        # traverse right child
+        self._isValidBST(node.right, stack)
+
+
+
