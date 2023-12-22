@@ -77,6 +77,7 @@ def base_converter(from_base: int, value: int, to_base: int) -> int:
     return int(''.join(map(str, reversed_out[::-1])))
 
 
-assert base_converter(10, 256, 4) == 10000
-assert base_converter(7, 256, 4) == 2023
-assert base_converter(8, 1205, 3) == 212220
+if __name__ == '__main__':
+    assert base_converter(10, 256, 4) == 10000
+    assert base_converter(7, 256, 4) == 2023
+    assert base_converter(8, 1205, 3) == 212220
