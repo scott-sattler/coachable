@@ -9,57 +9,62 @@ class Solution:
         solutions = list()
 
         # create solution sets
-        # i = 0 and j = 0 are top/left solutions
-        goal_p = set((0, j) for j in range(cols))
-        goal_p.update((i, 0) for i in range(rows))
-        # i = len - 1 and j = len - 1 are bottom/right solutions
-        goal_a = set((i, cols - 1) for i in range(rows))
-        goal_a.update((rows - 1, j) for j in range(cols))
+        solutions_p = set()
+        solutions_a = set()
 
-        # dfs across every cell
-        for i in range(rows):
-            for j in range(cols):
-                visited = set()
-                self.dfs(heights, visited, goal_p, (i, j), (i, j), i, j)
-                visited = set()
-                self.dfs(heights, visited, goal_a, (i, j), (i, j), i, j)
+        # # dfs from pacific and atlantic
+        # pacific
+        visited = set()
+        # top
+        for j in range(len(heights[0])):
+            # visited = set()
+            self.dfs(heights, visited, solutions_p, heights[0][j], 0, j)
+        # left
+        for i in range(len(heights)):
+            # visited = set()
+            self.dfs(heights, visited, solutions_p, heights[i][0], i, 0)
 
-        # return solution set intersections
-        # between Pacific and Atlantic
-        for p in goal_p:
-            if p in goal_a:
+        # atlantic
+        visited = set()
+        # right
+        for i in range(len(heights)):
+            j = len(heights[0]) - 1
+            self.dfs(heights, visited, solutions_a, heights[i][j], i, j)
+        # bottom
+        for j in range(len(heights[0])):
+            i = len(heights) - 1
+            self.dfs(heights, visited, solutions_a, heights[i][j], i, j)
+
+        for p in solutions_p:
+            if p in solutions_a:
                 solutions.append(p)
         return solutions
 
-    def dfs(self, heights, visited, goal, orig, prev_ij, i, j):
-        # boundary test
+    # dfs from oceans
+    def dfs(self, heights, visited, solutions, prev_val, i, j):
+        # optimization
+        if (i, j) in solutions:
+            return
+
+        # boundaries
         if not (len(heights) > i > -1 and len(heights[0]) > j > -1):
             return
 
-        # problem constraint test
-        # must be equal or decreasing
-        if heights[i][j] > heights[prev_ij[0]][prev_ij[1]]:
+        # bail on bad paths
+        if heights[i][j] < prev_val:
             return
 
-        # exclude visited nodes
+        # add to visited set
         if (i, j) in visited:
             return
         visited.add((i, j))
 
-        # update goal set if
-        # goal path found
-        if (i, j) in goal:
-            if (i, j) != prev_ij:
-                goal.add(orig)
-            return
+        solutions.add((i, j))
 
-        # explore
-        self.dfs(heights, visited, goal, orig, (i, j), i - 1, j)
-        self.dfs(heights, visited, goal, orig, (i, j), i + 1, j)
-        self.dfs(heights, visited, goal, orig, (i, j), i, j - 1)
-        self.dfs(heights, visited, goal, orig, (i, j), i, j + 1)
-
-
+        self.dfs(heights, visited, solutions, heights[i][j], i - 1, j)
+        self.dfs(heights, visited, solutions, heights[i][j], i + 1, j)
+        self.dfs(heights, visited, solutions, heights[i][j], i, j - 1)
+        self.dfs(heights, visited, solutions, heights[i][j], i, j + 1)
 
 
 if __name__ == '__main__':
@@ -86,7 +91,9 @@ if __name__ == '__main__':
             [[0, 0], [0, 1], [0, 2], [1, 0], [1, 2], [2, 0], [2, 1], [2, 2]]
         ),
         (
-            [[1, 2, 3], [8, 9, 4], [7, 6, 5]],
+            [[1, 2, 3],
+             [8, 9, 4],
+             [7, 6, 5]],
             [[0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
         ),
 
