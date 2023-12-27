@@ -12,29 +12,24 @@ class Solution:
         solutions_p = set()
         solutions_a = set()
 
-        # # dfs from pacific and atlantic
-        # pacific
-        visited = set()
-        # top
+        # create visited sets
+        visited_p = set()
+        visited_a = set()
+
+        # dfs from pacific and atlantic
+        # top/bottom
+        i = len(heights) - 1
         for j in range(len(heights[0])):
-            # visited = set()
-            self.dfs(heights, visited, solutions_p, heights[0][j], 0, j)
-        # left
+            self.dfs(heights, visited_p, solutions_p, heights[0][j], 0, j)  # pac
+            self.dfs(heights, visited_a, solutions_a, heights[i][j], i, j)  # atl
+        # left/right
+        j = len(heights[0]) - 1
         for i in range(len(heights)):
             # visited = set()
-            self.dfs(heights, visited, solutions_p, heights[i][0], i, 0)
+            self.dfs(heights, visited_p, solutions_p, heights[i][0], i, 0)  # pac
+            self.dfs(heights, visited_a, solutions_a, heights[i][j], i, j)  # atl
 
-        # atlantic
-        visited = set()
-        # right
-        for i in range(len(heights)):
-            j = len(heights[0]) - 1
-            self.dfs(heights, visited, solutions_a, heights[i][j], i, j)
-        # bottom
-        for j in range(len(heights[0])):
-            i = len(heights) - 1
-            self.dfs(heights, visited, solutions_a, heights[i][j], i, j)
-
+        # find intersecting solutions
         for p in solutions_p:
             if p in solutions_a:
                 solutions.append(p)
@@ -46,7 +41,7 @@ class Solution:
         if (i, j) in solutions:
             return
 
-        # boundaries
+        # boundary
         if not (len(heights) > i > -1 and len(heights[0]) > j > -1):
             return
 
@@ -54,13 +49,15 @@ class Solution:
         if heights[i][j] < prev_val:
             return
 
-        # add to visited set
+        # add current vertex to visited set
         if (i, j) in visited:
             return
         visited.add((i, j))
 
+        # record solution
         solutions.add((i, j))
 
+        # explore
         self.dfs(heights, visited, solutions, heights[i][j], i - 1, j)
         self.dfs(heights, visited, solutions, heights[i][j], i + 1, j)
         self.dfs(heights, visited, solutions, heights[i][j], i, j - 1)
