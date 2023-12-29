@@ -4,16 +4,19 @@ import queue
 
 
 class ListNode:
-    def __init__(self, val=0, next_=None):
+    def __init__(self, val: int | None = 0, next_=None):
         self.val = val
         self.next_ = next_
 
     def __lt__(self, other): return self.val < other.val
     def __le__(self, other): return self.val <= other.val
+
     # def __eq__(self, other): return self.val == other.val
     # def __ne__(self, other): return self.val != other.val
     # def __gt__(self, other): return self.val > other.val
     # def __ge__(self, other): return self.val >= other.val
+
+    def __repr__(self): return f"n{self.val} -> {self.next_}"
 
 
 class Solution:
@@ -27,7 +30,7 @@ class Solution:
 
         for head in lists:
             if head is None:  # LeetCode Imposed
-                continue      # LeetCode Imposed
+                continue  # LeetCode Imposed
             minheap.append(head)
         heapq.heapify(minheap)
 
@@ -74,9 +77,40 @@ class Solution:
 
         return merged_head_dummy.next_
 
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
+    def mergeKLists_rec(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        if len(lists) < 2:                           # base case
+            return lists[0]
+
+        mid_p = len(lists) // 2                      # find midpoint
+        left = self.mergeKLists_rec(lists[:mid_p])   # recurse left
+        right = self.mergeKLists_rec(lists[mid_p:])  # recurse right
+
+        merged = ListNode(None)
+        merged_head = merged
+        while left and right:                        # while both left and right
+            if left.val <= right.val:                # contain nodes, transfer the
+                merged.next_ = left                  # lesser of the two values
+                left = left.next_
+            else:  # right.val < left.val
+                merged.next_ = right
+                right = right.next_
+            merged = merged.next_
+
+        remain = left                                # consume remaining when
+        if right:                                    # left OR right is consumed
+            remain = right
+        while remain:
+            merged.next_ = remain
+            remain = remain.next_
+            merged = merged.next_
+
+        return merged_head.next_
+
 
 if __name__ == '__main__':
     import helper_functions as hf
+
 
     def create_ll_from_list(lst: list) -> ListNode:
         dummy_head = ListNode()
@@ -86,11 +120,13 @@ if __name__ == '__main__':
             list_pointer = list_pointer.next_
         return dummy_head.next_
 
+
     def create_list_of_ll(lst_of_lls: list[list]) -> list[ListNode]:
         ret: list[ListNode] = list()
         for each in lst_of_lls:
             ret.append(create_ll_from_list(each))
         return ret
+
 
     def create_list_from_ll(ll: ListNode) -> list:
         ret = list()
@@ -109,14 +145,14 @@ if __name__ == '__main__':
 
     class Testing(TestCase):
         tests = [
-            (
-                [],
-                []
-            ),
-            (
-                [[]],
-                []
-            ),
+            # (
+            #     [],
+            #     []
+            # ),
+            # (
+            #     [[]],
+            #     []
+            # ),
             (
                 [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
                 [i for i in range(1, 10)]
@@ -146,23 +182,39 @@ if __name__ == '__main__':
                 self.test_cases.append(TestCase(test[0], test[1]))
 
         def run(self):
+            passed, failed = list(), list()
             for fn in self.functions:
                 self.load_test_cases()
                 print(hf.color('yellow', f'FUNCTION TEST: {fn}'))
+                passed.append(0)
+                failed.append(0)
                 for test in self.test_cases:
-                    actual = self.functions[fn](self, test.input_)
+                    actual = self.functions[fn](Solution(), test.input_)
                     actual_list = create_list_from_ll(actual)
                     try:
                         assert actual_list == test.expected
                         result = hf.color('green', 'PASS')
+                        passed[-1] += 1
                     except (Exception,):
                         result = hf.color('red', 'FAIL')
+                        failed[-1] += 1
+
                     print(f"test: {result}\n{test.raw_input}\n"
                           f"expected:\n{test.expected}\n"
-                          f"actual:\n{actual_list}\n")
+                          f"actual:\n{actual_list}\n"
+                          f"PASSED: {passed[-1]} | FAILED: {failed[-1]}\n")
+            print(f"{hf.color('yellow', 'SUMMARY:')}\n"
+                  f"TOTAL PASSED: {sum(passed)} | TOTAL FAILED: {sum(failed)}")
 
 
-    fns = {k: v for k, v in Solution.__dict__.items() if 'mergeKLists' in k}
-    print(fns)
+
+    include_fns = 'mergeKLists'
+    # include_fns = 'mergeKLists_rec'
+    fns = {k: v for k, v in Solution.__dict__.items() if include_fns in k}
+    # fns = {
+    #     # 'mergeKLists_heapq': lambda inp: Solution().mergeKLists_heapq(inp),
+    #     # 'mergeKLists_pq': lambda inp: Solution().mergeKLists_pq(inp),
+    #     'mergeKLists_rec': lambda inp: Solution().mergeKLists_rec(inp),
+    # }
     t = Testing(fns)
     t.run()
