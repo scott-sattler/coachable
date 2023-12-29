@@ -4,8 +4,6 @@ from typing import List
 class Solution:
     # noinspection PyPep8Naming,PyMethodMayBeStatic
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
-        rows = len(heights)
-        cols = len(heights[0])
         solutions = list()
 
         # create solution sets
@@ -41,7 +39,7 @@ class Solution:
         if (i, j) in solutions:
             return
 
-        # boundary
+        # boundaries
         if not (len(heights) > i > -1 and len(heights[0]) > j > -1):
             return
 
@@ -49,7 +47,7 @@ class Solution:
         if heights[i][j] < prev_val:
             return
 
-        # add current vertex to visited set
+        # add current to visited set
         if (i, j) in visited:
             return
         visited.add((i, j))
