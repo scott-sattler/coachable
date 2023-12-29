@@ -1,4 +1,27 @@
 """###########################
+###### HELPER FUNCTIONS ######
+###########################"""
+
+"""###########################
+######### fun stuff ##########
+###########################"""
+
+
+def color(color: int | str, string: str = '') -> str:
+    # for i in range(101):
+    #     print(f'{i:<3}', str(f'\x1b[{str(i)}m' + 'ABCDEF' + '\x1b[0m'))
+
+    colors = {
+        'red': 91,
+        'green': 92,
+        'yellow': 93
+    }
+    if type(color) is not int:
+        color = colors[color]
+    return str(f'\x1b[{str(color)}m{string}\x1b[0m')
+
+
+"""###########################
 ######## linked lists ########
 ###########################"""
 
