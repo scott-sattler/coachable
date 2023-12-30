@@ -111,7 +111,6 @@ class Solution:
 if __name__ == '__main__':
     import helper_functions as hf
 
-
     def create_ll_from_list(lst: list) -> ListNode:
         dummy_head = ListNode()
         list_pointer = dummy_head
@@ -145,14 +144,14 @@ if __name__ == '__main__':
 
     class Testing(TestCase):
         tests = [
-            # (
-            #     [],
-            #     []
-            # ),
-            # (
-            #     [[]],
-            #     []
-            # ),
+            (
+                [],
+                []
+            ),
+            (
+                [[]],
+                []
+            ),
             (
                 [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
                 [i for i in range(1, 10)]
@@ -205,7 +204,6 @@ if __name__ == '__main__':
                           f"PASSED: {passed[-1]} | FAILED: {failed[-1]}\n")
             print(f"{hf.color('yellow', 'SUMMARY:')}\n"
                   f"TOTAL PASSED: {sum(passed)} | TOTAL FAILED: {sum(failed)}")
-
 
 
     include_fns = 'mergeKLists'
