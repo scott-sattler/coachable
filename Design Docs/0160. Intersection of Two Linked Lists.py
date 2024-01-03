@@ -12,7 +12,7 @@ class Solution:
     # noinspection PyMethodMayBeStatic,PyPep8Naming
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
         # initialize pointers
-        # and counters
+        # initialize counters
         p1, p2 = headA, headB
         c1, c2 = 0, 0
 
@@ -24,14 +24,13 @@ class Solution:
             p2 = p2.next
             c2 += 1
 
-        # return null in the
-        # absence of an intersection
+        # return null in the absence
+        # of an intersection
         if p1 != p2:
             return None
 
-        # reset pointers and align
-        # at equal distances to
-        # intersecting node
+        # reset pointers and align at equal
+        # distances to the intersecting node
         p1, p2 = headA, headB
         while c1 > c2:
             p1 = p1.next
@@ -40,9 +39,8 @@ class Solution:
             p2 = p2.next
             c2 -= 1
 
-        # traverse linked lists
-        # until intersecting node
-        # is found
+        # traverse linked lists until
+        # the intersecting node is found
         while p1 != p2:
             p1 = p1.next
             p2 = p2.next
