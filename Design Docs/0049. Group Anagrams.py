@@ -25,7 +25,7 @@ class Solution:
 
     # # Counting Sort implementation in O(n * k) # #
     # O(n * k) or O(n) time complexity; O(n) auxiliary space complexity
-    # where n is the number of words and k is the average word length
+    # where n is the number of words, and k is the average word length
     # O(n * k) if word length, k, is allowed to scale with n, else, O(n)
     # noinspection PyPep8Naming,PyMethodMayBeStatic,PyRedeclaration
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
