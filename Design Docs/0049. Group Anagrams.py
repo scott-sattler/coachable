@@ -23,15 +23,16 @@ class Solution:
         # return list of anagrams grouped in lists
         return list(hmap.values())
 
-    # # Counting Sort implementation in O(n) # #
+    # # Counting Sort implementation in O(n * k) # #
     # O(n * k) or O(n) time complexity; O(n) auxiliary space complexity
-    # where k is the average word length
-    # as k does not scale with input, it is O(1), hence O(n) time
+    # where n is the number of words and k is the average word length
+    # O(n * k) if word length, k, is allowed to scale with n, else, O(n)
     # noinspection PyPep8Naming,PyMethodMayBeStatic,PyRedeclaration
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        # create map for counting sort
-        cmap = [0] * 26  # replication or list comprehension: [0] * 26 or [0 for _ in range(26)]
-        # create hash table for anagram grouping
+        # # initialize maps # #
+        # for counting sort in O(1)
+        cmap = [0] * 26  # replication; list comp. -> [0 for _ in range(26)]
+        # for anagram grouping in O(1)
         hmap = dict()
 
         # iterate over input in O(n)
@@ -42,14 +43,15 @@ class Solution:
                 cmap[ord(let_w) - 97] += 1
 
             # sorted word formation
-            # create a list in O(k)
+            # create a list(word) in O(k)
             sorted_word = list()
             for let_s in cmap:
                 sorted_word.append(chr(let_s + 97))
             # cast list to string in O(k)
             sorted_word = ''.join(sorted_word)
+            # # end counting sort # #
 
-            # reset letter map
+            # reset letter map O(1)
             cmap = [0] * 26
 
             # add to hash map in O(1)
@@ -57,5 +59,6 @@ class Solution:
                 hmap[sorted_word] = list()
             hmap[sorted_word].append(word)
 
-        # O(2n) value retrieval
+        # hash map value retrieval in O(n)
+        # cast dict object to list in O(n)
         return list(hmap.values())
