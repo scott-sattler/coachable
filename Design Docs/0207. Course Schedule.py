@@ -1,56 +1,41 @@
-# from collections import deque
+from typing import List
 
-# agenda.popleft()
-# agenda.appendleft()
-
-
-# we're looking for a valid path
-# cycle detection, given uniqueness
-# assumes every course can be seen at least once within prerequisites
-
-# successor <- predecessor
 
 class Solution:
+    # noinspection PyPep8Naming,PyMethodMayBeStatic
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         # find topological sort
         topo = list()
 
+        # initialize in/out degree stores
+        in_deg = [0] * numCourses
+        out_deg = {i: [] for i in range(numCourses)}
+
         # find in/out degrees
-        in_deg = dict()
-        out_deg = dict()
-        for course in prerequisites:
-            # increment in-degrees of node course[0]
-            if course[0] not in in_deg:
-                in_deg[course[0]] = 0
-            in_deg[course[0]] += 1
-            # append course[0] (successor) of course[1] (predecessor) out-degree
-            if course[1] not in out_deg:
-                out_deg[course[1]] = []
-            out_deg[course[1]].append(course[0])
-            # # turn out-degree into adjacency list
-            # if course[0] not in out_deg:
-            #     out_deg[course[0]] = []
-            # if course[1] not in in_deg:
-            #     in_deg[course[1]] = 0
-            for i in range(numCourses):
-                if i not in in_deg:
-                    in_deg[i] = 0
+        for pre_req in prerequisites:
+            child = pre_req[0]
+            parent = pre_req[1]
+            in_deg[child] += 1
+            out_deg[parent].append(child)
 
-        # add zero in-degrees to stack (or queue)
-        agenda = list()
-        for course in in_deg:
-            if in_deg[course] == 0:
-                agenda.append(course)
+        # seed agenda with zero in-degrees
+        agenda = list()  # could also use queue
+        for i in range(len(in_deg)):
+            if in_deg[i] == 0:
+                agenda.append(i)
 
-        # process zero in-degrees until agenda is consumed
+        # consume agenda by decrementing children's incoming
+        # degrees, and adding zero in-degrees to agenda
         while agenda:
-            next_course = agenda.pop()
-            topo.append(next_course)
-            if next_course not in out_deg:
-                continue
-            for child in out_deg[next_course]:
+            next_ = agenda.pop()
+            topo.append(next_)
+            for child in out_deg[next_]:
                 in_deg[child] -= 1
                 if in_deg[child] == 0:
                     agenda.append(child)
 
-        return True if len(topo) == len(in_deg) else False
+        # return True iff every element was 
+        # able to be topologically sorted
+        if len(topo) == numCourses:
+            return True
+        return False
