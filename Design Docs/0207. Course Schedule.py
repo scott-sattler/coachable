@@ -33,5 +33,5 @@ class Solution:
                 if in_deg[child] == 0:
                     agenda.append(child)
 
-        # return True iff every element can be topologically ordered
+        # True iff every element can be topologically ordered
         return True if len(topo) == numCourses else False
