@@ -19,9 +19,9 @@ class Solution:
         # iterate until p1 and p2 collide
         while p1 < p2:
             width = p2 - p1
+            lower_height = height[p1]
             # bound by the lesser height of p1
             if height[p1] < height[p2]:
-                lower_height = height[p1]
                 p1 += 1
             # bound by p2
             elif height[p1] > height[p2]:
@@ -29,7 +29,6 @@ class Solution:
                 p2 -= 1
             # maximum of both p1 and p2 found
             else:  # height[p1] == height[p2]
-                lower_height = height[p1]
                 p1 += 1
                 p2 -= 1
             # update if new area is larger
