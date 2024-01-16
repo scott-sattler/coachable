@@ -32,8 +32,6 @@ class Solution:
                 p1 += 1
                 p2 -= 1
             # update if new area is larger
-            next_area = lower_height * width
-            if next_area > max_area:
-                max_area = next_area
+            max_area = max(max_area, lower_height * width)
 
         return max_area
