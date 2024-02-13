@@ -104,4 +104,81 @@ class OtherSolutions:
         self._isValidBST(node.right, stack)
 
 
+    ############################# PRACTICE ############################# # noqa
 
+
+    class Solution:
+        # stack with O(n) space penalty
+        # noinspection PyPep8Naming
+        def isValidBST(self, root: Optional[TreeNode]) -> bool:
+            in_order = list()
+            self.hf(root, in_order)
+
+            for i in range(1, len(in_order)):
+                if in_order[i] < in_order[i - 1]:
+                    return False
+            return True
+
+        def hf(self, node, stack):
+            # base case
+            if not node:
+                return
+
+            # in-order traversal
+            self.hf(node.left, stack)
+            stack.append(node.val)
+            self.hf(node.right, stack)
+
+    # noinspection PyRedeclaration
+    class Solution:
+        # failure transmitter with mutable parameter O(1) space
+        # noinspection PyPep8Naming,PyRedeclaration
+        def isValidBST(self, root: Optional[TreeNode]) -> bool:
+            # visit inorder and verify current
+            # element is always increasing
+            prev = [float('-inf')]  # mutable argument
+            return self.hf(root, prev)
+
+        # failure transmitter
+        # noinspection PyRedeclaration
+        def hf(self, node, prev):
+            # base case(s)
+            if not node:
+                return True
+
+            # inorder traversal
+            if not self.hf(node.left, prev):
+                return False
+
+            # verify order
+            if not prev[0] < node.val:
+                return False
+            # update last visited
+            prev[0] = node.val
+
+            if not self.hf(node.right, prev):
+                return False
+
+            return True
+
+    # noinspection PyRedeclaration
+    class Solution:
+        # mutable parameter w/o transmitter with O(1) space
+        # noinspection PyRedeclaration,PyPep8Naming
+        def isValidBST(self, root: Optional[TreeNode]) -> bool:
+            last_seen = [float('-inf'), True]  # [last val, valid]
+            self.hf(root, last_seen)
+            return last_seen[1]
+
+        # noinspection PyRedeclaration
+        def hf(self, node, last_seen):
+            # base case(s)
+            if not node:
+                return
+
+            # in-order traversal
+            self.hf(node.left, last_seen)
+            if not last_seen[0] < node.val:
+                last_seen[1] = False
+            last_seen[0] = node.val
+            self.hf(node.right, last_seen)
