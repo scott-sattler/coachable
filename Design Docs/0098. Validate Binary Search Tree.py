@@ -108,7 +108,7 @@ class OtherSolutions:
 
 
     class Solution:
-        # stack with O(n) space penalty
+        # stack with O(n) space
         # noinspection PyPep8Naming
         def isValidBST(self, root: Optional[TreeNode]) -> bool:
             in_order = list()
@@ -131,7 +131,8 @@ class OtherSolutions:
 
     # noinspection PyRedeclaration
     class Solution:
-        # failure transmitter with mutable parameter O(1) space
+        # failure transmitter with mutable parameter
+        # unchanged worst-case space
         # noinspection PyPep8Naming,PyRedeclaration
         def isValidBST(self, root: Optional[TreeNode]) -> bool:
             # visit inorder and verify current
@@ -163,7 +164,8 @@ class OtherSolutions:
 
     # noinspection PyRedeclaration
     class Solution:
-        # mutable parameter w/o transmitter with O(1) space
+        # mutable parameter w/o transmitter
+        # unchanged worst-case space
         # noinspection PyRedeclaration,PyPep8Naming
         def isValidBST(self, root: Optional[TreeNode]) -> bool:
             last_seen = [float('-inf'), True]  # [last val, valid]
