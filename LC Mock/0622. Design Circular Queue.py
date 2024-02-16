@@ -78,8 +78,7 @@ class MyCircularQueue:
         if self.size == 1:
             self.tail_pointer = self.head
             self.head.next = None
-
-        if self.size > 1:
+        else:  # self.size > 1
             self.head.next = self.head.next.next
             self.tail_pointer.next = self.head.next
 
@@ -87,12 +86,12 @@ class MyCircularQueue:
         return True
 
     def Front(self) -> int:
-        if self.size < 1:
+        if self.isEmpty():
             return -1
         return self.head.next.val
 
     def Rear(self) -> int:
-        if self.size < 1:
+        if self.isEmpty():
             return -1
         return self.tail_pointer.val
 
