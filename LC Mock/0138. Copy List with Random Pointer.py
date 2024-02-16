@@ -1,3 +1,39 @@
+########################### hashmap solution ########################### # noqa
+# hashmap
+# O(n) time/space
+
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return None
+
+        node_map = {None: None}
+
+        # traverse and create map
+        curr_inp = head
+        while curr_inp:
+            copy = Node(curr_inp.val)
+            node_map[curr_inp] = copy
+            curr_inp = curr_inp.next
+
+        # traverse and assign pointers
+        curr_inp = head
+        while curr_inp:
+            node_map[curr_inp].next = node_map[curr_inp.next]
+            node_map[curr_inp].random = node_map[curr_inp.random]
+            curr_inp = curr_inp.next
+
+        return node_map[head]
+
+
 ############################ first solution ############################ # noqa
 # hashmap + (unnecessary) array
 # O(n) time/space
