@@ -1,3 +1,54 @@
+######################### interweaving solution ######################## # noqa
+# interweaving (uses input list)
+# O(n) time/space
+
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return None
+
+        # traverse and create copy nodes
+        curr = head
+        while curr:
+            new_node = Node(curr.val)
+            next_node = curr.next
+            curr.next = new_node
+            new_node.next = next_node
+
+            curr = curr.next.next
+
+        # create return reference
+        copy_head = head.next
+
+        # traverse and assign pointers
+        curr = head
+        while curr:
+            # assign the copied node's random pointer by
+            # looking at one after the input's random node
+            if curr.random:
+                curr.next.random = curr.random.next
+
+            curr = curr.next.next
+
+        # traverse and seperate
+        curr = head
+        while curr.next:
+            next_node = curr.next
+            curr.next = curr.next.next
+
+            curr = next_node
+
+        return copy_head
+
+
 ########################### hashmap solution ########################### # noqa
 # hashmap
 # O(n) time/space
