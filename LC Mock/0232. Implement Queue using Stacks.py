@@ -1,6 +1,9 @@
 ###################### static array with pointers ###################### # noqa
-# time: O(n); O(1) amortized
-# space: stream input; O(n) stack space; for O(n) auxiliary
+# time: O(1)
+# space:
+#   stream input O(n)
+#   O(n) array space, where n is the maximum number of push inputs
+#   O(n) auxiliary space
 
 class MyQueue:
     def __init__(self):
@@ -32,8 +35,13 @@ class MyQueue:
 
 
 ################ naive: two stacks (problem expectation) ############### # noqa
-# time: O(n); O(1) amortized
-# space: stream input; O(n) stack space; for O(n) auxiliary
+# time:
+#   O(n)
+#   O(1) amortized
+# space:
+#   stream input
+#   O(n) stack space
+#   for O(n) auxiliary
 
 class MyQueue:
     def __init__(self):
