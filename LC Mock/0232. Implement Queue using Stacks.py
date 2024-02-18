@@ -3,7 +3,7 @@
 # space:
 #   stream input O(n)
 #   O(n) array space, where n is the maximum number of push inputs
-#   O(n) auxiliary space
+#   for O(n) auxiliary space
 
 class MyQueue:
     def __init__(self):
