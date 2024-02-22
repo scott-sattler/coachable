@@ -1,3 +1,47 @@
+# iterative DFS (1 pass)
+# t/s: O(V + E)
+
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+from typing import Optional
+
+
+class Solution:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if not node:
+            return None
+
+        n_map = {node: Node(node.val)}  # also visited set
+        agenda = [node]  # seed agenda
+
+        # while nodes exist to be visited
+        while agenda:
+            # pop our next node to visit
+            curr = agenda.pop()
+            # iterate over its neighbors
+            for neighbor in curr.neighbors:
+                # if a neighbor has not been created
+                if neighbor not in n_map:
+                    # create the neighbor
+                    n_map[neighbor] = Node(neighbor.val)
+                    # push to stack to later visit
+                    agenda.append(neighbor)
+                # update current node's neighbors
+                n_map[curr].neighbors.append(n_map[neighbor])
+
+        # return map reference to clone
+        return n_map[node]
+
+
+# iterative DFS (2 pass)
+# t/s: O(V + E)
+
 """
 # Definition for a Node.
 class Node:
