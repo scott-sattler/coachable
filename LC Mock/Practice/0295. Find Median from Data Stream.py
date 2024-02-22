@@ -1,3 +1,55 @@
+###############################################################################
+# improved solution
+# O(log2 n) push; O(1) find
+
+import heapq
+
+class MedianFinder(object):
+
+    def __init__(self):
+        self.left = list()  # max heap
+        self.right = list()  # min heap
+
+    def addNum(self, num):
+        """
+        :type num: int
+        :rtype: None
+        """
+        # always push left
+        heappush(self.left, -num)
+
+        # size(left) too large
+        if len(self.left) > len(self.right):
+            heappush(self.right, -heappop(self.left))
+
+        # left root is larger than right root
+        # heap swap left root and right root
+        if self.left and -self.left[0] > self.right[0]:
+            heappush(self.right, -heappop(self.left))
+            heappush(self.left, -heappop(self.right))
+
+
+    def findMedian(self):
+        """
+        :rtype: float
+        """
+        # heaps are either balanced
+        if len(self.left) == len(self.right):
+            return (-self.left[0] + self.right[0])/2.0
+        # or the right is larger
+        return self.right[0]
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+
+
+###############################################################################
+# live solution
+# O(log2 n) push; O(1) find
+
 import heapq
 
 
