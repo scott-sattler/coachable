@@ -20,10 +20,9 @@ class Solution:
         p2 = l2
         carry = 0
 
-        # prev = None
         # consume p1 and p2
         while p1 and p2:
-            curr_val = p2.val + p1.val + carry
+            curr_val = p1.val + p2.val + carry
             carry, p1.val = divmod(curr_val, 10)
 
             prev = p1
@@ -37,6 +36,7 @@ class Solution:
             # l2 = None  # optional: destroy l2
 
         # p2 consumed first
+        # or p1 was merged
         # exhaust p1
         while p1:
             carry, p1.val = divmod(p1.val + carry, 10)
