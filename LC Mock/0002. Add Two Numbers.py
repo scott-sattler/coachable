@@ -1,3 +1,64 @@
+###############################################################################
+# revised solution
+# mutate primary
+# time:
+#   O(n + m)
+# space:
+#   O(1)
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # designate primary/secondary
+        # mutate primary until cases below
+        # return primary
+        p1 = prev = l1
+        p2 = l2
+        carry = 0
+
+        # prev = None
+        # consume p1 and p2
+        while p1 and p2:
+            curr_val = p2.val + p1.val + carry
+            carry, p1.val = divmod(curr_val, 10)
+
+            prev = p1
+            p1, p2 = p1.next, p2.next
+
+        # p1 consumed first
+        # merge with p2
+        if p2:
+            prev.next = p2
+            p1 = prev.next
+            # l2 = None  # optional: destroy l2
+
+        # p2 consumed first
+        # exhaust p1
+        while p1:
+            carry, p1.val = divmod(p1.val + carry, 10)
+            prev = p1
+            p1 = p1.next
+
+        # and finally, in all cases
+        # account for potential carry
+        if carry:
+            prev.next = ListNode(1)
+
+        return l1
+
+
+###############################################################################
+# live loom
+# mutate longer
+# time:
+#   O(n + m)
+# space:
+#   O(1)
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
