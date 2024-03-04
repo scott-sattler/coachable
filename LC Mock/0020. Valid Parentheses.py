@@ -1,4 +1,31 @@
 ###############################################################################
+# variation on iterative solution
+# time: O(n)
+# space:
+#   O(n) stack
+#   O(n) auxiliary
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = list()
+        lookup = {
+            ')': '(',
+            '}': '{',
+            ']': '[',
+        }
+
+        for char in s:
+            if char in lookup.values():
+                stack.append(char)
+            elif len(stack) < 1:
+                return False
+            elif lookup[char] != stack.pop():
+                return False
+
+        return len(stack) == 0
+
+
+###############################################################################
 # toy recursive solution
 # time: O(n)
 # space:
