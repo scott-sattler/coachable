@@ -1,4 +1,40 @@
 ###############################################################################
+# second attempt live
+# time: O(n)
+# space: O(1)
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # edge cases
+        if not head or not head.next:
+            return head
+
+        prehead = ListNode(None, head)
+        prev = prehead
+        post = head.next
+
+        while post:
+            # no duplicates
+            if prev.next.val != post.val:
+                prev = prev.next
+                post = post.next
+                continue
+
+            # remove duplicates
+            while post and prev.next.val == post.val:
+                post = post.next
+            prev.next = post
+            post = post.next if post else None
+
+        return prehead.next
+
+
+###############################################################################
 # time: O(n)
 # space: O(1)
 
