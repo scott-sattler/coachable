@@ -1,6 +1,6 @@
 ###############################################################################
 # live solution
-# time: O(n)
+# time: O(c*n) -> O(n), where c is (right - left)
 # space: O(1)
 
 # Definition for singly-linked list.
