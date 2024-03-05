@@ -14,6 +14,8 @@ class Solution:
         if not head or not head.next:
             return head
 
+        # inspect middle value
+        # between prev and post
         prehead = ListNode(None, head)
         prev = prehead
         post = head.next
@@ -48,6 +50,8 @@ class Solution:
         if not head or not head.next:
             return head
 
+        # inspect middle value
+        # between prev and post
         prehead = ListNode(None, head)
         p1 = prehead
         p2 = head.next
