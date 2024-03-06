@@ -1,4 +1,36 @@
 ###############################################################################
+# revised live solution
+# time: O(n)
+# space: O(1)
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+
+        p1 = prehead = ListNode(None, head)
+        p2 = lesser = ListNode(None, None)
+
+        while p1.next:
+            if p1.next.val < x:
+                p2.next = p1.next  # move node to lesser list
+                p1.next = p1.next.next  # remove node from larger
+                p2 = p2.next  # increment lesser list
+            else:
+                p1 = p1.next
+
+        p1.next = None  # end list
+        p2.next = prehead.next
+
+        return lesser.next
+
+
+###############################################################################
 # live loom solution
 # time: O(n)
 # space: O(1)
