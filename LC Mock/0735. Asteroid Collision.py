@@ -2,6 +2,33 @@
 # live solution
 # O(n) time/space
 
+''' ...removed... '''
+
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+        stack = list()
+
+        ''' ...removed... '''
+
+        i = 0
+        while i < len(asteroids):
+            nxt = asteroids[i]
+            if stack and stack[-1] > 0 and nxt < 0:
+                if -nxt >= stack[-1]:
+                    top = stack.pop()
+                    if -nxt > top:
+                        continue
+            else:
+                stack.append(nxt)
+            i += 1
+
+        return stack
+
+
+###############################################################################
+# live solution
+# O(n) time/space
+
 '''
 
 # todo: consider 2 pointers emulating stack
