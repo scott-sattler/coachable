@@ -13,7 +13,7 @@ class Solution:
         i = 0
         while i < len(asteroids):
             nxt = asteroids[i]
-            if stack and stack[-1] > 0 and nxt < 0:
+            if stack and stack[-1] > 0 > nxt:
                 if -nxt >= stack[-1]:
                     top = stack.pop()
                     if -nxt > top:
