@@ -1,3 +1,53 @@
+###############################################################################
+# improved solution
+# O(n) time/space
+
+'''
+
+# preserve only valid parenthesis pairs
+
+if open
+    add index to stack
+if close
+    invalidate if stack empty
+    pop from stack
+
+invalidate remaining indices from stack
+
+'''
+
+
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        s = list(s)  # O(n) time/space
+        stack = list()
+
+        # invalidate excess close
+        # create stack of opens
+        for i in range(len(s)):
+            if s[i] not in '()':
+                continue
+
+            if s[i] == '(':
+                stack.append(i)
+            elif len(stack) > 0:  # s[i] == ')':
+                stack.pop()
+            else:  # empty stack
+                s[i] = ''
+
+        # only invalid opens remain
+        # invalidate excess opens
+        for i in stack:
+            s[i] = ''
+
+        return ''.join(s)
+
+
+###############################################################################
+# first attempt
+# O(n) time/space
+
+
 '''
 
 # preserve only valid parenthesis pairs
