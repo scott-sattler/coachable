@@ -1,4 +1,64 @@
 ###############################################################################
+# live iterative solution
+# time: O(n)
+# space: O(1)
+
+'''
+
+1 -> 2 -> 3 -> 4 -|
+=>
+4 -> 3 -> 2 -> 1 -|
+
+# iterative solution:
+initialize prev as last.next (None)
+while on a node
+    record next
+    reassign next to previous
+    record previous
+    reassign current to next
+return current
+
+
+# recursive solution:
+parameters:
+    previous (current)
+    node recursed into
+
+base case(s):
+    if next is null
+    return current
+recursive case(s):
+    fn(next)
+
+
+<-   <-   <-   <-
+1 -> 2 -> 3 -> 4 -|
+               ^
+
+'''
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return head
+
+        prev = None
+        curr = head
+        while curr:
+            next_node = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_node
+        return prev
+
+
+###############################################################################
 # recursive solution
 # time: O(n)
 # space: O(1)
