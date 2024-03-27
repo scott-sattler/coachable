@@ -1,5 +1,102 @@
 ###############################################################################
 # live solution:
+#   hash map implementation
+# time: O(n*k)
+#   where
+#   n is the number of input operations
+#   k is average word length
+# space: O(m*k)
+#   where
+#   m is the number of words
+
+'''
+
+dictionary {letter: children}
+where
+children <- {letter: children}
+
+example:
+abc -> {a: {b: {is_word: True, c: None}}}
+
+
+O(n*k) time
+where
+n is the number of input operations
+k is average word length
+
+O(m*k) space
+where
+m is the number of words
+
+
+solution:
+
+.insert()
+# for every letter in word
+    # create node if dne
+    # traverse down a level
+# indicate word completion
+
+.search()
+# for each letter
+    # if node dne
+        # return false
+    # traverse down trie
+# return true if sentinel present
+
+.startsWith()
+# for each letter
+    # if node dne
+        # return false
+    # traverse down trie
+# return true
+
+'''
+
+
+class Trie:
+    '''
+    {letter: children}
+    where is_word is in children dict
+    '''
+
+    def __init__(self):
+        self.root = dict()
+
+    def _traverse(self, word) -> bool | dict:
+        p = self.root
+        for c in word:
+            if not c in p:
+                return False
+            p = p[c]
+        return p
+
+    def insert(self, word: str) -> None:
+        p = self.root
+        for c in word:
+            if not c in p:
+                p[c] = dict()
+            p = p[c]
+        p['is_word'] = True
+
+    def search(self, word: str) -> bool:
+        p = self._traverse(word)
+        return p and 'is_word' in p
+
+    def startsWith(self, prefix: str) -> bool:
+        p = self._traverse(prefix)
+        return type(p) is dict
+
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)
+
+
+###############################################################################
+# live solution:
 #   array implementation
 # time: O(n*k)
 #   where
@@ -8,7 +105,6 @@
 # space: O(k*a)
 #   where
 #   a is the alphabet size
-
 
 '''
 trie
